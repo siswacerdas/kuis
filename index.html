@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kuis Digital — SD Muhammadiyah 01 Kukusan</title>
+<meta name="description" content="Kuis dan evaluasi singkat untuk siswa kelas 5 SD Muhammadiyah 01 Kukusan.">
+<meta name="theme-color" content="#0F6B5C">
+<style>
+  :root{
+    --bg: #F7F6F1;
+    --paper: #FFFFFF;
+    --ink: #23241F;
+    --ink-soft: #5B5D55;
+    --line: #E3E0D6;
+    --brand: #0F6B5C;
+    --brand-dark: #0B4F45;
+    --amber: #E0952E;
+    --radius: 14px;
+    --step: 0px; /* font-size adjustment, applied in px via JS */
+    --maxw: 960px;
+  }
+
+  *{ box-sizing: border-box; }
+  html{ -webkit-text-size-adjust: 100%; }
+
+  body{
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    font-size: calc(16px + var(--step));
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  a{ color: inherit; }
+
+  .wrap{
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding: 0 18px;
+  }
+
+  /* ---------- Header ---------- */
+  header.site{
+    background: var(--brand);
+    color: #F4FBF9;
+    padding: 22px 0 26px;
+    position: relative;
+  }
+
+  .brand-row{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .brand{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+  }
+
+  .brand-mark{
+    width: 38px;
+    height: 38px;
+    flex: none;
+    border-radius: 10px;
+    background: var(--brand-dark);
+    display: grid;
+    place-items: center;
+  }
+  .brand-mark svg{ width: 22px; height: 22px; }
+
+  .brand-text .school{
+    font-size: 0.72em;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    opacity: .8;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .brand-text .app{
+    font-weight: 700;
+    font-size: 1.08em;
+    letter-spacing: -0.01em;
+  }
+
+  .font-ctrl{
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    background: rgba(255,255,255,.12);
+    border-radius: 999px;
+    padding: 3px;
+    flex: none;
+  }
+  .font-ctrl button{
+    appearance: none;
+    border: 0;
+    background: transparent;
+    color: #F4FBF9;
+    width: 32px;
+    height: 32px;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    display: grid;
+    place-items: center;
+  }
+  .font-ctrl button:hover{ background: rgba(255,255,255,.18); }
+  .font-ctrl button:active{ background: rgba(255,255,255,.28); }
+  .font-ctrl button:focus-visible{ outline: 2px solid #fff; outline-offset: 2px; }
+  .font-ctrl .lg{ font-size: 17px; }
+
+  .hero{
+    margin-top: 20px;
+  }
+  .hero h1{
+    margin: 0 0 6px;
+    font-size: clamp(1.35rem, 4.5vw, 1.9rem);
+    line-height: 1.25;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+  }
+  .hero p{
+    margin: 0;
+    max-width: 46ch;
+    color: #E3F2ED;
+    font-size: 0.95em;
+  }
+
+  /* ---------- Ticket-style card list ---------- */
+  main{ margin-top: -14px; }
+
+  .panel{
+    background: var(--paper);
+    border-radius: var(--radius);
+    box-shadow: 0 1px 3px rgba(20,30,25,.06), 0 8px 24px -14px rgba(20,30,25,.18);
+    padding: 6px;
+  }
+
+  .subject-list{
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 2px;
+  }
+
+  .subject-list li{ position: relative; }
+
+  .subject-list li + li::before{
+    content: "";
+    position: absolute;
+    top: 0; left: 18px; right: 18px;
+    border-top: 1.5px dashed var(--line);
+  }
+
+  .stub{
+    display: grid;
+    grid-template-columns: 46px 1fr auto;
+    align-items: center;
+    gap: 14px;
+    padding: 16px 14px;
+    text-decoration: none;
+    color: inherit;
+    border-radius: 10px;
+  }
+  .stub:focus-visible{ outline: 2px solid var(--brand); outline-offset: -2px; }
+  a.stub:hover{ background: #FAF9F5; }
+
+  .icon{
+    width: 46px;
+    height: 46px;
+    border-radius: 12px;
+    display: grid;
+    place-items: center;
+    flex: none;
+  }
+  .icon svg{ width: 24px; height: 24px; }
+
+  .subj-name{
+    font-weight: 700;
+    font-size: 1em;
+    letter-spacing: -0.005em;
+  }
+  .subj-meta{
+    margin-top: 2px;
+    font-size: 0.82em;
+    color: var(--ink-soft);
+  }
+
+  .status{
+    justify-self: end;
+    font-size: 0.74em;
+    font-weight: 700;
+    padding: 5px 10px;
+    border-radius: 999px;
+    white-space: nowrap;
+  }
+  .status.ready{ background: #E4F3EC; color: var(--brand-dark); }
+  .status.soon{ background: #F1EFE8; color: var(--ink-soft); }
+
+  li.disabled .stub{ cursor: default; }
+  li.disabled .subj-name{ color: var(--ink-soft); }
+  li.disabled .icon{ opacity: .55; }
+
+  /* subject accent tints (used only as small icon backgrounds, not whole cards) */
+  .t-pancasila{ background:#FBEAE6; color:#B85C3E; }
+  .t-bindo{ background:#EAF1FB; color:#3E6BB8; }
+  .t-mtk{ background:#F6EAFB; color:#8A46B0; }
+  .t-ipas{ background:#E7F6EE; color:#1F8A55; }
+  .t-seni{ background:#FBF2E1; color:#B8823E; }
+
+  /* ---------- Info section ---------- */
+  .info{
+    margin-top: 28px;
+    display: grid;
+    gap: 14px;
+  }
+  .info h2{
+    font-size: 0.98em;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: var(--ink-soft);
+    margin: 0 0 10px;
+  }
+  .steps{
+    list-style: none;
+    margin: 0; padding: 0;
+    display: grid;
+    gap: 10px;
+  }
+  .steps li{
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    font-size: 0.92em;
+    color: var(--ink-soft);
+  }
+  .steps .num{
+    flex: none;
+    width: 24px; height: 24px;
+    border-radius: 999px;
+    background: var(--brand);
+    color: #fff;
+    font-size: 0.72em;
+    font-weight: 700;
+    display: grid;
+    place-items: center;
+    margin-top: 1px;
+  }
+  .steps b{ color: var(--ink); }
+
+  footer{
+    margin: 34px 0 22px;
+    text-align: center;
+    color: var(--ink-soft);
+    font-size: 0.82em;
+  }
+  footer .muh{ color: var(--brand-dark); font-weight: 700; }
+
+  @media (min-width: 640px){
+    header.site{ padding: 30px 0 40px; }
+    .hero h1{ font-size: clamp(1.6rem, 3.2vw, 2.1rem); }
+    main{ margin-top: -22px; }
+    .panel{ padding: 10px; }
+    .subject-list{ grid-template-columns: 1fr 1fr; gap: 2px 2px; }
+    .subject-list li:nth-child(odd)::after{
+      content:"";
+      position:absolute; top:14px; bottom:14px; right:0;
+      border-right: 1.5px dashed var(--line);
+    }
+    .subject-list li + li::before{ display: none; }
+    .subject-list li:nth-child(n+3)::before{
+      content:"";
+      display:block;
+      position:absolute; top:0; left:18px; right:18px;
+      border-top: 1.5px dashed var(--line);
+    }
+    .stub{ padding: 18px 16px; }
+  }
+
+  @media (prefers-reduced-motion: no-preference){
+    a.stub{ transition: background-color .15s ease; }
+    .font-ctrl button{ transition: background-color .15s ease; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap">
+    <div class="brand-row">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">
+          <svg viewBox="0 0 24 24" fill="none"><path d="M4 6.5 12 3l8 3.5-8 3.5-8-3.5Z" stroke="#F4FBF9" stroke-width="1.6" stroke-linejoin="round"/><path d="M7 10.2v4.3c0 1.4 2.2 2.5 5 2.5s5-1.1 5-2.5v-4.3" stroke="#F4FBF9" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M20 8.2v5.6" stroke="#F4FBF9" stroke-width="1.6" stroke-linecap="round"/></svg>
+        </span>
+        <span class="brand-text">
+          <span class="school">SD Muhammadiyah 01 Kukusan</span>
+          <span class="app">Kuis Digital</span>
+        </span>
+      </div>
+      <div class="font-ctrl" role="group" aria-label="Ukuran tulisan">
+        <button type="button" id="fontDown" aria-label="Perkecil tulisan">A<span style="font-size:.7em">−</span></button>
+        <button type="button" id="fontUp" class="lg" aria-label="Perbesar tulisan">A+</button>
+      </div>
+    </div>
+    <div class="hero">
+      <h1>Yuk, latihan kuis harian!</h1>
+      <p>Pilih mata pelajaran di bawah untuk mulai kuis. Kerjakan pelan-pelan dan jawab dengan jujur ya.</p>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <div class="panel">
+      <ul class="subject-list">
+
+        <li class="disabled">
+          <span class="stub" aria-disabled="true">
+            <span class="icon t-pancasila" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M12 3 4 6.5 5.2 15c.5 3.4 3.4 5.6 6.8 6.5 3.4-.9 6.3-3.1 6.8-6.5L20 6.5 12 3Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9.5 12.2l1.8 1.8 3.2-3.6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </span>
+            <span>
+              <span class="subj-name">Pendidikan Pancasila</span>
+              <span class="subj-meta">Kuis pilihan ganda</span>
+            </span>
+            <span class="status soon">Segera hadir</span>
+          </span>
+        </li>
+
+        <li class="disabled">
+          <span class="stub" aria-disabled="true">
+            <span class="icon t-bindo" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M4 5.5h13a2 2 0 0 1 2 2v10.7L15.5 16H4V5.5Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M7.5 9h7M7.5 12.2h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+            </span>
+            <span>
+              <span class="subj-name">Bahasa Indonesia</span>
+              <span class="subj-meta">Kuis pilihan ganda</span>
+            </span>
+            <span class="status soon">Segera hadir</span>
+          </span>
+        </li>
+
+        <li class="disabled">
+          <span class="stub" aria-disabled="true">
+            <span class="icon t-mtk" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M6 4h12M9 4v5.5L5 19h14l-4-9.5V4" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M8 15.5h8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+            </span>
+            <span>
+              <span class="subj-name">Matematika</span>
+              <span class="subj-meta">Kuis pilihan ganda</span>
+            </span>
+            <span class="status soon">Segera hadir</span>
+          </span>
+        </li>
+
+        <li class="disabled">
+          <span class="stub" aria-disabled="true">
+            <span class="icon t-ipas" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8.2" stroke="currentColor" stroke-width="1.6"/><path d="M12 3.8c2.6 2.4 4 5.3 4 8.2s-1.4 5.8-4 8.2c-2.6-2.4-4-5.3-4-8.2s1.4-5.8 4-8.2Z" stroke="currentColor" stroke-width="1.6"/><path d="M4.3 12h15.4" stroke="currentColor" stroke-width="1.6"/></svg>
+            </span>
+            <span>
+              <span class="subj-name">IPAS</span>
+              <span class="subj-meta">Ilmu Pengetahuan Alam &amp; Sosial</span>
+            </span>
+            <span class="status soon">Segera hadir</span>
+          </span>
+        </li>
+
+        <li class="disabled">
+          <span class="stub" aria-disabled="true">
+            <span class="icon t-seni" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none"><path d="M12 3.5c-4.7 0-8.5 3.5-8.5 7.8 0 2.6 2 4 4 4h1.1c.9 0 1.5.9 1.1 1.7l-.3.6c-.5 1 .3 2.1 1.4 1.9 4.4-.7 9.7-4.3 9.7-9.2 0-3.7-4-6.8-8.5-6.8Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="8.7" cy="10.2" r=".9" fill="currentColor"/><circle cx="12" cy="8" r=".9" fill="currentColor"/><circle cx="15.3" cy="10.2" r=".9" fill="currentColor"/></svg>
+            </span>
+            <span>
+              <span class="subj-name">Seni Budaya</span>
+              <span class="subj-meta">Seni Rupa &amp; Seni Musik</span>
+            </span>
+            <span class="status soon">Segera hadir</span>
+          </span>
+        </li>
+
+      </ul>
+    </div>
+
+    <div class="info">
+      <div>
+        <h2>Cara mengerjakan</h2>
+        <ul class="steps">
+          <li><span class="num">1</span><span><b>Pilih mata pelajaran</b> yang akan diujikan hari ini.</span></li>
+          <li><span class="num">2</span><span><b>Jawab setiap soal</b> sesuai waktu yang diberikan guru.</span></li>
+          <li><span class="num">3</span><span><b>Lihat hasil</b> setelah selesai mengerjakan seluruh soal.</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <footer>
+      Dibuat untuk siswa kelas 5 &middot; <span class="muh">SD Muhammadiyah 01 Kukusan</span>
+    </footer>
+  </div>
+</main>
+
+<script>
+(function(){
+  var root = document.documentElement;
+  var KEY = "kuis-font-step";
+  var MIN = -2, MAX = 4, STEP = 1; // px increments applied to base 16px
+
+  function apply(step){
+    step = Math.max(MIN, Math.min(MAX, step));
+    root.style.setProperty("--step", step + "px");
+    localStorage.setItem(KEY, String(step));
+    return step;
+  }
+
+  var saved = parseInt(localStorage.getItem(KEY), 10);
+  var current = apply(isNaN(saved) ? 0 : saved);
+
+  document.getElementById("fontUp").addEventListener("click", function(){
+    current = apply(current + STEP);
+  });
+  document.getElementById("fontDown").addEventListener("click", function(){
+    current = apply(current - STEP);
+  });
+})();
+</script>
+
+</body>
+</html>
