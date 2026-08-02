@@ -18,7 +18,7 @@
     --amber: #E0952E;
     --radius: 14px;
     --step: 0px; /* font-size adjustment, applied in px via JS */
-    --maxw: 960px;
+    --maxw: 1040px;
   }
 
   *{ box-sizing: border-box; }
@@ -39,15 +39,14 @@
   .wrap{
     max-width: var(--maxw);
     margin: 0 auto;
-    padding: 0 18px;
+    padding: 0 20px;
   }
 
   /* ---------- Header ---------- */
   header.site{
     background: var(--brand);
     color: #F4FBF9;
-    padding: 22px 0 26px;
-    position: relative;
+    padding: 24px 0 56px;
   }
 
   .brand-row{
@@ -119,62 +118,60 @@
   .font-ctrl .lg{ font-size: 17px; }
 
   .hero{
-    margin-top: 20px;
+    margin-top: 22px;
+    max-width: 46ch;
   }
   .hero h1{
-    margin: 0 0 6px;
-    font-size: clamp(1.35rem, 4.5vw, 1.9rem);
+    margin: 0 0 8px;
+    font-size: clamp(1.4rem, 3.4vw, 2rem);
     line-height: 1.25;
     font-weight: 800;
     letter-spacing: -0.01em;
   }
   .hero p{
     margin: 0;
-    max-width: 46ch;
     color: #E3F2ED;
     font-size: 0.95em;
   }
 
-  /* ---------- Ticket-style card list ---------- */
-  main{ margin-top: -14px; }
+  /* ---------- Konten ---------- */
+  main{ padding-bottom: 30px; }
 
-  .panel{
-    background: var(--paper);
-    border-radius: var(--radius);
-    box-shadow: 0 1px 3px rgba(20,30,25,.06), 0 8px 24px -14px rgba(20,30,25,.18);
-    padding: 6px;
+  .content-shift{ margin-top: -34px; }
+
+  .section-title{
+    font-size: 0.85em;
+    text-transform: uppercase;
+    letter-spacing: .06em;
+    color: var(--ink-soft);
+    font-weight: 700;
+    margin: 0 0 12px;
   }
 
-  .subject-list{
+  /* ---------- Kartu mata pelajaran ---------- */
+  .subject-grid{
     list-style: none;
-    margin: 0;
+    margin: 0 0 30px;
     padding: 0;
     display: grid;
     grid-template-columns: 1fr;
-    gap: 2px;
+    gap: 12px;
   }
 
-  .subject-list li{ position: relative; }
-
-  .subject-list li + li::before{
-    content: "";
-    position: absolute;
-    top: 0; left: 18px; right: 18px;
-    border-top: 1.5px dashed var(--line);
-  }
-
-  .stub{
-    display: grid;
-    grid-template-columns: 46px 1fr auto;
+  .subject-card{
+    display: flex;
     align-items: center;
     gap: 14px;
-    padding: 16px 14px;
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 16px;
     text-decoration: none;
     color: inherit;
-    border-radius: 10px;
+    box-shadow: 0 1px 2px rgba(20,30,25,.04);
   }
-  .stub:focus-visible{ outline: 2px solid var(--brand); outline-offset: -2px; }
-  a.stub:hover{ background: #FAF9F5; }
+  a.subject-card:hover{ border-color: #CFE3DA; box-shadow: 0 4px 14px -8px rgba(15,60,45,.25); }
+  .subject-card:focus-visible{ outline: 2px solid var(--brand); outline-offset: 2px; }
 
   .icon{
     width: 46px;
@@ -186,19 +183,22 @@
   }
   .icon svg{ width: 24px; height: 24px; }
 
+  .subject-body{ min-width: 0; flex: 1; }
   .subj-name{
     font-weight: 700;
     font-size: 1em;
     letter-spacing: -0.005em;
+    display: block;
   }
   .subj-meta{
     margin-top: 2px;
     font-size: 0.82em;
     color: var(--ink-soft);
+    display: block;
   }
 
   .status{
-    justify-self: end;
+    flex: none;
     font-size: 0.74em;
     font-weight: 700;
     padding: 5px 10px;
@@ -208,10 +208,6 @@
   .status.ready{ background: #E4F3EC; color: var(--brand-dark); }
   .status.soon{ background: #F1EFE8; color: var(--ink-soft); }
 
-  li.disabled .stub{ cursor: default; }
-  li.disabled .subj-name{ color: var(--ink-soft); }
-  li.disabled .icon{ opacity: .55; }
-
   /* subject accent tints (used only as small icon backgrounds, not whole cards) */
   .t-pancasila{ background:#FBEAE6; color:#B85C3E; }
   .t-bindo{ background:#EAF1FB; color:#3E6BB8; }
@@ -220,23 +216,17 @@
   .t-seni{ background:#FBF2E1; color:#B8823E; }
 
   /* ---------- Info section ---------- */
-  .info{
-    margin-top: 28px;
-    display: grid;
-    gap: 14px;
-  }
-  .info h2{
-    font-size: 0.98em;
-    text-transform: uppercase;
-    letter-spacing: .06em;
-    color: var(--ink-soft);
-    margin: 0 0 10px;
+  .info-panel{
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 20px;
   }
   .steps{
     list-style: none;
     margin: 0; padding: 0;
     display: grid;
-    gap: 10px;
+    gap: 12px;
   }
   .steps li{
     display: flex;
@@ -260,7 +250,7 @@
   .steps b{ color: var(--ink); }
 
   footer{
-    margin: 34px 0 22px;
+    margin: 34px 0 10px;
     text-align: center;
     color: var(--ink-soft);
     font-size: 0.82em;
@@ -268,28 +258,25 @@
   footer .muh{ color: var(--brand-dark); font-weight: 700; }
 
   @media (min-width: 640px){
-    header.site{ padding: 30px 0 40px; }
-    .hero h1{ font-size: clamp(1.6rem, 3.2vw, 2.1rem); }
-    main{ margin-top: -22px; }
-    .panel{ padding: 10px; }
-    .subject-list{ grid-template-columns: 1fr 1fr; gap: 2px 2px; }
-    .subject-list li:nth-child(odd)::after{
-      content:"";
-      position:absolute; top:14px; bottom:14px; right:0;
-      border-right: 1.5px dashed var(--line);
+    header.site{ padding: 32px 0 64px; }
+    .subject-grid{ grid-template-columns: 1fr 1fr; gap: 14px; }
+    .subject-card{ padding: 18px; }
+    .content-shift{ margin-top: -40px; }
+  }
+
+  @media (min-width: 960px){
+    .layout{
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: 22px;
+      align-items: start;
     }
-    .subject-list li + li::before{ display: none; }
-    .subject-list li:nth-child(n+3)::before{
-      content:"";
-      display:block;
-      position:absolute; top:0; left:18px; right:18px;
-      border-top: 1.5px dashed var(--line);
-    }
-    .stub{ padding: 18px 16px; }
+    .subject-grid{ margin-bottom: 0; }
+    .info-panel{ position: sticky; top: 20px; }
   }
 
   @media (prefers-reduced-motion: no-preference){
-    a.stub{ transition: background-color .15s ease; }
+    a.subject-card{ transition: border-color .15s ease, box-shadow .15s ease; }
     .font-ctrl button{ transition: background-color .15s ease; }
   }
 </style>
@@ -321,81 +308,82 @@
 </header>
 
 <main>
-  <div class="wrap">
-    <div class="panel">
-      <ul class="subject-list">
-
-        <li class="disabled">
-          <span class="stub" aria-disabled="true">
-            <span class="icon t-pancasila" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none"><path d="M12 3 4 6.5 5.2 15c.5 3.4 3.4 5.6 6.8 6.5 3.4-.9 6.3-3.1 6.8-6.5L20 6.5 12 3Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9.5 12.2l1.8 1.8 3.2-3.6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </span>
-            <span>
-              <span class="subj-name">Pendidikan Pancasila</span>
-              <span class="subj-meta">Kuis pilihan ganda</span>
-            </span>
-            <span class="status soon">Segera hadir</span>
-          </span>
-        </li>
-
-        <li class="disabled">
-          <span class="stub" aria-disabled="true">
-            <span class="icon t-bindo" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none"><path d="M4 5.5h13a2 2 0 0 1 2 2v10.7L15.5 16H4V5.5Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M7.5 9h7M7.5 12.2h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-            </span>
-            <span>
-              <span class="subj-name">Bahasa Indonesia</span>
-              <span class="subj-meta">Kuis pilihan ganda</span>
-            </span>
-            <span class="status soon">Segera hadir</span>
-          </span>
-        </li>
-
-        <li class="disabled">
-          <span class="stub" aria-disabled="true">
-            <span class="icon t-mtk" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none"><path d="M6 4h12M9 4v5.5L5 19h14l-4-9.5V4" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M8 15.5h8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-            </span>
-            <span>
-              <span class="subj-name">Matematika</span>
-              <span class="subj-meta">Kuis pilihan ganda</span>
-            </span>
-            <span class="status soon">Segera hadir</span>
-          </span>
-        </li>
-
-        <li class="disabled">
-          <span class="stub" aria-disabled="true">
-            <span class="icon t-ipas" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8.2" stroke="currentColor" stroke-width="1.6"/><path d="M12 3.8c2.6 2.4 4 5.3 4 8.2s-1.4 5.8-4 8.2c-2.6-2.4-4-5.3-4-8.2s1.4-5.8 4-8.2Z" stroke="currentColor" stroke-width="1.6"/><path d="M4.3 12h15.4" stroke="currentColor" stroke-width="1.6"/></svg>
-            </span>
-            <span>
-              <span class="subj-name">IPAS</span>
-              <span class="subj-meta">Ilmu Pengetahuan Alam &amp; Sosial</span>
-            </span>
-            <span class="status soon">Segera hadir</span>
-          </span>
-        </li>
-
-        <li class="disabled">
-          <span class="stub" aria-disabled="true">
-            <span class="icon t-seni" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none"><path d="M12 3.5c-4.7 0-8.5 3.5-8.5 7.8 0 2.6 2 4 4 4h1.1c.9 0 1.5.9 1.1 1.7l-.3.6c-.5 1 .3 2.1 1.4 1.9 4.4-.7 9.7-4.3 9.7-9.2 0-3.7-4-6.8-8.5-6.8Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="8.7" cy="10.2" r=".9" fill="currentColor"/><circle cx="12" cy="8" r=".9" fill="currentColor"/><circle cx="15.3" cy="10.2" r=".9" fill="currentColor"/></svg>
-            </span>
-            <span>
-              <span class="subj-name">Seni Budaya</span>
-              <span class="subj-meta">Seni Rupa &amp; Seni Musik</span>
-            </span>
-            <span class="status soon">Segera hadir</span>
-          </span>
-        </li>
-
-      </ul>
-    </div>
-
-    <div class="info">
+  <div class="wrap content-shift">
+    <div class="layout">
       <div>
-        <h2>Cara mengerjakan</h2>
+        <h2 class="section-title">Mata pelajaran</h2>
+        <ul class="subject-grid">
+
+          <li>
+            <a class="subject-card" href="pendidikan-pancasila/">
+              <span class="icon t-pancasila" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none"><path d="M12 3 4 6.5 5.2 15c.5 3.4 3.4 5.6 6.8 6.5 3.4-.9 6.3-3.1 6.8-6.5L20 6.5 12 3Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9.5 12.2l1.8 1.8 3.2-3.6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </span>
+              <span class="subject-body">
+                <span class="subj-name">Pendidikan Pancasila</span>
+                <span class="subj-meta">Kuis pilihan ganda</span>
+              </span>
+              <span class="status soon">Segera hadir</span>
+            </a>
+          </li>
+
+          <li>
+            <a class="subject-card" href="bahasa-indonesia/">
+              <span class="icon t-bindo" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none"><path d="M4 5.5h13a2 2 0 0 1 2 2v10.7L15.5 16H4V5.5Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M7.5 9h7M7.5 12.2h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+              </span>
+              <span class="subject-body">
+                <span class="subj-name">Bahasa Indonesia</span>
+                <span class="subj-meta">Kuis pilihan ganda</span>
+              </span>
+              <span class="status soon">Segera hadir</span>
+            </a>
+          </li>
+
+          <li>
+            <a class="subject-card" href="matematika/">
+              <span class="icon t-mtk" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none"><path d="M6 4h12M9 4v5.5L5 19h14l-4-9.5V4" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M8 15.5h8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+              </span>
+              <span class="subject-body">
+                <span class="subj-name">Matematika</span>
+                <span class="subj-meta">Kuis pilihan ganda</span>
+              </span>
+              <span class="status soon">Segera hadir</span>
+            </a>
+          </li>
+
+          <li>
+            <a class="subject-card" href="ipas/">
+              <span class="icon t-ipas" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8.2" stroke="currentColor" stroke-width="1.6"/><path d="M12 3.8c2.6 2.4 4 5.3 4 8.2s-1.4 5.8-4 8.2c-2.6-2.4-4-5.3-4-8.2s1.4-5.8 4-8.2Z" stroke="currentColor" stroke-width="1.6"/><path d="M4.3 12h15.4" stroke="currentColor" stroke-width="1.6"/></svg>
+              </span>
+              <span class="subject-body">
+                <span class="subj-name">IPAS</span>
+                <span class="subj-meta">Ilmu Pengetahuan Alam &amp; Sosial</span>
+              </span>
+              <span class="status ready">1 kuis tersedia</span>
+            </a>
+          </li>
+
+          <li>
+            <a class="subject-card" href="seni-budaya/">
+              <span class="icon t-seni" aria-hidden="true">
+                <svg viewBox="0 0 24 24" fill="none"><path d="M12 3.5c-4.7 0-8.5 3.5-8.5 7.8 0 2.6 2 4 4 4h1.1c.9 0 1.5.9 1.1 1.7l-.3.6c-.5 1 .3 2.1 1.4 1.9 4.4-.7 9.7-4.3 9.7-9.2 0-3.7-4-6.8-8.5-6.8Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="8.7" cy="10.2" r=".9" fill="currentColor"/><circle cx="12" cy="8" r=".9" fill="currentColor"/><circle cx="15.3" cy="10.2" r=".9" fill="currentColor"/></svg>
+              </span>
+              <span class="subject-body">
+                <span class="subj-name">Seni Budaya</span>
+                <span class="subj-meta">Seni Rupa &amp; Seni Musik</span>
+              </span>
+              <span class="status soon">Segera hadir</span>
+            </a>
+          </li>
+
+        </ul>
+      </div>
+
+      <div class="info-panel">
+        <h2 class="section-title">Cara mengerjakan</h2>
         <ul class="steps">
           <li><span class="num">1</span><span><b>Pilih mata pelajaran</b> yang akan diujikan hari ini.</span></li>
           <li><span class="num">2</span><span><b>Jawab setiap soal</b> sesuai waktu yang diberikan guru.</span></li>
