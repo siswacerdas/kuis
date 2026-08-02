@@ -1,1 +1,90 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bahasa Indonesia — Kuis Digital SDM01KKS</title>
+<meta name="theme-color" content="#0F6B5C">
+<style>
+  :root{
+    --bg:#F7F6F1; --paper:#FFFFFF; --ink:#23241F; --ink-soft:#5B5D55;
+    --line:#E3E0D6; --brand:#0F6B5C; --brand-dark:#0B4F45;
+    --radius:14px; --step:0px; --maxw:640px;
+  }
+  *{ box-sizing:border-box; }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    font-size:calc(16px + var(--step)); line-height:1.5; -webkit-font-smoothing:antialiased;
+  }
+  a{ color:inherit; }
+  .wrap{ max-width:var(--maxw); margin:0 auto; padding:0 20px; }
 
+  header.site{ background:var(--brand); color:#F4FBF9; padding:20px 0; }
+  .top-row{ display:flex; align-items:center; justify-content:space-between; gap:10px; }
+  .back-link{ display:inline-flex; align-items:center; gap:6px; font-size:.85em; font-weight:600; text-decoration:none; color:#E3F2ED; opacity:.9; }
+  .font-ctrl{ display:flex; align-items:center; gap:2px; background:rgba(255,255,255,.12); border-radius:999px; padding:3px; }
+  .font-ctrl button{ appearance:none; border:0; background:transparent; color:#F4FBF9; width:30px; height:30px; border-radius:999px; font-weight:700; font-size:13px; cursor:pointer; }
+  .font-ctrl button:active{ background:rgba(255,255,255,.28); }
+
+  main{ padding:60px 0; }
+  .panel{
+    background:var(--paper); border:1px solid var(--line); border-radius:var(--radius);
+    padding:36px 24px; text-align:center;
+  }
+  .icon{
+    width:56px; height:56px; border-radius:14px; background:#EAF1FB; color:#3E6BB8;
+    display:grid; place-items:center; margin:0 auto 16px;
+  }
+  h1{ margin:0 0 8px; font-size:1.3em; }
+  p{ margin:0 auto; max-width:38ch; color:var(--ink-soft); font-size:.92em; }
+  .btn-back{
+    display:inline-block; margin-top:22px; background:var(--brand); color:#fff;
+    text-decoration:none; font-weight:700; font-size:.9em; padding:12px 22px; border-radius:10px;
+  }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap top-row">
+    <a class="back-link" href="../">← Semua mata pelajaran</a>
+    <div class="font-ctrl" role="group" aria-label="Ukuran tulisan">
+      <button type="button" id="fontDown" aria-label="Perkecil tulisan">A−</button>
+      <button type="button" id="fontUp" aria-label="Perbesar tulisan">A+</button>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <div class="panel">
+      <div class="icon" aria-hidden="true"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M4 5.5h13a2 2 0 0 1 2 2v10.7L15.5 16H4V5.5Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M7.5 9h7M7.5 12.2h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+      <h1>Bahasa Indonesia segera hadir</h1>
+      <p>Kuis untuk mata pelajaran ini sedang disiapkan. Pantau terus, ya — halaman ini akan otomatis terisi begitu kuisnya siap dipakai.</p>
+      <a class="btn-back" href="../">Kembali ke halaman utama</a>
+    </div>
+  </div>
+</main>
+
+<script>
+(function(){
+  var root = document.documentElement;
+  var KEY = "kuis-font-step";
+  var MIN = -2, MAX = 4, STEP = 1;
+  function apply(step){
+    step = Math.max(MIN, Math.min(MAX, step));
+    root.style.setProperty("--step", step + "px");
+    localStorage.setItem(KEY, String(step));
+    return step;
+  }
+  var saved = parseInt(localStorage.getItem(KEY), 10);
+  var current = apply(isNaN(saved) ? 0 : saved);
+  document.getElementById("fontUp").addEventListener("click", function(){ current = apply(current + STEP); });
+  document.getElementById("fontDown").addEventListener("click", function(){ current = apply(current - STEP); });
+})();
+</script>
+
+</body>
+</html>
