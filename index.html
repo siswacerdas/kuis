@@ -46,7 +46,7 @@
   header.site{
     background: var(--brand);
     color: #F4FBF9;
-    padding: 24px 0 56px;
+    padding: 24px 0 28px;
   }
 
   .brand-row{
@@ -103,19 +103,23 @@
     border: 0;
     background: transparent;
     color: #F4FBF9;
-    width: 32px;
+    min-width: 32px;
     height: 32px;
+    padding: 0 8px;
     border-radius: 999px;
     font-weight: 700;
-    font-size: 14px;
+    font-size: 13px;
+    line-height: 1;
+    white-space: nowrap;
     cursor: pointer;
-    display: grid;
-    place-items: center;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
   }
   .font-ctrl button:hover{ background: rgba(255,255,255,.18); }
   .font-ctrl button:active{ background: rgba(255,255,255,.28); }
   .font-ctrl button:focus-visible{ outline: 2px solid #fff; outline-offset: 2px; }
-  .font-ctrl .lg{ font-size: 17px; }
+  .font-ctrl .lg{ font-size: 15px; }
 
   .hero{
     margin-top: 22px;
@@ -135,9 +139,7 @@
   }
 
   /* ---------- Konten ---------- */
-  main{ padding-bottom: 30px; }
-
-  .content-shift{ margin-top: -34px; }
+  main{ padding: 28px 0 30px; }
 
   .section-title{
     font-size: 0.85em;
@@ -258,10 +260,9 @@
   footer .muh{ color: var(--brand-dark); font-weight: 700; }
 
   @media (min-width: 640px){
-    header.site{ padding: 32px 0 64px; }
+    header.site{ padding: 32px 0 36px; }
     .subject-grid{ grid-template-columns: 1fr 1fr; gap: 14px; }
     .subject-card{ padding: 18px; }
-    .content-shift{ margin-top: -40px; }
   }
 
   @media (min-width: 960px){
@@ -296,7 +297,7 @@
         </span>
       </div>
       <div class="font-ctrl" role="group" aria-label="Ukuran tulisan">
-        <button type="button" id="fontDown" aria-label="Perkecil tulisan">A<span style="font-size:.7em">−</span></button>
+        <button type="button" id="fontDown" aria-label="Perkecil tulisan">A−</button>
         <button type="button" id="fontUp" class="lg" aria-label="Perbesar tulisan">A+</button>
       </div>
     </div>
@@ -308,7 +309,7 @@
 </header>
 
 <main>
-  <div class="wrap content-shift">
+  <div class="wrap">
     <div class="layout">
       <div>
         <h2 class="section-title">Mata pelajaran</h2>
