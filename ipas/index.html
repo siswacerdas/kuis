@@ -21,14 +21,14 @@
   a{ color:inherit; }
   .wrap{ max-width:var(--maxw); margin:0 auto; padding:0 20px; }
 
-  header.site{ background:var(--brand); color:#F4FBF9; padding:20px 0 44px; }
+  header.site{ background:var(--brand); color:#F4FBF9; padding:20px 0 24px; }
   .top-row{ display:flex; align-items:center; justify-content:space-between; gap:10px; }
   .back-link{
     display:inline-flex; align-items:center; gap:6px; font-size:.85em; font-weight:600;
     text-decoration:none; color:#E3F2ED; opacity:.9;
   }
   .font-ctrl{ display:flex; align-items:center; gap:2px; background:rgba(255,255,255,.12); border-radius:999px; padding:3px; }
-  .font-ctrl button{ appearance:none; border:0; background:transparent; color:#F4FBF9; width:30px; height:30px; border-radius:999px; font-weight:700; font-size:13px; cursor:pointer; }
+  .font-ctrl button{ appearance:none; border:0; background:transparent; color:#F4FBF9; min-width:30px; height:30px; padding:0 8px; border-radius:999px; font-weight:700; font-size:13px; line-height:1; white-space:nowrap; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; }
   .font-ctrl button:active{ background:rgba(255,255,255,.28); }
 
   .hero{ margin-top:18px; display:flex; align-items:center; gap:12px; }
@@ -36,7 +36,7 @@
   .hero h1{ margin:0; font-size:1.4em; font-weight:800; }
   .hero p{ margin:2px 0 0; font-size:.85em; color:#E3F2ED; }
 
-  main{ margin-top:-28px; padding-bottom:30px; }
+  main{ padding:6px 0 30px; }
   .panel{
     background:var(--paper); border-radius:var(--radius);
     box-shadow:0 1px 3px rgba(20,30,25,.06), 0 8px 24px -14px rgba(20,30,25,.18);
