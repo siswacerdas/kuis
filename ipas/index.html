@@ -1,1 +1,144 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>IPAS — Kuis Digital SDM01KKS</title>
+<meta name="theme-color" content="#0F6B5C">
+<style>
+  :root{
+    --bg:#F7F6F1; --paper:#FFFFFF; --ink:#23241F; --ink-soft:#5B5D55;
+    --line:#E3E0D6; --brand:#0F6B5C; --brand-dark:#0B4F45; --amber:#E0952E;
+    --radius:14px; --step:0px; --maxw:760px;
+  }
+  *{ box-sizing:border-box; }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    font-size:calc(16px + var(--step)); line-height:1.5; -webkit-font-smoothing:antialiased;
+  }
+  a{ color:inherit; }
+  .wrap{ max-width:var(--maxw); margin:0 auto; padding:0 20px; }
 
+  header.site{ background:var(--brand); color:#F4FBF9; padding:20px 0 44px; }
+  .top-row{ display:flex; align-items:center; justify-content:space-between; gap:10px; }
+  .back-link{
+    display:inline-flex; align-items:center; gap:6px; font-size:.85em; font-weight:600;
+    text-decoration:none; color:#E3F2ED; opacity:.9;
+  }
+  .font-ctrl{ display:flex; align-items:center; gap:2px; background:rgba(255,255,255,.12); border-radius:999px; padding:3px; }
+  .font-ctrl button{ appearance:none; border:0; background:transparent; color:#F4FBF9; width:30px; height:30px; border-radius:999px; font-weight:700; font-size:13px; cursor:pointer; }
+  .font-ctrl button:active{ background:rgba(255,255,255,.28); }
+
+  .hero{ margin-top:18px; display:flex; align-items:center; gap:12px; }
+  .hero .icon{ width:44px; height:44px; border-radius:12px; background:var(--brand-dark); display:grid; place-items:center; flex:none; }
+  .hero h1{ margin:0; font-size:1.4em; font-weight:800; }
+  .hero p{ margin:2px 0 0; font-size:.85em; color:#E3F2ED; }
+
+  main{ margin-top:-28px; padding-bottom:30px; }
+  .panel{
+    background:var(--paper); border-radius:var(--radius);
+    box-shadow:0 1px 3px rgba(20,30,25,.06), 0 8px 24px -14px rgba(20,30,25,.18);
+    padding:8px;
+  }
+  .section-title{
+    font-size:.82em; text-transform:uppercase; letter-spacing:.06em; color:var(--ink-soft);
+    font-weight:700; margin:20px 0 10px 4px;
+  }
+
+  .kuis-card{
+    display:flex; align-items:center; gap:14px; padding:16px 14px;
+    text-decoration:none; color:inherit; border-radius:10px;
+  }
+  a.kuis-card:hover{ background:#FAF9F5; }
+  .kuis-card .icon-kuis{
+    width:46px; height:46px; border-radius:12px; background:#E7F6EE; color:#1F8A55;
+    display:grid; place-items:center; flex:none;
+  }
+  .kuis-card .body{ flex:1; min-width:0; }
+  .kuis-card .judul{ font-weight:700; font-size:1em; }
+  .kuis-card .meta{ font-size:.82em; color:var(--ink-soft); margin-top:2px; }
+  .status{ flex:none; font-size:.74em; font-weight:700; padding:5px 10px; border-radius:999px; }
+  .status.ready{ background:#E4F3EC; color:var(--brand-dark); }
+
+  .empty-note{
+    padding:22px 18px; text-align:center; color:var(--ink-soft); font-size:.9em;
+  }
+
+  footer{ margin:28px 0 10px; text-align:center; color:var(--ink-soft); font-size:.8em; }
+  footer .muh{ color:var(--brand-dark); font-weight:700; }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap">
+    <div class="top-row">
+      <a class="back-link" href="../">← Semua mata pelajaran</a>
+      <div class="font-ctrl" role="group" aria-label="Ukuran tulisan">
+        <button type="button" id="fontDown" aria-label="Perkecil tulisan">A−</button>
+        <button type="button" id="fontUp" aria-label="Perbesar tulisan">A+</button>
+      </div>
+    </div>
+    <div class="hero">
+      <span class="icon" aria-hidden="true">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8.2" stroke="#F4FBF9" stroke-width="1.6"/><path d="M12 3.8c2.6 2.4 4 5.3 4 8.2s-1.4 5.8-4 8.2c-2.6-2.4-4-5.3-4-8.2s1.4-5.8 4-8.2Z" stroke="#F4FBF9" stroke-width="1.6"/><path d="M4.3 12h15.4" stroke="#F4FBF9" stroke-width="1.6"/></svg>
+      </span>
+      <div>
+        <h1>IPAS</h1>
+        <p>Ilmu Pengetahuan Alam &amp; Sosial</p>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <h2 class="section-title">Kuis tersedia</h2>
+    <div class="panel">
+      <a class="kuis-card" href="bunyi.html">
+        <span class="icon-kuis" aria-hidden="true">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 10v4h4l6 5V5l-6 5H4Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M17 9c1.6 1.6 1.6 5.4 0 7M20 6c3 3 3 9 0 12" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+        </span>
+        <span class="body">
+          <span class="judul">Bunyi</span>
+          <span class="meta">20 soal · 30 menit · Kelas 5A</span>
+        </span>
+        <span class="status ready">Aktif</span>
+      </a>
+    </div>
+
+    <h2 class="section-title">Segera hadir</h2>
+    <div class="panel">
+      <div class="empty-note">
+        Materi IPAS lain untuk kelas 5 akan ditambahkan secara bertahap di halaman ini.
+      </div>
+    </div>
+
+    <footer>
+      IPAS &middot; <span class="muh">SD Muhammadiyah 01 Kukusan</span>
+    </footer>
+  </div>
+</main>
+
+<script>
+(function(){
+  var root = document.documentElement;
+  var KEY = "kuis-font-step";
+  var MIN = -2, MAX = 4, STEP = 1;
+  function apply(step){
+    step = Math.max(MIN, Math.min(MAX, step));
+    root.style.setProperty("--step", step + "px");
+    localStorage.setItem(KEY, String(step));
+    return step;
+  }
+  var saved = parseInt(localStorage.getItem(KEY), 10);
+  var current = apply(isNaN(saved) ? 0 : saved);
+  document.getElementById("fontUp").addEventListener("click", function(){ current = apply(current + STEP); });
+  document.getElementById("fontDown").addEventListener("click", function(){ current = apply(current - STEP); });
+})();
+</script>
+
+</body>
+</html>
