@@ -37,6 +37,23 @@ Catatan progres pengerjaan, disusun per fase supaya mudah dilanjutkan di sesi be
 
 ---
 
+## Fase 5b — Kuis IPAS kedua: Ekosistem (Aliran Energi & Simbiosis)
+
+**Tanggal:** 7 September 2026
+
+**Yang dikerjakan:**
+- Ditambahkan kuis kedua untuk mapel IPAS: `ipas/ekosistem.html`, materi "Hubungan Timbal Balik & Aliran Energi" (Subunit 3: Rantai & Jaring-Jaring Makanan | Simbiosis), sumber `Presentation_Ekosistem.pdf`.
+- Dibuat `ipas/draft-soal-ekosistem.md` sebagai arsip bank soal (20 soal, C1→C5, kompetensi A–F) beserta kunci jawaban dan pembahasan, mengikuti pola `draft-soal-bunyi.md`.
+- File HTML dibangun dari pola `bahasa-indonesia/deskripsi.html` (versi terbaru, sudah termasuk `LABEL_KOMPETENSI_EMAIL` untuk laporan ke orang tua), `ID_KUIS = 'IPAS-EKOSISTEM-01'`, backend Apps Script sama seperti kuis lain.
+- `ipas/index.html` diperbarui: kartu kuis "Ekosistem: Aliran Energi & Simbiosis" ditambahkan ke daftar "Kuis tersedia".
+- `index.html` (halaman utama) diperbarui: badge IPAS dari "1 kuis tersedia" menjadi "2 kuis tersedia".
+- Bank soal divalidasi otomatis (index jawaban, panjang array kategori/urutan, keanggotaan kode kompetensi) — tidak ditemukan error struktural.
+
+**Belum dikerjakan / catatan lanjutan:**
+- Token kuis untuk `IPAS-EKOSISTEM-01` perlu didaftarkan di backend Apps Script (Code.gs / sheet token) sebelum kuis bisa dipakai siswa — belum dicek dari sisi ini karena backend tidak termasuk dalam repo.
+- Belum diuji langsung di perangkat/browser sungguhan — baru divalidasi lewat pengecekan struktur data JS.
+- Checklist `antiregresi.md` belum dicentang manual sebelum publish ke siswa.
+
 ## Fase berikutnya (usulan urutan)
 
 1. Tentukan dulu format soal kuis (pilihan ganda saja, atau campur isian singkat) dan skema datanya (mis. JSON per mapel) sebelum mulai membangun halaman kuis pertama.
