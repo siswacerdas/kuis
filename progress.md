@@ -72,6 +72,21 @@ Catatan progres pengerjaan, disusun per fase supaya mudah dilanjutkan di sesi be
 - Belum diuji di HP/browser sungguhan, baru divalidasi struktur datanya.
 - Checklist `antiregresi.md` belum dicentang manual sebelum publish ke siswa.
 
+## Fase 5c — Riwayat Kuis jadi live (fetch dari backend, bukan snapshot statis)
+
+**Tanggal:** 8 September 2026
+
+**Yang dikerjakan:**
+- Ditambahkan folder `backend/` berisi `Code.gs` (cermin/referensi backend Apps Script yang sebenarnya) dan `README.md` yang menjelaskan bahwa file ini tidak auto-deploy — perubahan tetap harus disalin manual ke editor Apps Script.
+- Ditambahkan action baru `riwayatKuis` (GET) di `doGet()`, lewat fungsi baru `ambilRiwayatKuis_()`, yang membaca sheet `Nama_Siswa`, `Daftar_Kuis`, dan `Hasil_Kuis` secara langsung dan mengembalikan submission TERBARU per (siswa, kuis) sebagai JSON — akun "Tes Sistem" selalu dikecualikan. Tidak mengubah fungsi/action yang sudah ada (`daftarSiswa`, `mulaiKuis`, `submitKuis`).
+- `riwayat-kuis/index.html` diubah total dari data ter-embed statis menjadi fetch live ke `WEBAPP_URL + '?action=riwayatKuis'` setiap halaman dibuka, dengan status "Memuat…" / "Data terbaru — dimuat pukul HH:MM" / pesan gagal, filter otomatis nonaktif saat memuat, dan tombol "Perbarui" untuk refresh manual tanpa reload halaman.
+- Nama materi tetap ditampilkan ramah-baca lewat `MATERI_LABEL_OVERRIDE` di sisi client (menimpa Nama_Kuis mentah dari sheet); kuis baru yang belum didaftarkan di map ini tetap tampil apa adanya, tidak "hilang".
+- Diuji dengan simulasi DOM (jsdom): skenario fetch berhasil (termasuk nilai 0 tetap tampil angka, bukan "Belum mengerjakan") dan skenario fetch gagal (pesan error + tombol "Coba lagi").
+
+**Belum dikerjakan / catatan lanjutan:**
+- Perubahan `Code.gs` di repo ini **belum otomatis aktif** — Arif perlu menyalin fungsi `ambilRiwayatKuis_()`, `formatTanggalIndo_()`, konstanta `NAMA_AKUN_TES`, dan baris baru di `doGet()` ke Apps Script editor sungguhan, lalu deploy ulang ("Manage deployments" → versi baru) sebelum halaman riwayat bisa memuat data live.
+- Belum diuji terhadap backend Apps Script sungguhan (baru diuji dengan data tiruan/mock).
+
 ## Fase berikutnya (usulan urutan)
 
 1. Tentukan dulu format soal kuis (pilihan ganda saja, atau campur isian singkat) dan skema datanya (mis. JSON per mapel) sebelum mulai membangun halaman kuis pertama.
