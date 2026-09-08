@@ -54,6 +54,24 @@ Catatan progres pengerjaan, disusun per fase supaya mudah dilanjutkan di sesi be
 - Belum diuji langsung di perangkat/browser sungguhan — baru divalidasi lewat pengecekan struktur data JS.
 - Checklist `antiregresi.md` belum dicentang manual sebelum publish ke siswa.
 
+## Fase 3b — Kuis Bahasa Indonesia kedua: Jalinan Deskripsi dan Sebab-Akibat
+
+**Tanggal:** 8 September 2026
+
+**Yang dikerjakan:**
+- Ditambahkan kuis kedua untuk mapel Bahasa Indonesia: `bahasa-indonesia/sebab-akibat.html`, materi "Jalinan Akrab Deskripsi dan Sebab-Akibat" (Subunit 2), sumber `Presentation_Sebab-Akibat.pdf`.
+- File dibangun dari pola `deskripsi.html` (`ID_KUIS = 'BINDO-SEBABAKIBAT-01'`), 20 soal C1→C5 (3/5/6/3/3), 13 PG/2 PGK/2 Kategori/3 Urutan, dengan 6 kompetensi (A–F): konsep deskripsi & sebab-akibat, menemukan detail dari pengamatan, kata hubung sebab/akibat/pertentangan, menyusun kalimat penjelasan, menilai kekuatan penjelasan, dan menerapkan langkah amati-pikirkan-jelaskan.
+- Bank soal divalidasi otomatis (index jawaban, panjang array kategori/urutan, keanggotaan kode kompetensi) — tidak ditemukan error struktural.
+- **Bug lama ditemukan & diperbaiki**: `deskripsi.html` ternyata masih menyisakan teks layar hasil dari kuis Bunyi ("Kerja bagus sudah menyelesaikan kuis Bunyi.") — sudah diperbaiki di `deskripsi.html` maupun di file baru `sebab-akibat.html`.
+- `bahasa-indonesia/index.html` diperbarui: kartu kuis "Jalinan Deskripsi dan Sebab-Akibat" ditambahkan.
+- `index.html` (halaman utama) diperbarui: badge Bahasa Indonesia dari "1 kuis tersedia" menjadi "2 kuis tersedia".
+- `riwayat-kuis/index.html` diperbarui: kuis baru ditambahkan ke data riwayat (status "Belum mengerjakan" untuk semua siswa karena belum ada yang mengerjakan).
+
+**Belum dikerjakan / catatan lanjutan:**
+- Token kuis untuk `BINDO-SEBABAKIBAT-01` perlu didaftarkan di backend Apps Script sebelum kuis bisa dipakai siswa.
+- Belum diuji di HP/browser sungguhan, baru divalidasi struktur datanya.
+- Checklist `antiregresi.md` belum dicentang manual sebelum publish ke siswa.
+
 ## Fase berikutnya (usulan urutan)
 
 1. Tentukan dulu format soal kuis (pilihan ganda saja, atau campur isian singkat) dan skema datanya (mis. JSON per mapel) sebelum mulai membangun halaman kuis pertama.
