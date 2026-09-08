@@ -64,6 +64,19 @@
 
   .riwayat-summary{ font-size:.82em; color:var(--ink-soft); margin:14px 4px 10px; }
 
+  .riwayat-status{
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    font-size:.82em; color:var(--ink-soft); margin:14px 2px 4px;
+  }
+  .riwayat-status.error{ color:#C24B3F; }
+  .btn-refresh{
+    appearance:none; border:1px solid var(--line); background:var(--paper);
+    color:var(--brand-dark); font-weight:700; font-size:.82em;
+    padding:7px 13px; border-radius:999px; cursor:pointer; flex:none;
+  }
+  .btn-refresh:disabled{ opacity:.55; cursor:default; }
+  .btn-refresh:active:not(:disabled){ background:#F1EFE8; }
+
   /* ---------- Grup hasil ---------- */
   .riwayat-group{
     border:1px solid var(--line); border-radius:12px; margin-bottom:10px;
@@ -143,23 +156,27 @@
       <div class="riwayat-filter">
         <div class="field">
           <label for="filterMapel">Mata pelajaran</label>
-          <select id="filterMapel">
+          <select id="filterMapel" disabled>
             <option value="">Semua mata pelajaran</option>
           </select>
         </div>
         <div class="field">
           <label for="filterMateri">Materi kuis</label>
-          <select id="filterMateri">
+          <select id="filterMateri" disabled>
             <option value="">Semua materi</option>
           </select>
         </div>
         <div class="field">
           <label for="filterNama">Cari nama siswa</label>
-          <input type="text" id="filterNama" placeholder="Ketik nama siswa..." autocomplete="off">
+          <input type="text" id="filterNama" placeholder="Ketik nama siswa..." autocomplete="off" disabled>
         </div>
       </div>
     </div>
 
+    <div class="riwayat-status" id="riwayatStatus">
+      <span id="riwayatStatusText">Memuat data riwayat…</span>
+      <button type="button" class="btn-refresh" id="btnRefresh" disabled>Memuat…</button>
+    </div>
     <p class="riwayat-summary" id="riwayatSummary"></p>
     <div id="riwayatHasil"></div>
 
@@ -189,25 +206,56 @@
 
 <script>
 (function(){
-  // Data riwayat kuis — snapshot dari Database_Kuis.xlsx (akun "Tes Sistem" sudah dikecualikan).
-  // Perbarui blok ini secara berkala saat ada hasil kuis baru yang perlu ditampilkan di sini.
-  var RIWAYAT_DATA = {"siswa":["Abdurrahman Ar Ribery","Abyan Nandana Khalif","Adskhan Ibran Elfatih","Afiya Nur Ataya Sandi","Aisyah Afqohunnisa","Akhdan Ziyad","Alam Rayyan Fiyanto","Arsyila Almahyira Azgefa","Athifa Nur Pelangi","Fairel Atharizz Calief","Fatih Pratama Basuki","Flora Baby Queen","Gilang Aditya Ramadhan","Ilham Ibrahim","Inara Huwaida Ardhani","Kinara Adisti Salsabila","Kirana Hafizah Iqra Nasution","Latifa Rafanda","Meshya Belliza Utama","Muhammad Ali Alfarizi","Nayla Latifa","Quenzino Satria Hadika","Reynand Pratama","Shakila Qiyana Shadiqah","Shanum Meyra Rosadi"],"kuis":[{"id":"IPAS-BUNYI-01","mapel":"IPAS","materi":"Bunyi"},{"id":"BINDO-DESKRIPSI-01","mapel":"Bahasa Indonesia","materi":"Mendeskripsikan Informasi"},{"id":"IPAS-EKOSISTEM-01","mapel":"IPAS","materi":"Ekosistem: Aliran Energi & Simbiosis"},{"id":"BINDO-SEBABAKIBAT-01","mapel":"Bahasa Indonesia","materi":"Jalinan Deskripsi dan Sebab-Akibat"}],"hasil":{"IPAS-BUNYI-01":{"Abdurrahman Ar Ribery":{"skor":17,"skorMax":20,"tanggal":"2 Agu 2026"},"Abyan Nandana Khalif":{"skor":19,"skorMax":20,"tanggal":"2 Agu 2026"},"Adskhan Ibran Elfatih":{"skor":11,"skorMax":20,"tanggal":"2 Agu 2026"},"Afiya Nur Ataya Sandi":{"skor":19,"skorMax":20,"tanggal":"2 Agu 2026"},"Aisyah Afqohunnisa":{"skor":18,"skorMax":20,"tanggal":"3 Agu 2026"},"Akhdan Ziyad":{"skor":16,"skorMax":20,"tanggal":"2 Agu 2026"},"Alam Rayyan Fiyanto":{"skor":18,"skorMax":20,"tanggal":"2 Agu 2026"},"Arsyila Almahyira Azgefa":{"skor":18,"skorMax":20,"tanggal":"2 Agu 2026"},"Athifa Nur Pelangi":{"skor":15,"skorMax":20,"tanggal":"2 Agu 2026"},"Fairel Atharizz Calief":{"skor":19,"skorMax":20,"tanggal":"2 Agu 2026"},"Fatih Pratama Basuki":{"skor":16,"skorMax":20,"tanggal":"3 Agu 2026"},"Flora Baby Queen":{"skor":16,"skorMax":20,"tanggal":"3 Agu 2026"},"Gilang Aditya Ramadhan":{"skor":17,"skorMax":20,"tanggal":"2 Agu 2026"},"Ilham Ibrahim":{"skor":15,"skorMax":20,"tanggal":"3 Agu 2026"},"Inara Huwaida Ardhani":{"skor":13,"skorMax":20,"tanggal":"2 Agu 2026"},"Kinara Adisti Salsabila":{"skor":20,"skorMax":20,"tanggal":"2 Agu 2026"},"Kirana Hafizah Iqra Nasution":{"skor":20,"skorMax":20,"tanggal":"2 Agu 2026"},"Latifa Rafanda":{"skor":14,"skorMax":20,"tanggal":"2 Agu 2026"},"Meshya Belliza Utama":{"skor":12,"skorMax":20,"tanggal":"2 Agu 2026"},"Muhammad Ali Alfarizi":{"skor":14,"skorMax":20,"tanggal":"2 Agu 2026"},"Nayla Latifa":{"skor":17,"skorMax":20,"tanggal":"2 Agu 2026"},"Quenzino Satria Hadika":{"skor":15,"skorMax":20,"tanggal":"2 Agu 2026"},"Reynand Pratama":{"skor":14,"skorMax":20,"tanggal":"2 Agu 2026"},"Shakila Qiyana Shadiqah":{"skor":17,"skorMax":20,"tanggal":"2 Agu 2026"},"Shanum Meyra Rosadi":{"skor":19,"skorMax":20,"tanggal":"2 Agu 2026"}},"BINDO-DESKRIPSI-01":{"Abdurrahman Ar Ribery":{"skor":17,"skorMax":20,"tanggal":"3 Agu 2026"},"Abyan Nandana Khalif":{"skor":19,"skorMax":20,"tanggal":"3 Agu 2026"},"Adskhan Ibran Elfatih":{"skor":16,"skorMax":20,"tanggal":"3 Agu 2026"},"Afiya Nur Ataya Sandi":{"skor":20,"skorMax":20,"tanggal":"3 Agu 2026"},"Aisyah Afqohunnisa":{"skor":12,"skorMax":20,"tanggal":"3 Agu 2026"},"Akhdan Ziyad":{"skor":13,"skorMax":20,"tanggal":"4 Agu 2026"},"Alam Rayyan Fiyanto":{"skor":17,"skorMax":20,"tanggal":"3 Agu 2026"},"Arsyila Almahyira Azgefa":{"skor":13,"skorMax":20,"tanggal":"3 Agu 2026"},"Athifa Nur Pelangi":{"skor":16,"skorMax":20,"tanggal":"3 Agu 2026"},"Fairel Atharizz Calief":{"skor":15,"skorMax":20,"tanggal":"3 Agu 2026"},"Fatih Pratama Basuki":{"skor":15,"skorMax":20,"tanggal":"3 Agu 2026"},"Flora Baby Queen":{"skor":13,"skorMax":20,"tanggal":"3 Agu 2026"},"Gilang Aditya Ramadhan":{"skor":10,"skorMax":20,"tanggal":"3 Agu 2026"},"Inara Huwaida Ardhani":{"skor":16,"skorMax":20,"tanggal":"3 Agu 2026"},"Kinara Adisti Salsabila":{"skor":20,"skorMax":20,"tanggal":"3 Agu 2026"},"Kirana Hafizah Iqra Nasution":{"skor":20,"skorMax":20,"tanggal":"3 Agu 2026"},"Latifa Rafanda":{"skor":17,"skorMax":20,"tanggal":"3 Agu 2026"},"Meshya Belliza Utama":{"skor":10,"skorMax":20,"tanggal":"3 Agu 2026"},"Muhammad Ali Alfarizi":{"skor":16,"skorMax":20,"tanggal":"3 Agu 2026"},"Nayla Latifa":{"skor":14,"skorMax":20,"tanggal":"5 Agu 2026"},"Quenzino Satria Hadika":{"skor":19,"skorMax":20,"tanggal":"3 Agu 2026"},"Reynand Pratama":{"skor":14,"skorMax":20,"tanggal":"3 Agu 2026"},"Shakila Qiyana Shadiqah":{"skor":20,"skorMax":20,"tanggal":"3 Agu 2026"},"Shanum Meyra Rosadi":{"skor":18,"skorMax":20,"tanggal":"3 Agu 2026"}},"IPAS-EKOSISTEM-01":{},"BINDO-SEBABAKIBAT-01":{}}};
+  // WEBAPP_URL sama persis dengan yang dipakai halaman kuis (bunyi.html, dst.)
+  // untuk memuat daftar nama siswa — backend Apps Script yang sama, action baru.
+  var WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbwotrwYBt0_-_9g4o2gNs6ktaTn1sw41f3jJlgoK5pN2N5RofwRjOeiSqzQq1JZsjhclw/exec';
+
+  // Nama materi yang lebih ramah dibaca, menimpa Nama_Kuis mentah dari
+  // spreadsheet. Kuis yang belum terdaftar di sini akan tetap tampil
+  // memakai Nama_Kuis apa adanya dari sheet Daftar_Kuis, jadi halaman ini
+  // tidak akan "melewatkan" kuis baru meski belum sempat ditambahkan ke sini.
+  var MATERI_LABEL_OVERRIDE = {
+    'IPAS-BUNYI-01': 'Bunyi',
+    'BINDO-DESKRIPSI-01': 'Mendeskripsikan Informasi',
+    'IPAS-EKOSISTEM-01': 'Ekosistem: Aliran Energi & Simbiosis',
+    'BINDO-SEBABAKIBAT-01': 'Jalinan Deskripsi dan Sebab-Akibat'
+  };
 
   var selMapel = document.getElementById("filterMapel");
   var selMateri = document.getElementById("filterMateri");
   var inputNama = document.getElementById("filterNama");
   var hasilEl = document.getElementById("riwayatHasil");
   var summaryEl = document.getElementById("riwayatSummary");
+  var statusEl = document.getElementById("riwayatStatus");
+  var statusTextEl = document.getElementById("riwayatStatusText");
+  var btnRefresh = document.getElementById("btnRefresh");
 
-  var mapelUnik = [];
-  RIWAYAT_DATA.kuis.forEach(function(k){
-    if (mapelUnik.indexOf(k.mapel) === -1) mapelUnik.push(k.mapel);
-  });
-  mapelUnik.forEach(function(m){
-    var opt = document.createElement("option");
-    opt.value = m; opt.textContent = m;
-    selMapel.appendChild(opt);
-  });
+  var RIWAYAT_DATA = null;
+
+  function escapeHtml(s){
+    return String(s).replace(/[&<>"']/g, function(c){
+      return { "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c];
+    });
+  }
+
+  function jamSekarang(){
+    var d = new Date();
+    function dua(n){ return (n < 10 ? "0" : "") + n; }
+    return dua(d.getHours()) + ":" + dua(d.getMinutes());
+  }
+
+  function isiOpsiMapel(){
+    selMapel.innerHTML = '<option value="">Semua mata pelajaran</option>';
+    var mapelUnik = [];
+    RIWAYAT_DATA.kuis.forEach(function(k){
+      if (mapelUnik.indexOf(k.mapel) === -1) mapelUnik.push(k.mapel);
+    });
+    mapelUnik.forEach(function(m){
+      var opt = document.createElement("option");
+      opt.value = m; opt.textContent = m;
+      selMapel.appendChild(opt);
+    });
+  }
 
   function isiOpsiMateri(mapelTerpilih){
     selMateri.innerHTML = '<option value="">Semua materi</option>';
@@ -218,15 +266,10 @@
       selMateri.appendChild(opt);
     });
   }
-  isiOpsiMateri("");
-
-  function escapeHtml(s){
-    return String(s).replace(/[&<>"']/g, function(c){
-      return { "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c];
-    });
-  }
 
   function render(){
+    if (!RIWAYAT_DATA) return;
+
     var mapelF = selMapel.value;
     var materiF = selMateri.value;
     var namaF = inputNama.value.trim().toLowerCase();
@@ -282,14 +325,68 @@
     }
   }
 
+  function aturModeMemuat(){
+    statusEl.classList.remove("error");
+    statusTextEl.textContent = "Memuat data riwayat…";
+    btnRefresh.disabled = true;
+    btnRefresh.textContent = "Memuat…";
+    selMapel.disabled = true;
+    selMateri.disabled = true;
+    inputNama.disabled = true;
+  }
+
+  function aturModeSiap(){
+    btnRefresh.disabled = false;
+    btnRefresh.textContent = "Perbarui";
+    selMapel.disabled = false;
+    selMateri.disabled = false;
+    inputNama.disabled = false;
+  }
+
+  function muatData(){
+    aturModeMemuat();
+    hasilEl.innerHTML = '<div class="riwayat-empty">Memuat data riwayat…</div>';
+    summaryEl.textContent = "";
+
+    fetch(WEBAPP_URL + '?action=riwayatKuis')
+      .then(function(r){ return r.json(); })
+      .then(function(res){
+        if (!res || res.ok === false){
+          throw new Error(res && res.pesan ? res.pesan : 'Data tidak valid.');
+        }
+        res.kuis.forEach(function(k){
+          if (MATERI_LABEL_OVERRIDE[k.id]) k.materi = MATERI_LABEL_OVERRIDE[k.id];
+        });
+        RIWAYAT_DATA = res;
+
+        aturModeSiap();
+        statusTextEl.textContent = "Data terbaru — dimuat pukul " + jamSekarang() + ".";
+
+        isiOpsiMapel();
+        isiOpsiMateri("");
+        render();
+      })
+      .catch(function(){
+        aturModeSiap();
+        btnRefresh.textContent = "Coba lagi";
+        statusEl.classList.add("error");
+        statusTextEl.textContent = "Gagal memuat data riwayat. Periksa koneksi internet, lalu coba lagi.";
+        hasilEl.innerHTML = '<div class="riwayat-empty">Data riwayat belum bisa dimuat.</div>';
+        selMapel.disabled = true;
+        selMateri.disabled = true;
+        inputNama.disabled = true;
+      });
+  }
+
   selMapel.addEventListener("change", function(){
     isiOpsiMateri(selMapel.value);
     render();
   });
   selMateri.addEventListener("change", render);
   inputNama.addEventListener("input", render);
+  btnRefresh.addEventListener("click", muatData);
 
-  render();
+  muatData();
 })();
 </script>
 
