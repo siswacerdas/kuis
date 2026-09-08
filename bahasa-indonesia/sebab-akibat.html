@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Kuis Bahasa Indonesia — Mendeskripsikan Informasi | SD Muhammadiyah 01 Kukusan</title>
+<title>Kuis Bahasa Indonesia — Jalinan Deskripsi dan Sebab-Akibat | SD Muhammadiyah 01 Kukusan</title>
 <meta name="theme-color" content="#0F6B5C">
 <style>
   :root{
@@ -204,7 +204,7 @@
   <div class="wrap brand-row">
     <div class="brand-text">
       <div class="school">SD Muhammadiyah 01 Kukusan · Kelas 5A</div>
-      <div class="app">Kuis B. Indonesia — Deskripsi</div>
+      <div class="app">Kuis B. Indonesia — Sebab-Akibat</div>
     </div>
     <div class="font-ctrl" role="group" aria-label="Ukuran tulisan">
       <button type="button" id="fontDown" aria-label="Perkecil tulisan">A−</button>
@@ -223,7 +223,7 @@
           <div class="icon" aria-hidden="true">
             <svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M4 5.5h13a2 2 0 0 1 2 2v10.7L15.5 16H4V5.5Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M7.5 9h7M7.5 12.2h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
           </div>
-          <h1>Siap latihan kuis Deskripsi?</h1>
+          <h1>Siap latihan kuis Sebab-Akibat?</h1>
           <p class="muted">Pilih namamu dan masukkan token dari gurumu untuk mulai.</p>
         </div>
 
@@ -243,7 +243,7 @@
 
         <div class="field">
           <label for="inputToken">Token dari guru</label>
-          <input type="text" id="inputToken" placeholder="Contoh: BUNYI25" autocomplete="off">
+          <input type="text" id="inputToken" placeholder="Contoh: SEBAB25" autocomplete="off">
         </div>
 
         <button class="btn btn-primary" id="btnMulai" disabled>Memuat…</button>
@@ -280,7 +280,7 @@
     <section id="layar-hasil" class="hidden">
       <div class="panel">
         <h1 style="text-align:center;">Kuis selesai!</h1>
-        <p class="muted" style="text-align:center;">Kerja bagus sudah menyelesaikan kuis Deskripsi.</p>
+        <p class="muted" style="text-align:center;">Kerja bagus sudah menyelesaikan kuis Sebab-Akibat.</p>
 
         <div class="skor-besar">
           <div class="angka" id="hasilAngka">0/20</div>
@@ -305,29 +305,29 @@
    KONFIGURASI
    ============================================================ */
 var WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbwotrwYBt0_-_9g4o2gNs6ktaTn1sw41f3jJlgoK5pN2N5RofwRjOeiSqzQq1JZsjhclw/exec';
-var ID_KUIS = 'BINDO-DESKRIPSI-01';
-var NAMA_KUIS = 'Kuis B. Indonesia — Mendeskripsikan Informasi';
+var ID_KUIS = 'BINDO-SEBABAKIBAT-01';
+var NAMA_KUIS = 'Kuis B. Indonesia — Jalinan Deskripsi dan Sebab-Akibat';
 var DURASI_DETIK = 30 * 60;
 
 // Label singkat untuk ditampilkan ke siswa di layar hasil
 var LABEL_KOMPETENSI = {
-  A: 'Konsep teks deskripsi',
-  B: 'Tujuan deskripsi (pancaindra)',
-  C: 'Deskripsi vs eksplanasi',
-  D: 'Fungsi kata sifat & keterangan',
-  E: 'Memilih kata sifat & keterangan tepat',
-  F: 'Cara & praktik mendeskripsikan benda'
+  A: 'Konsep deskripsi & sebab-akibat',
+  B: 'Menemukan detail dari pengamatan',
+  C: 'Kata hubung: sebab, akibat, pertentangan',
+  D: 'Menyusun kalimat penjelasan',
+  E: 'Menilai kekuatan penjelasan',
+  F: 'Menerapkan langkah amati–pikirkan–jelaskan'
 };
 
 // Versi lebih lengkap untuk laporan email orang tua (dikirim ke backend
 // saat submit, supaya Code.gs tidak perlu tahu detail tiap mapel).
 var LABEL_KOMPETENSI_EMAIL = {
-  A: 'Memahami konsep deskripsi sebagai cara menggambarkan informasi melalui kata/kalimat',
-  B: 'Memahami tujuan deskripsi, yaitu menggambarkan informasi dengan bantuan pancaindra agar pembaca seolah mengalaminya sendiri',
-  C: 'Memahami deskripsi sebagai cara memperkaya informasi, berbeda dengan teks eksplanasi',
-  D: 'Memahami fungsi kata sifat dan kata keterangan dalam mendeskripsikan informasi',
-  E: 'Mengidentifikasi kata sifat dan kata keterangan yang tepat untuk mendeskripsikan objek, hobi, dan hal lain',
-  F: 'Mampu memahami cara dan praktik mendeskripsikan benda-benda di sekitar'
+  A: 'Memahami bahwa detail hasil pengamatan membuat penjelasan sebab-akibat menjadi lebih nyata dan meyakinkan',
+  B: 'Mampu menemukan detail penting dari hasil pengamatan, seperti warna, tekstur, jumlah, letak, dan keadaan',
+  C: 'Memahami dan menggunakan kata hubung sebab (karena, sebab), akibat (sehingga, akibatnya), dan pertentangan (meskipun, walaupun) dengan tepat',
+  D: 'Mampu menyusun kalimat penjelasan dengan menggabungkan pengamatan, sebab, dan kata hubung yang sesuai',
+  E: 'Mampu menilai apakah sebuah penjelasan sudah cukup detail dan hubungan sebab-akibatnya masuk akal',
+  F: 'Mampu menerapkan langkah amati-temukan detail-hubungkan-jelaskan pada berbagai objek, keadaan, maupun kejadian/perubahan'
 };
 
 /* ============================================================
@@ -340,102 +340,100 @@ var ILUST = {};
    ============================================================ */
 var DATA_SOAL = [
   { tipe:'pg', level:'C1', kompetensi:'A',
-    teks:'Perhatikan kalimat berikut: "Kucing itu berbulu putih lembut, matanya bulat berwarna hijau, dan ekornya panjang melengkung." Kalimat ini adalah contoh dari ...',
-    pilihan:['Kalimat perintah','Kalimat deskripsi','Kalimat tanya','Kalimat ajakan'], jawaban:1 },
+    teks:'Detail yang kita amati dapat membuat penjelasan sebab-akibat menjadi ...',
+    pilihan:['Semakin singkat','Semakin nyata dan meyakinkan','Semakin sulit dipahami','Semakin membingungkan'], jawaban:1 },
 
-  { tipe:'pg', level:'C1', kompetensi:'D',
-    teks:'Kata yang menjelaskan sifat atau keadaan suatu benda, orang, atau tempat (misalnya: besar, harum, ramai) disebut ...',
-    pilihan:['Kata kerja','Kata sifat','Kata bilangan','Kata tanya'], jawaban:1 },
+  { tipe:'pg', level:'C1', kompetensi:'A',
+    teks:'Sebuah penjelasan sebab-akibat dianggap kuat jika ...',
+    pilihan:['Sekadar menggunakan kata "karena"','Hubungan sebab-akibatnya masuk akal dan didukung detail pengamatan','Kalimatnya sangat panjang','Menggunakan banyak kata sifat'], jawaban:1 },
 
-  { tipe:'pg', level:'C1', kompetensi:'D',
-    teks:'Kata yang menjelaskan bagaimana, kapan, atau di mana sesuatu terjadi (misalnya: dengan cepat, kemarin, di taman) disebut ...',
-    pilihan:['Kata benda','Kata ganti','Kata keterangan','Kata sambung'], jawaban:2 },
+  { tipe:'pg', level:'C1', kompetensi:'A',
+    teks:'Langkah pertama yang perlu dilakukan sebelum menjelaskan sebab-akibat suatu keadaan adalah ...',
+    pilihan:['Menjelaskan','Mengamati','Menghubungkan','Memeriksa'], jawaban:1 },
 
   { tipe:'pg', level:'C2', kompetensi:'B',
-    teks:'Tujuan utama menulis teks deskripsi adalah ...',
-    pilihan:['Menjelaskan urutan langkah melakukan sesuatu','Membuat pembaca seolah-olah melihat, mendengar, atau merasakan sendiri hal yang digambarkan','Meyakinkan pembaca untuk melakukan sesuatu','Menceritakan urutan kejadian dari awal sampai akhir'], jawaban:1 },
-
-  { tipe:'pg', level:'C2', kompetensi:'C',
-    teks:'Perbedaan utama teks deskripsi dengan teks eksplanasi adalah ...',
-    pilihan:['Deskripsi menggambarkan ciri-ciri suatu hal, sedangkan eksplanasi menjelaskan proses atau sebab-akibat terjadinya sesuatu','Deskripsi hanya boleh tentang hewan, sedangkan eksplanasi tentang benda mati','Deskripsi selalu lebih pendek daripada eksplanasi','Keduanya sama saja, tidak ada perbedaan'], jawaban:0 },
-
-  { tipe:'kategori', level:'C2', kompetensi:'E',
-    teks:'Kelompokkan kata-kata berikut ke dalam kategori Kata Sifat atau Kata Keterangan:',
-    instruksi:'Ketuk kategori yang sesuai untuk setiap kata.',
-    item:['manis','dengan hati-hati','tinggi','kemarin sore','harum','di dalam kotak'],
-    kategoriPilihan:['Kata Sifat','Kata Keterangan'],
-    jawaban:[0,1,0,1,0,1] },
-
-  { tipe:'pg', level:'C2', kompetensi:'E',
-    teks:'Manakah kata sifat dalam kalimat berikut? "Rumah itu besar dan berwarna biru muda."',
-    pilihan:['Rumah','itu','besar','dan'], jawaban:2 },
+    teks:'Berikut ini yang termasuk detail yang bisa diamati dari sebuah benda, KECUALI ...',
+    pilihan:['Warna','Tekstur','Perasaan orang yang belum pernah melihatnya','Letak'], jawaban:2 },
 
   { tipe:'urutan', level:'C2', kompetensi:'F',
-    teks:'Urutkan langkah-langkah menyusun kalimat deskripsi berikut:',
+    teks:'Urutkan langkah menyusun penjelasan sebab-akibat berikut, mulai dari yang pertama dilakukan:',
     instruksi:'Ketuk langkah satu per satu sesuai urutan yang benar.',
-    langkah:['Pilih kata sifat dan kata keterangan yang tepat untuk menggambarkannya','Tentukan benda atau hal yang akan dideskripsikan','Susun kata-kata tadi menjadi kalimat yang runtut','Amati ciri-ciri benda tersebut menggunakan pancaindra'],
-    jawabanUrutan:[1,3,0,2] },
+    langkah:['Jelaskan hubungan sebab-akibatnya','Amati keadaan dengan teliti','Hubungkan pengamatan dengan alasan yang masuk akal','Temukan detail penting dari hasil pengamatan'],
+    jawabanUrutan:[1,3,2,0] },
 
-  { tipe:'pg', level:'C3', kompetensi:'E',
-    teks:'Lengkapi kalimat berikut dengan kata sifat yang tepat: "Bunga mawar itu berwarna merah dan baunya sangat ___."',
-    pilihan:['cepat','harum','kemarin','berlari'], jawaban:1 },
+  { tipe:'pg', level:'C2', kompetensi:'A',
+    teks:'Bandingkan dua kalimat berikut: (1) "Karena ban sepeda saya bocor, Pak." (2) "Karena ban belakang sepeda saya kempes rata dengan jalan, dan ada sebatang paku karatan sepanjang 3 cm yang menancap kuat di karet ban tersebut." Perbedaan utama kedua kalimat itu adalah ...',
+    pilihan:['Kalimat kedua lebih detail sehingga lebih meyakinkan','Kalimat pertama lebih detail','Kalimat kedua tidak memiliki hubungan sebab-akibat','Kedua kalimat itu sama persis maknanya'], jawaban:0 },
 
-  { tipe:'pg', level:'C3', kompetensi:'E',
-    teks:'Lengkapi kalimat berikut dengan kata keterangan yang tepat: "Adik bermain di taman ___."',
-    pilihan:['lembut','manis','dengan gembira','tinggi'], jawaban:2 },
+  { tipe:'kategori', level:'C2', kompetensi:'C',
+    teks:'Kelompokkan kata hubung berikut sebagai Sebab, Akibat, atau Pertentangan:',
+    instruksi:'Ketuk kategori yang sesuai untuk setiap kata.',
+    item:['karena','sehingga','meskipun','dikarenakan','akibatnya','walaupun'],
+    kategoriPilihan:['Sebab','Akibat','Pertentangan'],
+    jawaban:[0,1,2,0,1,2] },
 
-  { tipe:'kategori', level:'C3', kompetensi:'B',
-    teks:'Kelompokkan kalimat deskripsi berikut berdasarkan pancaindra yang digunakan untuk mengamatinya:',
+  { tipe:'pg', level:'C2', kompetensi:'C',
+    teks:'Kata hubung yang tepat digunakan untuk menunjukkan hasil atau akibat dari suatu sebab adalah ...',
+    pilihan:['karena','meskipun','sehingga','walaupun'], jawaban:2 },
+
+  { tipe:'pg', level:'C3', kompetensi:'D',
+    teks:'Pengamatan: "Debu terlihat menempel di meja." Sebab: "Jendela kelas terbuka sepanjang hari." Kalimat penjelasan yang tepat menghubungkan keduanya adalah ...',
+    pilihan:['Debu terlihat menempel di meja sehingga jendela kelas terbuka sepanjang hari.','Debu terlihat menempel di meja karena jendela kelas terbuka sepanjang hari.','Jendela kelas terbuka sepanjang hari meskipun debu menempel di meja.','Debu menempel di meja, walaupun jendela kelas terbuka.'], jawaban:1 },
+
+  { tipe:'pg', level:'C3', kompetensi:'D',
+    teks:'Rumus menyusun penjelasan yang kuat menurut materi ini adalah ...',
+    pilihan:['Objek + Nama + Kesimpulan','Pengamatan + Sebab + Kata Hubung = Penjelasan','Deskripsi + Pertanyaan = Jawaban','Judul + Isi + Penutup'], jawaban:1 },
+
+  { tipe:'kategori', level:'C3', kompetensi:'C',
+    teks:'Pasangkan setiap kalimat berikut dengan jenis hubungan yang ditunjukkannya:',
     instruksi:'Ketuk kategori yang sesuai untuk setiap kalimat.',
-    item:['Bunga itu berwarna merah cerah dan kelopaknya lebar','Aromanya harum semerbak memenuhi ruangan','Suara air terjun itu bergemuruh dan menggema'],
-    kategoriPilihan:['Penglihatan','Penciuman','Pendengaran'],
+    item:['Hujan turun karena awan mendung menggumpal tebal.','Suhu tubuhnya meningkat sehingga ia menjadi demam.','Cuaca sangat panas, meskipun begitu ia tetap belajar dengan semangat.'],
+    kategoriPilihan:['Sebab','Akibat','Pertentangan'],
     jawaban:[0,1,2] },
 
+  { tipe:'pg', level:'C3', kompetensi:'D',
+    teks:'Manakah kalimat yang paling tepat menjelaskan hubungan sebab-akibat dari pengamatan berikut? Pengamatan: tanaman tampak layu, daun menguning, dan tanah dalam pot terlihat kering.',
+    pilihan:['Tanaman tampak layu karena kekurangan air sehingga daunnya menguning dan menggantung layu.','Tanaman tampak layu, sehingga kekurangan air.','Tanaman tidak disiram meskipun daunnya menguning.','Daun menguning adalah tanda tanaman yang sehat.'], jawaban:0 },
+
+  { tipe:'pg', level:'C3', kompetensi:'C',
+    teks:'Deskripsi "Ini adalah tanaman lidah mertua. Daunnya panjang, tegak, dan memiliki pola hijau kekuningan." lebih baik daripada "Ini adalah tanaman" karena ...',
+    pilihan:['Hanya menyebutkan nama tanpa ciri-ciri','Menambahkan ciri-ciri yang membuat gambaran menjadi lebih jelas dan detail','Lebih singkat sehingga lebih mudah dibaca','Tidak menyebutkan nama objek sama sekali'], jawaban:1 },
+
   { tipe:'urutan', level:'C3', kompetensi:'F',
-    teks:'Urutkan kalimat-kalimat berikut menjadi paragraf deskripsi yang runtut tentang seekor kucing:',
-    instruksi:'Ketuk kalimat satu per satu sesuai urutan yang benar.',
-    langkah:['Bulunya berwarna oranye bergaris-garis putih dan sangat lembut saat disentuh','Kucing peliharaanku bernama Milo','Setiap sore, ia suka duduk manja di dekat jendela sambil menjemur diri','Matanya bulat besar berwarna kuning keemasan'],
-    jawabanUrutan:[1,0,3,2] },
+    teks:'Urutkan langkah berpikir berikut untuk menemukan hubungan sebab-akibat dari suatu keadaan:',
+    instruksi:'Ketuk langkah satu per satu sesuai urutan yang benar.',
+    langkah:['Apa buktinya?','Apa yang kamu amati?','Mengapa hal itu terjadi?','Apa yang terjadi?'],
+    jawabanUrutan:[1,3,2,0] },
 
-  { tipe:'pg', level:'C3', kompetensi:'F',
-    teks:'Manakah kalimat yang merupakan deskripsi paling baik tentang sebuah pensil?',
-    pilihan:['Pensil adalah alat tulis.','Pensil itu berwarna kuning cerah, panjangnya sekitar 15 cm, dan ujungnya runcing tajam.','Pensil digunakan untuk menulis dan menggambar.','Aku punya sebuah pensil di tas.'], jawaban:1 },
-
-  { tipe:'pg', level:'C3', kompetensi:'F',
-    teks:'Langkah pertama yang sebaiknya dilakukan sebelum menulis deskripsi tentang suatu benda adalah ...',
-    pilihan:['Langsung menulis kalimat sepanjang mungkin','Mengamati benda tersebut dengan cermat menggunakan pancaindra','Mencari kata sifat di kamus tanpa melihat bendanya','Menghitung jumlah kata yang akan ditulis'], jawaban:1 },
-
-  { tipe:'pgk', level:'C4', kompetensi:'D',
-    teks:'Pilih semua pernyataan yang benar tentang kata sifat dan kata keterangan dalam teks deskripsi:',
+  { tipe:'pgk', level:'C4', kompetensi:'E',
+    teks:'Pilih semua ciri jawaban/penjelasan yang tepat menurut materi ini:',
     instruksi:'Bisa lebih dari satu jawaban benar.',
-    pilihan:['Kata sifat dan kata keterangan membuat deskripsi menjadi lebih hidup dan jelas','Kata sifat hanya boleh dipakai untuk mendeskripsikan manusia','Kata keterangan bisa menjelaskan bagaimana, kapan, atau di mana sesuatu terjadi','Semakin spesifik kata sifat yang dipilih, semakin jelas gambaran yang didapat pembaca','Teks deskripsi sebaiknya tidak memakai kata sifat sama sekali'],
-    jawaban:[0,2,3] },
+    pilihan:['Ada hasil pengamatan','Ada detail yang benar-benar terlihat','Ada alasan (sebab) yang berhubungan','Hanya menggunakan kata "karena" tanpa detail apa pun','Kalimatnya utuh dan mudah dipahami'],
+    jawaban:[0,1,2,4] },
 
   { tipe:'urutan', level:'C4', kompetensi:'F',
-    teks:'Berikut tiga kalimat yang mendeskripsikan hal yang sama. Urutkan dari yang PALING detail dan hidup sampai yang PALING sederhana:',
-    instruksi:'Ketuk kalimat satu per satu, mulai dari yang paling detail.',
-    langkah:['Kucing itu lucu.','Kucing itu berbulu oranye lembut dengan mata bulat berwarna kuning keemasan.','Kucing itu berwarna oranye.'],
-    jawabanUrutan:[1,2,0] },
+    teks:'Urutkan tahapan lengkap membuat penjelasan yang kuat berikut, mulai dari yang pertama:',
+    instruksi:'Ketuk langkah satu per satu sesuai urutan yang benar.',
+    langkah:['Rangkai menjadi kalimat','Deskripsikan','Amati','Temukan sebab','Jelaskan akibat'],
+    jawabanUrutan:[2,1,3,4,0] },
 
-  { tipe:'pg', level:'C4', kompetensi:'C',
-    teks:'Perhatikan dua kutipan berikut. Kutipan 1: "Danau itu airnya jernih kebiruan, dikelilingi pohon-pohon pinus yang menjulang tinggi." Kutipan 2: "Danau terbentuk dari air hujan yang terkumpul di cekungan tanah selama bertahun-tahun." Kutipan manakah yang merupakan teks deskripsi?',
-    pilihan:['Kutipan 1, karena menggambarkan ciri-ciri danau yang bisa dibayangkan pancaindra','Kutipan 2, karena menjelaskan proses terbentuknya danau','Keduanya sama-sama deskripsi','Keduanya sama-sama eksplanasi'], jawaban:0 },
+  { tipe:'pg', level:'C4', kompetensi:'E',
+    teks:'Perhatikan ilustrasi: pakaian basah dijemur di bawah sinar matahari, setelah beberapa waktu menjadi kering. Ada dua penjelasan berikut: (A) "Pakaian dijemur di halaman lalu pakaian menjadi kering." (B) "Pakaian dijemur di bawah sinar matahari sehingga air pada pakaian menguap dan pakaian menjadi kering." Manakah penjelasan yang lebih kuat, dan mengapa?',
+    pilihan:['Penjelasan A, karena lebih singkat','Penjelasan B, karena menjelaskan sebab (sinar matahari) dan akibat (air menguap) secara jelas','Keduanya sama kuat','Penjelasan A, karena tidak menyebutkan sebab apa pun'], jawaban:1 },
 
-  { tipe:'pgk', level:'C5', kompetensi:'A',
-    teks:'Setelah mempelajari teks deskripsi, pilih semua kesimpulan yang tepat:',
+  { tipe:'pgk', level:'C5', kompetensi:'F',
+    teks:'Setelah mempelajari materi ini, pilih semua pernyataan yang benar tentang deskripsi:',
     instruksi:'Bisa lebih dari satu jawaban benar.',
-    pilihan:['Teks deskripsi menggambarkan sesuatu dengan bantuan pancaindra agar pembaca seolah mengalaminya sendiri','Kata sifat dan kata keterangan berperan penting membuat deskripsi lebih jelas dan hidup','Teks deskripsi sama persis dengan teks eksplanasi','Semakin spesifik dan detail ciri-ciri yang digambarkan, semakin baik kualitas deskripsinya','Teks deskripsi hanya bisa dipakai untuk mendeskripsikan hewan'],
-    jawaban:[0,1,3] },
+    pilihan:['Deskripsi hanya bisa digunakan untuk benda, tidak untuk kejadian atau perubahan','Deskripsi bisa digunakan untuk menggambarkan keadaan, peristiwa, atau perubahan','Menyebutkan nama objek selalu dilarang dalam deskripsi','Deskripsi yang baik menambahkan ciri-ciri yang membuat gambaran lebih jelas','Hubungan sebab-akibat dapat membuat deskripsi kejadian menjadi lebih jelas'],
+    jawaban:[1,3,4] },
+
+  { tipe:'pg', level:'C5', kompetensi:'E',
+    teks:'Perhatikan ilustrasi: sepatu tampak basah dan bagian bawahnya terkena tanah. Penjelasan manakah yang PALING tepat dan lengkap?',
+    pilihan:['Sepatu itu kotor.','Sepatu tampak basah dan terkena tanah, tetapi tidak jelas sebabnya.','Sepatu tampak basah karena berjalan di luar saat hujan.','Sepatu itu baru dibeli kemarin.'], jawaban:2 },
 
   { tipe:'pg', level:'C5', kompetensi:'F',
-    teks:'Dika ditugaskan mendeskripsikan mainan kesayangannya untuk teman sekelas, agar teman-temannya bisa membayangkan mainan itu meski belum pernah melihatnya. Pendekatan yang paling tepat adalah ...',
-    pilihan:['Menyebutkan hanya nama dan harga mainan tersebut','Mengamati bentuk, warna, ukuran, dan tekstur mainan itu, lalu menuliskannya dengan kata sifat dan kata keterangan yang spesifik','Menjelaskan cara mainan itu dibuat di pabrik','Menceritakan kapan dan di mana mainan itu dibeli saja'], jawaban:1 },
-
-  { tipe:'pgk', level:'C5', kompetensi:'E',
-    teks:'Seorang siswa menulis deskripsi: "Tasku bagus." Gurunya bilang kalimat ini masih kurang detail. Pilih semua cara yang tepat untuk memperbaikinya:',
-    instruksi:'Bisa lebih dari satu jawaban benar.',
-    pilihan:['Menambahkan kata sifat yang lebih spesifik, misalnya warna, bentuk, atau bahan tasnya','Menambahkan kata keterangan yang menjelaskan detail lain, misalnya ukurannya atau bagaimana tampilannya','Mengganti kata "bagus" dengan kata sifat yang lebih detail seperti "berwarna biru tua dengan motif bintang"','Menghapus semua kata sifat dari kalimat itu','Membiarkan kalimat itu apa adanya karena sudah cukup jelas'],
-    jawaban:[0,1,2] }
+    teks:'"Ruangan menjadi gelap karena lampunya dimatikan sehingga benda-benda di dalam ruangan sulit terlihat." Kalimat ini menunjukkan penjelasan yang baik karena ...',
+    pilihan:['Hanya menyebutkan akibat tanpa sebab','Menghubungkan sebab (lampu dimatikan) dan akibat (benda sulit terlihat) secara masuk akal','Tidak ada hubungan sebab-akibat sama sekali','Kalimatnya terlalu panjang'], jawaban:1 }
 ];
 
 
