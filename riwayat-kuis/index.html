@@ -254,7 +254,7 @@
         if (h){
           return '<div class="riwayat-row">' +
             '<span class="rr-nama">' + escapeHtml(nama) + '<span class="rr-tanggal">' + escapeHtml(h.tanggal) + '</span></span>' +
-            '<span class="rr-nilai">' + h.skor + '/' + h.skorMax + '</span>' +
+            '<span class="rr-nilai">' + Math.round((h.skor / h.skorMax) * 100) + '</span>' +
             '</div>';
         }
         return '<div class="riwayat-row">' +
