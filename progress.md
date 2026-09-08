@@ -87,6 +87,24 @@ Catatan progres pengerjaan, disusun per fase supaya mudah dilanjutkan di sesi be
 - Perubahan `Code.gs` di repo ini **belum otomatis aktif** — Arif perlu menyalin fungsi `ambilRiwayatKuis_()`, `formatTanggalIndo_()`, konstanta `NAMA_AKUN_TES`, dan baris baru di `doGet()` ke Apps Script editor sungguhan, lalu deploy ulang ("Manage deployments" → versi baru) sebelum halaman riwayat bisa memuat data live.
 - Belum diuji terhadap backend Apps Script sungguhan (baru diuji dengan data tiruan/mock).
 
+## Fase 6 — Perbaikan: reset kuis (hapus baris di spreadsheet) tidak mengizinkan siswa mengulang di perangkat yang sama
+
+**Tanggal:** 8 September 2026
+
+**Akar masalah (ditemukan setelah ditelusuri):** setiap kuis menyimpan status "sudah selesai" di `localStorage` perangkat siswa (`kuisSelesai_<ID_KUIS>_<nama>`), dan halaman kuis MEMPERCAYA catatan lokal ini begitu saja tanpa mengecek ulang ke server. Kalau guru menghapus baris hasil siswa di sheet `Hasil_Kuis` (supaya siswa bisa mengulang karena kendala teknis), spreadsheet memang sudah bersih — tapi perangkat siswa yang sama tetap "mengira" kuisnya sudah selesai karena localStorage tidak pernah tersinkron ulang, sehingga siswa langsung diarahkan ke layar hasil lama, bukan layar masuk. Ini bug lama bawaan struktur kuis, bukan sesuatu yang baru dibuat.
+
+**Perbaikan yang dilakukan (backend + 4 file kuis):**
+- Backend (`backend/Code.gs`): ditambahkan action baru `cekStatusKuis` (GET, tanpa token) lewat fungsi `cekStatusKuis_(idKuis, nama)`, yang mengecek langsung ke sheet `Hasil_Kuis` apakah siswa tsb BENAR-BENAR masih tercatat sudah mengerjakan. Tidak mengubah action/fungsi manapun yang sudah ada.
+- 4 halaman kuis (`ipas/bunyi.html`, `ipas/ekosistem.html`, `bahasa-indonesia/deskripsi.html`, `bahasa-indonesia/sebab-akibat.html`) diperbarui secara identik: sebelum menampilkan hasil dari cache localStorage, halaman sekarang memanggil `cekStatusKuis` dulu ke server.
+  - Kalau server bilang **masih tercatat** → tampilkan hasil lama seperti biasa (perilaku lama tidak berubah).
+  - Kalau server bilang **sudah tidak ada** (baris sudah dihapus guru) → catatan lokal (`kuisSelesai`, `kuisMulai`, `kuisJawaban`) dihapus otomatis, siswa kembali ke layar masuk dan bisa mengulang dengan token seperti biasa.
+  - Kalau gagal terhubung ke server (offline sesaat) → untuk keamanan, tetap tampilkan hasil cache (tidak mengizinkan mengulang tanpa konfirmasi server).
+- Diuji dengan simulasi DOM (jsdom) untuk kedua skenario (baris sudah dihapus / belum dihapus) — keduanya berperilaku sesuai harapan.
+
+**Belum dikerjakan / catatan lanjutan:**
+- Perubahan `Code.gs` di repo **belum otomatis aktif** — perlu disalin manual ke Apps Script editor (timpa seluruh isi) lalu deploy ulang lewat "Manage deployments" → New version (URL /exec tetap sama, tidak ada file lain yang perlu diubah).
+- Alur untuk guru **tidak berubah sama sekali** — cukup hapus baris siswa yang bersangkutan di sheet `Hasil_Kuis` seperti biasa; perbaikan ini murni di sisi teknis supaya cara lama tersebut kembali benar-benar berfungsi, termasuk di perangkat yang sama dengan percobaan sebelumnya.
+
 ## Fase berikutnya (usulan urutan)
 
 1. Tentukan dulu format soal kuis (pilihan ganda saja, atau campur isian singkat) dan skema datanya (mis. JSON per mapel) sebelum mulai membangun halaman kuis pertama.
