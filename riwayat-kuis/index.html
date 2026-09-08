@@ -1,1 +1,297 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Riwayat Kuis — Kuis Digital SDM01KKS</title>
+<meta name="theme-color" content="#0F6B5C">
+<style>
+  :root{
+    --bg:#F7F6F1; --paper:#FFFFFF; --ink:#23241F; --ink-soft:#5B5D55;
+    --line:#E3E0D6; --brand:#0F6B5C; --brand-dark:#0B4F45; --amber:#E0952E;
+    --radius:14px; --step:0px; --maxw:760px;
+  }
+  *{ box-sizing:border-box; }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    font-size:calc(16px + var(--step)); line-height:1.5; -webkit-font-smoothing:antialiased;
+  }
+  a{ color:inherit; }
+  .wrap{ max-width:var(--maxw); margin:0 auto; padding:0 20px; }
 
+  header.site{ background:var(--brand); color:#F4FBF9; padding:20px 0 24px; }
+  .top-row{ display:flex; align-items:center; justify-content:space-between; gap:10px; }
+  .back-link{
+    display:inline-flex; align-items:center; gap:6px; font-size:.85em; font-weight:600;
+    text-decoration:none; color:#E3F2ED; opacity:.9;
+  }
+  .font-ctrl{ display:flex; align-items:center; gap:2px; background:rgba(255,255,255,.12); border-radius:999px; padding:3px; }
+  .font-ctrl button{ appearance:none; border:0; background:transparent; color:#F4FBF9; min-width:30px; height:30px; padding:0 8px; border-radius:999px; font-weight:700; font-size:13px; line-height:1; white-space:nowrap; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; }
+  .font-ctrl button:active{ background:rgba(255,255,255,.28); }
+
+  .hero{ margin-top:18px; display:flex; align-items:center; gap:12px; }
+  .hero .icon{ width:44px; height:44px; border-radius:12px; background:var(--brand-dark); display:grid; place-items:center; flex:none; }
+  .hero h1{ margin:0; font-size:1.4em; font-weight:800; }
+  .hero p{ margin:2px 0 0; font-size:.85em; color:#E3F2ED; }
+
+  main{ padding:6px 0 30px; }
+  .section-title{
+    font-size:.82em; text-transform:uppercase; letter-spacing:.06em; color:var(--ink-soft);
+    font-weight:700; margin:20px 0 10px 4px;
+  }
+
+  /* ---------- Filter ---------- */
+  .filter-panel{
+    background:var(--paper); border-radius:var(--radius);
+    box-shadow:0 1px 3px rgba(20,30,25,.06), 0 8px 24px -14px rgba(20,30,25,.18);
+    padding:16px;
+  }
+  .riwayat-filter{ display:grid; grid-template-columns:1fr; gap:10px; }
+  .riwayat-filter .field{ display:flex; flex-direction:column; gap:5px; }
+  .riwayat-filter label{
+    font-size:.76em; font-weight:700; color:var(--ink-soft);
+    text-transform:uppercase; letter-spacing:.04em;
+  }
+  .riwayat-filter select,
+  .riwayat-filter input{
+    appearance:none; border:1px solid var(--line); border-radius:10px;
+    padding:10px 12px; font-size:.95em; font-family:inherit; color:var(--ink); background:var(--paper);
+  }
+  .riwayat-filter select:focus-visible,
+  .riwayat-filter input:focus-visible{ outline:2px solid var(--brand); outline-offset:1px; }
+
+  .riwayat-summary{ font-size:.82em; color:var(--ink-soft); margin:14px 4px 10px; }
+
+  /* ---------- Grup hasil ---------- */
+  .riwayat-group{
+    border:1px solid var(--line); border-radius:12px; margin-bottom:10px;
+    overflow:hidden; background:var(--paper);
+  }
+  .riwayat-group:last-child{ margin-bottom:0; }
+  .riwayat-group summary{
+    cursor:pointer; padding:13px 14px; display:flex; align-items:center; gap:8px;
+    list-style:none; background:#FAF9F5;
+  }
+  .riwayat-group summary::-webkit-details-marker{ display:none; }
+  .riwayat-group summary::after{
+    content:""; flex:none; width:8px; height:8px;
+    border-right:2px solid var(--ink-soft); border-bottom:2px solid var(--ink-soft);
+    transform:rotate(-45deg); transition:transform .15s ease; margin-left:auto;
+  }
+  .riwayat-group[open] summary::after{ transform:rotate(45deg); }
+  .riwayat-group summary:focus-visible{ outline:2px solid var(--brand); outline-offset:-2px; }
+
+  .grp-mapel{
+    flex:none; font-size:.72em; font-weight:700; padding:3px 9px; border-radius:999px;
+    background:#E7F6EE; color:#1F8A55; white-space:nowrap;
+  }
+  .grp-materi{ font-weight:700; min-width:0; }
+  .grp-count{ flex:none; font-size:.78em; color:var(--ink-soft); font-weight:600; }
+
+  .riwayat-list{ border-top:1px solid var(--line); }
+  .riwayat-row{
+    display:flex; justify-content:space-between; align-items:center; gap:10px;
+    padding:10px 14px; border-bottom:1px solid var(--line); font-size:.92em;
+  }
+  .riwayat-row:last-child{ border-bottom:0; }
+  .rr-nama{ min-width:0; }
+  .rr-nama .rr-tanggal{ display:block; font-size:.78em; color:var(--ink-soft); font-weight:400; }
+  .rr-nilai{
+    flex:none; font-weight:800; font-size:.88em; padding:4px 11px; border-radius:999px;
+    background:#E4F3EC; color:var(--brand-dark); white-space:nowrap;
+  }
+  .rr-nilai.belum{ font-weight:600; font-style:italic; background:#F1EFE8; color:var(--ink-soft); }
+
+  .riwayat-empty{ text-align:center; color:var(--ink-soft); font-size:.9em; padding:22px 10px; }
+
+  footer{ margin:28px 0 10px; text-align:center; color:var(--ink-soft); font-size:.8em; }
+  footer .muh{ color:var(--brand-dark); font-weight:700; }
+
+  @media (min-width:640px){
+    .riwayat-filter{ grid-template-columns:1fr 1fr 1fr; align-items:end; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap">
+    <div class="top-row">
+      <a class="back-link" href="../">← Menu utama</a>
+      <div class="font-ctrl" role="group" aria-label="Ukuran tulisan">
+        <button type="button" id="fontDown" aria-label="Perkecil tulisan">A−</button>
+        <button type="button" id="fontUp" aria-label="Perbesar tulisan">A+</button>
+      </div>
+    </div>
+    <div class="hero">
+      <span class="icon" aria-hidden="true">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M5 4.5h14v15l-3.2-2.1-3.3 2.1-3.3-2.1L10 19.5l-3.3-2.1L5 19.5v-15Z" stroke="#F4FBF9" stroke-width="1.6" stroke-linejoin="round"/><path d="M8.3 9h7.4M8.3 12.5h7.4" stroke="#F4FBF9" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </span>
+      <div>
+        <h1>Riwayat Kuis</h1>
+        <p>Nilai akhir siswa per mata pelajaran &amp; materi</p>
+      </div>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+    <div class="filter-panel">
+      <div class="riwayat-filter">
+        <div class="field">
+          <label for="filterMapel">Mata pelajaran</label>
+          <select id="filterMapel">
+            <option value="">Semua mata pelajaran</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="filterMateri">Materi kuis</label>
+          <select id="filterMateri">
+            <option value="">Semua materi</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="filterNama">Cari nama siswa</label>
+          <input type="text" id="filterNama" placeholder="Ketik nama siswa..." autocomplete="off">
+        </div>
+      </div>
+    </div>
+
+    <p class="riwayat-summary" id="riwayatSummary"></p>
+    <div id="riwayatHasil"></div>
+
+    <footer>
+      Riwayat Kuis &middot; <span class="muh">SD Muhammadiyah 01 Kukusan</span>
+    </footer>
+  </div>
+</main>
+
+<script>
+(function(){
+  var root = document.documentElement;
+  var KEY = "kuis-font-step";
+  var MIN = -2, MAX = 4, STEP = 1;
+  function apply(step){
+    step = Math.max(MIN, Math.min(MAX, step));
+    root.style.setProperty("--step", step + "px");
+    localStorage.setItem(KEY, String(step));
+    return step;
+  }
+  var saved = parseInt(localStorage.getItem(KEY), 10);
+  var current = apply(isNaN(saved) ? 0 : saved);
+  document.getElementById("fontUp").addEventListener("click", function(){ current = apply(current + STEP); });
+  document.getElementById("fontDown").addEventListener("click", function(){ current = apply(current - STEP); });
+})();
+</script>
+
+<script>
+(function(){
+  // Data riwayat kuis — snapshot dari Database_Kuis.xlsx (akun "Tes Sistem" sudah dikecualikan).
+  // Perbarui blok ini secara berkala saat ada hasil kuis baru yang perlu ditampilkan di sini.
+  var RIWAYAT_DATA = {"siswa":["Abdurrahman Ar Ribery","Abyan Nandana Khalif","Adskhan Ibran Elfatih","Afiya Nur Ataya Sandi","Aisyah Afqohunnisa","Akhdan Ziyad","Alam Rayyan Fiyanto","Arsyila Almahyira Azgefa","Athifa Nur Pelangi","Fairel Atharizz Calief","Fatih Pratama Basuki","Flora Baby Queen","Gilang Aditya Ramadhan","Ilham Ibrahim","Inara Huwaida Ardhani","Kinara Adisti Salsabila","Kirana Hafizah Iqra Nasution","Latifa Rafanda","Meshya Belliza Utama","Muhammad Ali Alfarizi","Nayla Latifa","Quenzino Satria Hadika","Reynand Pratama","Shakila Qiyana Shadiqah","Shanum Meyra Rosadi"],"kuis":[{"id":"IPAS-BUNYI-01","mapel":"IPAS","materi":"Bunyi"},{"id":"BINDO-DESKRIPSI-01","mapel":"Bahasa Indonesia","materi":"Mendeskripsikan Informasi"},{"id":"IPAS-EKOSISTEM-01","mapel":"IPAS","materi":"Ekosistem: Aliran Energi & Simbiosis"}],"hasil":{"IPAS-BUNYI-01":{"Abdurrahman Ar Ribery":{"skor":17,"skorMax":20,"tanggal":"2 Agu 2026"},"Abyan Nandana Khalif":{"skor":19,"skorMax":20,"tanggal":"2 Agu 2026"},"Adskhan Ibran Elfatih":{"skor":11,"skorMax":20,"tanggal":"2 Agu 2026"},"Afiya Nur Ataya Sandi":{"skor":19,"skorMax":20,"tanggal":"2 Agu 2026"},"Aisyah Afqohunnisa":{"skor":18,"skorMax":20,"tanggal":"3 Agu 2026"},"Akhdan Ziyad":{"skor":16,"skorMax":20,"tanggal":"2 Agu 2026"},"Alam Rayyan Fiyanto":{"skor":18,"skorMax":20,"tanggal":"2 Agu 2026"},"Arsyila Almahyira Azgefa":{"skor":18,"skorMax":20,"tanggal":"2 Agu 2026"},"Athifa Nur Pelangi":{"skor":15,"skorMax":20,"tanggal":"2 Agu 2026"},"Fairel Atharizz Calief":{"skor":19,"skorMax":20,"tanggal":"2 Agu 2026"},"Fatih Pratama Basuki":{"skor":16,"skorMax":20,"tanggal":"3 Agu 2026"},"Flora Baby Queen":{"skor":16,"skorMax":20,"tanggal":"3 Agu 2026"},"Gilang Aditya Ramadhan":{"skor":17,"skorMax":20,"tanggal":"2 Agu 2026"},"Ilham Ibrahim":{"skor":15,"skorMax":20,"tanggal":"3 Agu 2026"},"Inara Huwaida Ardhani":{"skor":13,"skorMax":20,"tanggal":"2 Agu 2026"},"Kinara Adisti Salsabila":{"skor":20,"skorMax":20,"tanggal":"2 Agu 2026"},"Kirana Hafizah Iqra Nasution":{"skor":20,"skorMax":20,"tanggal":"2 Agu 2026"},"Latifa Rafanda":{"skor":14,"skorMax":20,"tanggal":"2 Agu 2026"},"Meshya Belliza Utama":{"skor":12,"skorMax":20,"tanggal":"2 Agu 2026"},"Muhammad Ali Alfarizi":{"skor":14,"skorMax":20,"tanggal":"2 Agu 2026"},"Nayla Latifa":{"skor":17,"skorMax":20,"tanggal":"2 Agu 2026"},"Quenzino Satria Hadika":{"skor":15,"skorMax":20,"tanggal":"2 Agu 2026"},"Reynand Pratama":{"skor":14,"skorMax":20,"tanggal":"2 Agu 2026"},"Shakila Qiyana Shadiqah":{"skor":17,"skorMax":20,"tanggal":"2 Agu 2026"},"Shanum Meyra Rosadi":{"skor":19,"skorMax":20,"tanggal":"2 Agu 2026"}},"BINDO-DESKRIPSI-01":{"Abdurrahman Ar Ribery":{"skor":17,"skorMax":20,"tanggal":"3 Agu 2026"},"Abyan Nandana Khalif":{"skor":19,"skorMax":20,"tanggal":"3 Agu 2026"},"Adskhan Ibran Elfatih":{"skor":16,"skorMax":20,"tanggal":"3 Agu 2026"},"Afiya Nur Ataya Sandi":{"skor":20,"skorMax":20,"tanggal":"3 Agu 2026"},"Aisyah Afqohunnisa":{"skor":12,"skorMax":20,"tanggal":"3 Agu 2026"},"Akhdan Ziyad":{"skor":13,"skorMax":20,"tanggal":"4 Agu 2026"},"Alam Rayyan Fiyanto":{"skor":17,"skorMax":20,"tanggal":"3 Agu 2026"},"Arsyila Almahyira Azgefa":{"skor":13,"skorMax":20,"tanggal":"3 Agu 2026"},"Athifa Nur Pelangi":{"skor":16,"skorMax":20,"tanggal":"3 Agu 2026"},"Fairel Atharizz Calief":{"skor":15,"skorMax":20,"tanggal":"3 Agu 2026"},"Fatih Pratama Basuki":{"skor":15,"skorMax":20,"tanggal":"3 Agu 2026"},"Flora Baby Queen":{"skor":13,"skorMax":20,"tanggal":"3 Agu 2026"},"Gilang Aditya Ramadhan":{"skor":10,"skorMax":20,"tanggal":"3 Agu 2026"},"Inara Huwaida Ardhani":{"skor":16,"skorMax":20,"tanggal":"3 Agu 2026"},"Kinara Adisti Salsabila":{"skor":20,"skorMax":20,"tanggal":"3 Agu 2026"},"Kirana Hafizah Iqra Nasution":{"skor":20,"skorMax":20,"tanggal":"3 Agu 2026"},"Latifa Rafanda":{"skor":17,"skorMax":20,"tanggal":"3 Agu 2026"},"Meshya Belliza Utama":{"skor":10,"skorMax":20,"tanggal":"3 Agu 2026"},"Muhammad Ali Alfarizi":{"skor":16,"skorMax":20,"tanggal":"3 Agu 2026"},"Nayla Latifa":{"skor":14,"skorMax":20,"tanggal":"5 Agu 2026"},"Quenzino Satria Hadika":{"skor":19,"skorMax":20,"tanggal":"3 Agu 2026"},"Reynand Pratama":{"skor":14,"skorMax":20,"tanggal":"3 Agu 2026"},"Shakila Qiyana Shadiqah":{"skor":20,"skorMax":20,"tanggal":"3 Agu 2026"},"Shanum Meyra Rosadi":{"skor":18,"skorMax":20,"tanggal":"3 Agu 2026"}},"IPAS-EKOSISTEM-01":{}}};
+
+  var selMapel = document.getElementById("filterMapel");
+  var selMateri = document.getElementById("filterMateri");
+  var inputNama = document.getElementById("filterNama");
+  var hasilEl = document.getElementById("riwayatHasil");
+  var summaryEl = document.getElementById("riwayatSummary");
+
+  var mapelUnik = [];
+  RIWAYAT_DATA.kuis.forEach(function(k){
+    if (mapelUnik.indexOf(k.mapel) === -1) mapelUnik.push(k.mapel);
+  });
+  mapelUnik.forEach(function(m){
+    var opt = document.createElement("option");
+    opt.value = m; opt.textContent = m;
+    selMapel.appendChild(opt);
+  });
+
+  function isiOpsiMateri(mapelTerpilih){
+    selMateri.innerHTML = '<option value="">Semua materi</option>';
+    RIWAYAT_DATA.kuis.forEach(function(k){
+      if (mapelTerpilih && k.mapel !== mapelTerpilih) return;
+      var opt = document.createElement("option");
+      opt.value = k.id; opt.textContent = k.mapel + " — " + k.materi;
+      selMateri.appendChild(opt);
+    });
+  }
+  isiOpsiMateri("");
+
+  function escapeHtml(s){
+    return String(s).replace(/[&<>"']/g, function(c){
+      return { "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c];
+    });
+  }
+
+  function render(){
+    var mapelF = selMapel.value;
+    var materiF = selMateri.value;
+    var namaF = inputNama.value.trim().toLowerCase();
+
+    var kuisTampil = RIWAYAT_DATA.kuis.filter(function(k){
+      if (mapelF && k.mapel !== mapelF) return false;
+      if (materiF && k.id !== materiF) return false;
+      return true;
+    });
+
+    var html = "";
+    var totalGroupTampil = 0;
+
+    kuisTampil.forEach(function(k){
+      var siswaTampil = RIWAYAT_DATA.siswa.filter(function(nama){
+        return !namaF || nama.toLowerCase().indexOf(namaF) !== -1;
+      });
+      if (siswaTampil.length === 0) return;
+
+      totalGroupTampil++;
+      var openAttr = (mapelF || materiF || namaF) ? " open" : "";
+
+      var rows = siswaTampil.map(function(nama){
+        var h = RIWAYAT_DATA.hasil[k.id] && RIWAYAT_DATA.hasil[k.id][nama];
+        if (h){
+          return '<div class="riwayat-row">' +
+            '<span class="rr-nama">' + escapeHtml(nama) + '<span class="rr-tanggal">' + escapeHtml(h.tanggal) + '</span></span>' +
+            '<span class="rr-nilai">' + h.skor + '/' + h.skorMax + '</span>' +
+            '</div>';
+        }
+        return '<div class="riwayat-row">' +
+          '<span class="rr-nama">' + escapeHtml(nama) + '</span>' +
+          '<span class="rr-nilai belum">Belum mengerjakan</span>' +
+          '</div>';
+      }).join("");
+
+      html += '<details class="riwayat-group"' + openAttr + '>' +
+        '<summary>' +
+          '<span class="grp-mapel">' + escapeHtml(k.mapel) + '</span>' +
+          '<span class="grp-materi">' + escapeHtml(k.materi) + '</span>' +
+          '<span class="grp-count">' + siswaTampil.length + ' siswa</span>' +
+        '</summary>' +
+        '<div class="riwayat-list">' + rows + '</div>' +
+      '</details>';
+    });
+
+    if (totalGroupTampil === 0){
+      hasilEl.innerHTML = '<div class="riwayat-empty">Tidak ada riwayat yang cocok dengan filter ini.</div>';
+      summaryEl.textContent = "";
+    } else {
+      hasilEl.innerHTML = html;
+      summaryEl.textContent = "Menampilkan " + totalGroupTampil + " materi kuis.";
+    }
+  }
+
+  selMapel.addEventListener("change", function(){
+    isiOpsiMateri(selMapel.value);
+    render();
+  });
+  selMateri.addEventListener("change", render);
+  inputNama.addEventListener("input", render);
+
+  render();
+})();
+</script>
+
+</body>
+</html>
