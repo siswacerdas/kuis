@@ -462,6 +462,18 @@ function ambilDaftarSiswa(){
     .then(function(r){ return r.json(); });
 }
 
+// Dipakai untuk mengecek ke server apakah seorang siswa BENAR-BENAR masih
+// tercatat sudah mengerjakan kuis ini — supaya catatan "selesai" di
+// localStorage perangkat ini tidak dipercaya begitu saja. Ini penting saat
+// guru menghapus baris hasil di spreadsheet (mis. karena kendala teknis)
+// supaya siswa tsb bisa mengulang: tanpa pengecekan ini, perangkat yang
+// sama akan tetap mengira kuisnya sudah selesai walau di spreadsheet sudah
+// dihapus, karena localStorage tidak pernah otomatis disinkronkan ulang.
+function cekStatusKuis(idKuis, nama){
+  return fetch(WEBAPP_URL + '?action=cekStatusKuis&idKuis=' + encodeURIComponent(idKuis) + '&nama=' + encodeURIComponent(nama))
+    .then(function(r){ return r.json(); });
+}
+
 function kirimKeBackend(data){
   // Content-Type "text/plain" sengaja dipakai (bukan application/json) supaya
   // browser tidak mengirim preflight OPTIONS, karena Apps Script Web App
@@ -899,14 +911,49 @@ window.addEventListener('load', function(){
     var nama = elPilihNama.value;
     if (!nama) return;
     var selesai = localStorage.getItem(keySelesai(nama));
-    if (selesai){
-      try {
-        var hasil = JSON.parse(selesai);
-        namaSiswa = nama;
-        document.getElementById('layar-masuk').classList.add('hidden');
-        tampilkanHasil(hasil, 'Terkirim');
-      } catch(e){}
-    }
+    if (!selesai) return;
+
+    // Ada catatan "sudah selesai" tersimpan di perangkat ini. Jangan
+    // langsung dipercaya — cek dulu ke server, karena guru bisa saja sudah
+    // menghapus hasilnya di spreadsheet (mis. karena kendala teknis) supaya
+    // siswa ini bisa mengulang kuisnya dari perangkat yang sama.
+    elBtnMulai.disabled = true;
+    elBtnMulai.textContent = 'Memeriksa…';
+
+    cekStatusKuis(ID_KUIS, nama)
+      .then(function(res){
+        elBtnMulai.disabled = false;
+        elBtnMulai.textContent = 'Mulai Kuis';
+        if (res && res.ok && res.sudahMengerjakan){
+          try {
+            var hasil = JSON.parse(selesai);
+            namaSiswa = nama;
+            document.getElementById('layar-masuk').classList.add('hidden');
+            tampilkanHasil(hasil, 'Terkirim');
+          } catch(e){}
+        } else {
+          // Sudah tidak ditemukan lagi di server (kemungkinan dihapus guru
+          // supaya siswa ini bisa mengulang) — hapus catatan lama di
+          // perangkat ini supaya siswa bisa mulai dari layar masuk lagi.
+          localStorage.removeItem(keySelesai(nama));
+          localStorage.removeItem(keyMulai(nama));
+          localStorage.removeItem(keyJawaban(nama));
+        }
+      })
+      .catch(function(){
+        // Gagal terhubung ke server (mis. sedang offline sebentar): untuk
+        // amannya jangan menganggap boleh mengulang begitu saja, tetap
+        // tampilkan hasil yang tersimpan. Siswa/guru bisa coba lagi nanti
+        // saat koneksi stabil.
+        elBtnMulai.disabled = false;
+        elBtnMulai.textContent = 'Mulai Kuis';
+        try {
+          var hasil = JSON.parse(selesai);
+          namaSiswa = nama;
+          document.getElementById('layar-masuk').classList.add('hidden');
+          tampilkanHasil(hasil, 'Terkirim');
+        } catch(e){}
+      });
   });
 });
 
