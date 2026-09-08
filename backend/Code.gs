@@ -120,6 +120,14 @@ function doGet(e) {
   if (action === 'riwayatKuis') {
     return jsonResponse_(ambilRiwayatKuis_());
   }
+  if (action === 'cekStatusKuis') {
+    const idKuis = String(e.parameter.idKuis || '').trim();
+    const nama = String(e.parameter.nama || '').trim();
+    if (!idKuis || !nama) {
+      return jsonResponse_({ ok: false, pesan: 'idKuis dan nama wajib diisi.' });
+    }
+    return jsonResponse_(cekStatusKuis_(idKuis, nama));
+  }
   return jsonResponse_({ ok: false, pesan: 'Aksi GET tidak dikenal.' });
 }
 
@@ -242,6 +250,19 @@ function sudahMengerjakan_(idKuis, nama) {
     }
   }
   return false;
+}
+
+/**
+ * Dipanggil dari halaman kuis (GET, tanpa token) untuk mengecek apakah
+ * seorang siswa BENAR-BENAR masih tercatat sudah mengerjakan kuis tsb di
+ * spreadsheet — dipakai untuk memvalidasi catatan "selesai" yang tersimpan
+ * di localStorage perangkat siswa, supaya kalau guru menghapus baris hasil
+ * di sheet Hasil_Kuis (mis. karena kendala teknis), siswa yang bersangkutan
+ * bisa langsung mengulang kuisnya dari perangkat yang sama tanpa perlu
+ * membersihkan cache/localStorage secara manual.
+ */
+function cekStatusKuis_(idKuis, nama) {
+  return { ok: true, sudahMengerjakan: sudahMengerjakan_(idKuis, nama) };
 }
 
 // ================= LANGKAH 3: SUBMIT, SIMPAN, KIRIM EMAIL =================
