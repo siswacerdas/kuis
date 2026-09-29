@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cetak laporan latihan — Area guru</title>
+<meta name="theme-color" content="#0F6B5C">
+<style>
+  :root{ --bg:#F7F6F1; --paper:#fff; --ink:#23241F; --soft:#5B5D55; --line:#E3E0D6; --brand:#0F6B5C; --brand-dark:#0B4F45; --radius:14px; }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:var(--bg); color:var(--ink); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif; font-size:15px; line-height:1.45; }
+  header.site{ background:var(--brand); color:#F4FBF9; padding:16px 20px; }
+  header.site .wrap{ max-width:800px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; }
+  header.site a{ color:#E3F2ED; text-decoration:none; font-weight:600; font-size:.9em; }
+  header.site h1{ margin:0; font-size:1.15em; }
+  main{ max-width:800px; margin:0 auto; padding:20px 16px 48px; }
+  .card{ background:var(--paper); border:1px solid var(--line); border-radius:var(--radius); padding:14px 16px; margin-bottom:12px; }
+  .card h2{ margin:0 0 10px; font-size:.75em; text-transform:uppercase; letter-spacing:.05em; color:var(--soft); }
+  label{ display:block; font-size:.78em; font-weight:600; color:var(--soft); margin-bottom:4px; }
+  select{ width:100%; padding:9px 11px; border:1.5px solid var(--line); border-radius:9px; font:inherit; background:#fff; margin-bottom:8px; }
+  .row{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; }
+  @media (max-width:640px){ .row{ grid-template-columns:1fr; } }
+  .btn{ appearance:none; border:0; border-radius:10px; padding:10px 14px; font:inherit; font-weight:700; background:var(--brand); color:#fff; cursor:pointer; }
+  .btn.secondary{ background:#EDEBE3; color:var(--ink); }
+  .btn:disabled{ opacity:.55; }
+  .toolbar{ display:flex; flex-wrap:wrap; gap:8px; margin-top:4px; }
+  .report{ display:none; background:#fff; border:1px solid var(--line); border-radius:12px; padding:24px 22px; margin-top:8px; }
+  .report.show{ display:block; }
+  .report-header{ border-bottom:2px solid var(--brand); padding-bottom:12px; margin-bottom:16px; }
+  .report-header .school{ font-size:.8em; text-transform:uppercase; letter-spacing:.04em; color:var(--soft); }
+  .report-header h2{ margin:4px 0 0; font-size:1.25em; color:var(--brand-dark); }
+  .report-meta{ display:grid; grid-template-columns:1fr 1fr; gap:8px 16px; font-size:.9em; margin-bottom:16px; }
+  .report-meta .k{ color:var(--soft); font-size:.8em; }
+  .report-meta .v{ font-weight:600; }
+  table{ width:100%; border-collapse:collapse; font-size:.88em; }
+  th, td{ text-align:left; padding:8px 6px; border-bottom:1px solid var(--line); }
+  th{ font-size:.72em; text-transform:uppercase; letter-spacing:.04em; color:var(--soft); }
+  .summary{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin:14px 0 18px; }
+  .summary .box{ background:#F7F6F1; border-radius:10px; padding:10px 12px; text-align:center; }
+  .summary .n{ font-size:1.3em; font-weight:800; color:var(--brand-dark); }
+  .summary .l{ font-size:.75em; color:var(--soft); }
+  .foot{ margin-top:20px; font-size:.8em; color:var(--soft); border-top:1px solid var(--line); padding-top:10px; }
+  .empty{ text-align:center; color:var(--soft); padding:20px; }
+  .msg{ display:none; margin-top:8px; padding:10px; border-radius:10px; font-size:.9em; }
+  .msg.show{ display:block; }
+  .msg.err{ background:#FBEAE6; color:#C24B3F; }
+  @media print{
+    body{ background:#fff; }
+    header.site, .no-print{ display:none !important; }
+    main{ max-width:none; padding:0; margin:0; }
+    .report{ display:block !important; border:0; border-radius:0; padding:0; margin:0; }
+    .report-header{ border-bottom:2px solid #000; }
+    .summary .box{ border:1px solid #ccc; background:#fff; }
+    th, td{ border-bottom:1px solid #ccc; }
+  }
+</style>
+</head>
+<body>
+<script>
+if (sessionStorage.getItem('kuis-guru-ok') !== '1') location.replace('../index.html');
+</script>
+<header class="site no-print">
+  <div class="wrap">
+    <h1>Cetak laporan latihan</h1>
+    <a href="./">← Area guru</a>
+  </div>
+</header>
+<main>
+  <div class="card no-print">
+    <h2>Pilih data laporan</h2>
+    <div class="row">
+      <div>
+        <label for="fNama">Nama siswa</label>
+        <select id="fNama"><option value="">— Pilih siswa —</option></select>
+      </div>
+      <div>
+        <label for="fMapel">Mapel (opsional)</label>
+        <select id="fMapel"><option value="">Semua</option></select>
+      </div>
+      <div>
+        <label for="fMateri">Materi (opsional)</label>
+        <select id="fMateri"><option value="">Semua</option></select>
+      </div>
+    </div>
+    <div class="toolbar">
+      <button type="button" class="btn" id="btnBuat">Buat laporan</button>
+      <button type="button" class="btn secondary" id="btnCetak" disabled>Cetak / Simpan PDF</button>
+    </div>
+    <p style="margin:10px 0 0;font-size:.85em;color:var(--soft)">
+      Tombol cetak membuka dialog browser. Pilih <strong>Save as PDF</strong> / <strong>Simpan sebagai PDF</strong> untuk dibagikan ke orang tua.
+    </p>
+    <div id="msg" class="msg"></div>
+  </div>
+
+  <div id="report" class="report" aria-live="polite">
+    <div class="report-header">
+      <div class="school">SD Muhammadiyah 01 Kukusan · Kelas 5</div>
+      <h2>Laporan Hasil Latihan Asesmen</h2>
+    </div>
+    <div class="report-meta">
+      <div><div class="k">Nama siswa</div><div class="v" id="rNama">—</div></div>
+      <div><div class="k">Tanggal cetak</div><div class="v" id="rTanggal">—</div></div>
+      <div><div class="k">Filter mapel</div><div class="v" id="rMapel">Semua</div></div>
+      <div><div class="k">Filter materi</div><div class="v" id="rMateri">Semua</div></div>
+    </div>
+    <div class="summary">
+      <div class="box"><div class="n" id="rPercobaan">0</div><div class="l">Percobaan</div></div>
+      <div class="box"><div class="n" id="rRata">—</div><div class="l">Rata-rata</div></div>
+      <div class="box"><div class="n" id="rTerbaik">—</div><div class="l">Skor terbaik</div></div>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th>Tanggal</th>
+          <th>Sesi latihan</th>
+          <th>Mapel / Materi</th>
+          <th>Ke-</th>
+          <th>Skor</th>
+          <th>%</th>
+        </tr>
+      </thead>
+      <tbody id="rBody">
+        <tr><td colspan="6" class="empty">Belum ada data</td></tr>
+      </tbody>
+    </table>
+    <div class="foot">
+      Dokumen ini dihasilkan dari sistem Kuis Digital SDM01KKS.
+      Hasil latihan bersifat formatif (latihan), bukan nilai rapor resmi.
+      Guru: Arif Azwar Anas
+    </div>
+  </div>
+</main>
+<script>
+(function(){
+  var WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbwotrwYBt0_-_9g4o2gNs6ktaTn1sw41f3jJlgoK5pN2N5RofwRjOeiSqzQq1JZsjhclw/exec';
+
+  function pct(v){
+    var n = Number(v);
+    if (isNaN(n)) return null;
+    if (n <= 1) n = n * 100;
+    return Math.round(n);
+  }
+  function esc(s){
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){
+      return ({'&':'&','<':'<','>':'>','"':'"',"'":'&#39;'})[c];
+    });
+  }
+  function fillSelect(id, arr, first){
+    var s = document.getElementById(id);
+    var cur = s.value;
+    s.innerHTML = '';
+    var o0 = document.createElement('option');
+    o0.value = '';
+    o0.textContent = first;
+    s.appendChild(o0);
+    (arr || []).forEach(function(v){
+      var o = document.createElement('option');
+      o.value = v; o.textContent = v;
+      s.appendChild(o);
+    });
+    if (cur) s.value = cur;
+  }
+  function showMsg(ok, text){
+    var el = document.getElementById('msg');
+    if (ok){ el.className = 'msg'; el.textContent = ''; return; }
+    el.className = 'msg show err';
+    el.textContent = text;
+  }
+
+  function loadFilters(){
+    fetch(WEBAPP_URL + '?action=riwayatLatihan')
+      .then(function(r){ return r.json(); })
+      .then(function(res){
+        if (res && res.ok && res.filter){
+          fillSelect('fNama', res.filter.nama, '— Pilih siswa —');
+          fillSelect('fMapel', res.filter.mapel, 'Semua');
+          fillSelect('fMateri', res.filter.materi, 'Semua');
+        }
+      });
+  }
+
+  function buatLaporan(){
+    var nama = document.getElementById('fNama').value;
+    if (!nama){
+      showMsg(false, 'Pilih nama siswa dulu.');
+      document.getElementById('btnCetak').disabled = true;
+      document.getElementById('report').classList.remove('show');
+      return;
+    }
+    showMsg(true);
+    var q = '?action=riwayatLatihan'
+      + '&nama=' + encodeURIComponent(nama)
+      + '&mapel=' + encodeURIComponent(document.getElementById('fMapel').value)
+      + '&materi=' + encodeURIComponent(document.getElementById('fMateri').value);
+    fetch(WEBAPP_URL + q)
+      .then(function(r){ return r.json(); })
+      .then(function(res){
+        if (!res || !res.ok){
+          showMsg(false, 'Gagal memuat data. Deploy Code.gs terbaru?');
+          return;
+        }
+        var list = res.hasil || [];
+        document.getElementById('rNama').textContent = nama;
+        document.getElementById('rTanggal').textContent = new Date().toLocaleDateString('id-ID', {
+          day: 'numeric', month: 'long', year: 'numeric'
+        });
+        document.getElementById('rMapel').textContent = document.getElementById('fMapel').value || 'Semua';
+        document.getElementById('rMateri').textContent = document.getElementById('fMateri').value || 'Semua';
+
+        var sum = 0, cnt = 0, best = null;
+        list.forEach(function(h){
+          var p = pct(h.persentase);
+          if (p == null) return;
+          sum += p; cnt++;
+          if (best == null || p > best) best = p;
+        });
+        document.getElementById('rPercobaan').textContent = list.length;
+        document.getElementById('rRata').textContent = cnt ? Math.round(sum / cnt) + '%' : '—';
+        document.getElementById('rTerbaik').textContent = best != null ? best + '%' : '—';
+
+        var tb = document.getElementById('rBody');
+        if (!list.length){
+          tb.innerHTML = '<tr><td colspan="6" class="empty">Belum ada hasil latihan untuk siswa ini.</td></tr>';
+          document.getElementById('btnCetak').disabled = true;
+        } else {
+          tb.innerHTML = '';
+          list.forEach(function(h){
+            var p = pct(h.persentase);
+            var tr = document.createElement('tr');
+            tr.innerHTML =
+              '<td>' + esc(h.tanggal || '') + '</td>' +
+              '<td>' + esc(h.namaLatihan || '') + '</td>' +
+              '<td>' + esc(h.mapel || '') + (h.materi ? ' / ' + esc(h.materi) : '') + '</td>' +
+              '<td>' + esc(h.percobaanKe) + '</td>' +
+              '<td>' + esc(h.skor) + '/' + esc(h.skorMaksimal) + '</td>' +
+              '<td>' + (p != null ? p + '%' : '—') + '</td>';
+            tb.appendChild(tr);
+          });
+          document.getElementById('btnCetak').disabled = false;
+        }
+        document.getElementById('report').classList.add('show');
+      })
+      .catch(function(){
+        showMsg(false, 'Koneksi gagal.');
+      });
+  }
+
+  document.getElementById('btnBuat').onclick = buatLaporan;
+  document.getElementById('btnCetak').onclick = function(){ window.print(); };
+  loadFilters();
+})();
+</script>
+</body>
+</html>
