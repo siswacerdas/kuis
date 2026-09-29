@@ -1,1 +1,685 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Latihan ATS/AAS — Kuis Digital SDM01KKS</title>
+<meta name="theme-color" content="#0F6B5C">
+<style>
+  :root{
+    --bg:#F7F6F1; --paper:#FFFFFF; --ink:#23241F; --ink-soft:#5B5D55;
+    --line:#E3E0D6; --brand:#0F6B5C; --brand-dark:#0B4F45; --amber:#E0952E;
+    --red:#C24B3F; --radius:14px; --step:0px; --maxw:720px;
+  }
+  *{ box-sizing:border-box; }
+  html{ -webkit-text-size-adjust:100%; }
+  body{
+    margin:0; background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    font-size:calc(16px + var(--step)); line-height:1.5; -webkit-font-smoothing:antialiased;
+  }
+  a{ color:inherit; text-decoration:none; }
+  .wrap{ max-width:var(--maxw); margin:0 auto; padding:0 20px; }
+  .hidden{ display:none !important; }
 
+  header.site{ background:var(--brand); color:#F4FBF9; padding:20px 0 24px; }
+  .top-row{ display:flex; align-items:center; justify-content:space-between; gap:10px; }
+  .back-link{ display:inline-flex; align-items:center; gap:6px; font-size:.85em; font-weight:600; color:#E3F2ED; opacity:.9; }
+  .font-ctrl{ display:flex; gap:2px; background:rgba(255,255,255,.12); border-radius:999px; padding:3px; }
+  .font-ctrl button{
+    appearance:none; border:0; background:transparent; color:#F4FBF9; min-width:30px; height:30px;
+    border-radius:999px; font-weight:700; font-size:13px; cursor:pointer;
+  }
+  .font-ctrl button:active{ background:rgba(255,255,255,.28); }
+  .hero{ margin-top:16px; }
+  .hero h1{ margin:0; font-size:1.35em; font-weight:800; letter-spacing:-.01em; }
+  .hero p{ margin:4px 0 0; font-size:.9em; color:#E3F2ED; }
+
+  main{ padding:22px 0 40px; }
+
+  .panel{
+    background:var(--paper); border:1px solid var(--line); border-radius:var(--radius);
+    padding:18px; box-shadow:0 1px 3px rgba(20,30,25,.05);
+  }
+  .section-title{
+    font-size:.78em; text-transform:uppercase; letter-spacing:.06em; color:var(--ink-soft);
+    font-weight:700; margin:0 0 12px;
+  }
+
+  .lat-card{
+    display:flex; align-items:center; gap:12px; width:100%; text-align:left;
+    border:1px solid var(--line); background:#fff; border-radius:12px; padding:14px;
+    cursor:pointer; margin-bottom:10px;
+  }
+  .lat-card:hover{ border-color:#CFE3DA; }
+  .lat-card .body{ flex:1; min-width:0; }
+  .lat-card .judul{ font-weight:700; display:block; }
+  .lat-card .meta{ font-size:.82em; color:var(--ink-soft); margin-top:2px; display:block; }
+  .badge{
+    flex:none; font-size:.72em; font-weight:700; padding:5px 10px; border-radius:999px;
+    background:#E4F3EC; color:var(--brand-dark);
+  }
+
+  label.field{ display:block; font-size:.85em; font-weight:600; margin:0 0 6px; color:var(--ink-soft); }
+  input, select{
+    width:100%; padding:12px 14px; border:1.5px solid var(--line); border-radius:10px;
+    font:inherit; background:#fff; color:var(--ink); margin-bottom:14px;
+  }
+  input:focus, select:focus{ outline:2px solid var(--brand); outline-offset:1px; border-color:var(--brand); }
+
+  .btn{
+    appearance:none; border:0; border-radius:12px; padding:13px 18px; font:inherit; font-weight:700;
+    cursor:pointer; display:inline-flex; align-items:center; justify-content:center; gap:8px;
+  }
+  .btn-primary{ background:var(--brand); color:#fff; width:100%; }
+  .btn-primary:active{ background:var(--brand-dark); }
+  .btn-primary:disabled{ opacity:.55; cursor:not-allowed; }
+  .btn-ghost{ background:#F1EFE8; color:var(--ink); }
+  .btn-row{ display:flex; gap:10px; margin-top:16px; }
+  .btn-row .btn{ flex:1; }
+
+  .pesan-error{
+    display:none; background:#FBEAE6; color:var(--red); border-radius:10px;
+    padding:10px 12px; font-size:.9em; margin-bottom:12px;
+  }
+  .pesan-error.show{ display:block; }
+  .pesan-info{
+    background:#EAF4F0; color:var(--brand-dark); border-radius:10px;
+    padding:10px 12px; font-size:.88em; margin-bottom:12px;
+  }
+
+  .info-grid{ display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:16px; }
+  .info-grid .item{ background:#FAF9F5; border:1px solid var(--line); border-radius:10px; padding:10px 12px; }
+  .info-grid .label{ font-size:.72em; color:var(--ink-soft); text-transform:uppercase; }
+  .info-grid .value{ font-weight:700; margin-top:2px; }
+
+  .quiz-topbar{ display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:12px; flex-wrap:wrap; }
+  .timer{
+    display:flex; align-items:center; gap:6px; font-weight:800;
+    background:#EAF4F0; color:var(--brand-dark); padding:8px 14px; border-radius:999px;
+  }
+  .timer.warn{ background:#FBEEDF; color:#9A5F14; }
+  .timer.danger{ background:#FBEAE6; color:var(--red); }
+  .progress-text{ font-size:.85em; color:var(--ink-soft); }
+
+  .navigator{ display:flex; flex-wrap:wrap; gap:6px; margin-bottom:16px; }
+  .navigator button{
+    width:36px; height:36px; border-radius:8px; border:1.5px solid var(--line);
+    background:#fff; color:var(--ink-soft); font-weight:700; font-size:.85em; cursor:pointer;
+  }
+  .navigator button.answered{ background:#E4F3EC; border-color:#B7D9C8; color:var(--brand-dark); }
+  .navigator button.current{ border-color:var(--brand); color:var(--brand); box-shadow:0 0 0 2px rgba(15,107,92,.2); }
+
+  .soal-card{ background:var(--paper); border:1px solid var(--line); border-radius:var(--radius); padding:18px; }
+  .soal-meta{ font-size:.78em; color:var(--ink-soft); margin-bottom:8px; }
+  .soal-meta .pill{
+    display:inline-block; background:#F1EFE8; padding:2px 8px; border-radius:999px; margin-right:6px; font-weight:600;
+  }
+  .context-box{
+    background:#FAF9F5; border-left:3px solid var(--brand); padding:12px 14px; border-radius:0 10px 10px 0;
+    margin-bottom:14px; font-size:.92em;
+  }
+  .context-box .ctx-title{ font-weight:700; margin-bottom:4px; }
+  .pertanyaan{ font-weight:700; font-size:1.05em; margin:0 0 14px; }
+
+  .opsi-list{ list-style:none; margin:0; padding:0; display:grid; gap:8px; }
+  .opsi-list label{
+    display:flex; gap:10px; align-items:flex-start; padding:12px 14px;
+    border:1.5px solid var(--line); border-radius:10px; cursor:pointer; background:#fff;
+  }
+  .opsi-list label:has(input:checked){ border-color:var(--brand); background:#EAF4F0; }
+  .opsi-list input{ width:auto; margin:3px 0 0; flex:none; }
+
+  .hasil-angka{ font-size:2.2em; font-weight:800; color:var(--brand); text-align:center; margin:8px 0 4px; }
+  .hasil-persen{ text-align:center; color:var(--ink-soft); margin-bottom:18px; }
+  .hasil-baris{ display:flex; justify-content:space-between; gap:12px; padding:10px 0; border-bottom:1px solid var(--line); font-size:.92em; }
+  .hasil-baris:last-child{ border-bottom:0; }
+
+  .empty{ text-align:center; color:var(--ink-soft); padding:28px 12px; font-size:.95em; }
+  footer{ margin:28px 0 8px; text-align:center; color:var(--ink-soft); font-size:.8em; }
+  footer .muh{ color:var(--brand-dark); font-weight:700; }
+
+  .loading{ text-align:center; color:var(--ink-soft); padding:24px; }
+</style>
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap">
+    <div class="top-row">
+      <a class="back-link" href="../">← Beranda</a>
+      <div class="font-ctrl" role="group" aria-label="Ukuran tulisan">
+        <button type="button" id="fontDown" aria-label="Perkecil">A−</button>
+        <button type="button" id="fontUp" aria-label="Perbesar">A+</button>
+      </div>
+    </div>
+    <div class="hero">
+      <h1>Latihan ATS / AAS</h1>
+      <p>Persiapan asesmen — boleh diulang. Kerjakan dengan jujur ya.</p>
+    </div>
+  </div>
+</header>
+
+<main>
+  <div class="wrap">
+
+    <!-- LAYAR 1: Daftar sesi latihan -->
+    <section id="layar-daftar">
+      <h2 class="section-title">Sesi latihan aktif</h2>
+      <div id="daftarLoading" class="loading">Memuat daftar latihan…</div>
+      <div id="daftarError" class="pesan-error"></div>
+      <div id="daftarList"></div>
+      <footer>Latihan &middot; <span class="muh">SD Muhammadiyah 01 Kukusan</span></footer>
+    </section>
+
+    <!-- LAYAR 2: Login -->
+    <section id="layar-masuk" class="hidden">
+      <button type="button" class="btn btn-ghost" id="btnKembaliDaftar" style="margin-bottom:14px">← Pilih latihan lain</button>
+      <div class="panel">
+        <h2 class="section-title" id="judulMasuk">Masuk latihan</h2>
+        <div class="info-grid" id="infoLatihan">
+          <div class="item"><div class="label">Mapel</div><div class="value" id="infoMapel">—</div></div>
+          <div class="item"><div class="label">Jumlah soal</div><div class="value" id="infoJumlah">—</div></div>
+          <div class="item"><div class="label">Materi</div><div class="value" id="infoMateri">—</div></div>
+          <div class="item"><div class="label">Durasi</div><div class="value" id="infoDurasi">—</div></div>
+        </div>
+        <div id="pesanMasuk" class="pesan-error"></div>
+        <label class="field" for="namaSiswa">Nama lengkap</label>
+        <select id="namaSiswa"><option value="">Memuat nama…</option></select>
+        <label class="field" for="tokenLatihan">Token dari guru</label>
+        <input id="tokenLatihan" type="text" autocomplete="off" placeholder="Contoh: LATIHAN1">
+        <button type="button" class="btn btn-primary" id="btnMulai">Mulai latihan</button>
+      </div>
+    </section>
+
+    <!-- LAYAR 3: Kuis -->
+    <section id="layar-kuis" class="hidden">
+      <div class="quiz-topbar">
+        <div class="timer" id="timerBox"><span id="timerTeks">--:--</span></div>
+        <div class="progress-text" id="progressTeks">Soal 1</div>
+      </div>
+      <div class="navigator" id="navigator"></div>
+      <div class="soal-card" id="soalContainer"></div>
+      <div class="btn-row">
+        <button type="button" class="btn btn-ghost" id="btnSebelumnya">Sebelumnya</button>
+        <button type="button" class="btn btn-primary" id="btnBerikutnya">Berikutnya</button>
+      </div>
+      <div style="margin-top:12px">
+        <button type="button" class="btn btn-primary" id="btnKumpulkan" style="background:var(--amber)">Selesai &amp; kumpulkan</button>
+      </div>
+      <div id="pesanKuis" class="pesan-error" style="margin-top:12px"></div>
+    </section>
+
+    <!-- LAYAR 4: Hasil -->
+    <section id="layar-hasil" class="hidden">
+      <div class="panel">
+        <h2 class="section-title" style="text-align:center">Hasil latihan</h2>
+        <div class="hasil-angka" id="hasilAngka">—</div>
+        <div class="hasil-persen" id="hasilPersen">—</div>
+        <div id="hasilMeta" style="text-align:center;font-size:.9em;color:var(--ink-soft);margin-bottom:16px"></div>
+        <div id="hasilRincian"></div>
+        <p id="catatanEmail" class="pesan-info" style="margin-top:16px"></p>
+        <div class="btn-row">
+          <button type="button" class="btn btn-ghost" id="btnUlang">Latihan lain</button>
+          <button type="button" class="btn btn-primary" id="btnKeBeranda">Ke beranda</button>
+        </div>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<script>
+(function(){
+  /* ========== Konfigurasi ========== */
+  var WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbwotrwYBt0_-_9g4o2gNs6ktaTn1sw41f3jJlgoK5pN2N5RofwRjOeiSqzQq1JZsjhclw/exec';
+
+  /* ========== State ========== */
+  var daftarLatihan = [];
+  var latihanAktif = null;   // meta dari daftar
+  var soalList = [];
+  var jawaban = {};          // index -> string (pg) atau array (pgk)
+  var idxSoal = 0;
+  var tokenDipakai = '';
+  var namaSiswa = '';
+  var timerId = null;
+  var sisaDetik = 0;
+  var sedangKirim = false;
+
+  /* ========== Util ========== */
+  function $(id){ return document.getElementById(id); }
+  function show(el){ el.classList.remove('hidden'); }
+  function hide(el){ el.classList.add('hidden'); }
+  function showError(id, msg){
+    var el = $(id);
+    el.textContent = msg || '';
+    if (msg) el.classList.add('show'); else el.classList.remove('show');
+  }
+  function escapeHtml(s){
+    return String(s == null ? '' : s)
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+      .replace(/"/g,'&quot;');
+  }
+  function formatWaktu(detik){
+    var m = Math.floor(detik / 60), s = detik % 60;
+    return (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
+  }
+  function setSama(a, b){
+    if (!Array.isArray(a) || !Array.isArray(b) || a.length !== b.length) return false;
+    var sa = a.slice().map(String).sort();
+    var sb = b.slice().map(String).sort();
+    for (var i = 0; i < sa.length; i++) if (sa[i] !== sb[i]) return false;
+    return true;
+  }
+
+  function getJSON(url){
+    return fetch(url).then(function(r){ return r.json(); });
+  }
+  function postJSON(body){
+    return fetch(WEBAPP_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify(body)
+    }).then(function(r){ return r.json(); });
+  }
+
+  /* ========== Font size ========== */
+  (function(){
+    var root = document.documentElement;
+    var KEY = 'kuis-font-step', MIN = -2, MAX = 4, STEP = 1;
+    function apply(step){
+      step = Math.max(MIN, Math.min(MAX, step));
+      root.style.setProperty('--step', step + 'px');
+      localStorage.setItem(KEY, String(step));
+      return step;
+    }
+    var saved = parseInt(localStorage.getItem(KEY), 10);
+    var current = apply(isNaN(saved) ? 0 : saved);
+    $('fontUp').onclick = function(){ current = apply(current + STEP); };
+    $('fontDown').onclick = function(){ current = apply(current - STEP); };
+  })();
+
+  /* ========== Layar 1: daftar ========== */
+  function muatDaftar(){
+    $('daftarLoading').classList.remove('hidden');
+    $('daftarList').innerHTML = '';
+    showError('daftarError', '');
+    getJSON(WEBAPP_URL + '?action=daftarLatihan')
+      .then(function(res){
+        $('daftarLoading').classList.add('hidden');
+        if (!res || !res.ok){
+          showError('daftarError', (res && res.pesan) || 'Gagal memuat daftar latihan. Coba muat ulang.');
+          return;
+        }
+        daftarLatihan = res.latihan || [];
+        if (!daftarLatihan.length){
+          $('daftarList').innerHTML = '<div class="empty">Belum ada sesi latihan aktif.<br>Guru perlu menambahkan di sheet Daftar_Latihan.</div>';
+          return;
+        }
+        var html = '';
+        daftarLatihan.forEach(function(L, i){
+          html += '<button type="button" class="lat-card" data-idx="'+i+'">' +
+            '<span class="body">' +
+              '<span class="judul">'+escapeHtml(L.namaLatihan)+'</span>' +
+              '<span class="meta">'+escapeHtml(L.mapel||'') +
+                (L.materi ? ' · ' + escapeHtml(L.materi) : '') +
+                (L.jumlahSoal ? ' · ' + L.jumlahSoal + ' soal' : '') +
+                (L.durasiMenit ? ' · ' + L.durasiMenit + ' menit' : '') +
+              '</span>' +
+            '</span>' +
+            '<span class="badge">Mulai</span>' +
+          '</button>';
+        });
+        $('daftarList').innerHTML = html;
+        Array.prototype.forEach.call($('daftarList').querySelectorAll('.lat-card'), function(btn){
+          btn.onclick = function(){
+            pilihLatihan(daftarLatihan[parseInt(btn.getAttribute('data-idx'), 10)]);
+          };
+        });
+      })
+      .catch(function(){
+        $('daftarLoading').classList.add('hidden');
+        showError('daftarError', 'Tidak bisa terhubung ke server. Periksa koneksi internet.');
+      });
+  }
+
+  function pilihLatihan(L){
+    latihanAktif = L;
+    $('judulMasuk').textContent = L.namaLatihan || 'Masuk latihan';
+    $('infoMapel').textContent = L.mapel || '—';
+    $('infoMateri').textContent = L.materi || '—';
+    $('infoJumlah').textContent = L.jumlahSoal != null ? L.jumlahSoal + ' soal' : '—';
+    $('infoDurasi').textContent = L.durasiMenit ? L.durasiMenit + ' menit' : 'Tanpa batas';
+    showError('pesanMasuk', '');
+    $('tokenLatihan').value = '';
+    hide($('layar-daftar'));
+    show($('layar-masuk'));
+    muatNamaSiswa();
+  }
+
+  function muatNamaSiswa(){
+    var sel = $('namaSiswa');
+    sel.innerHTML = '<option value="">Memuat nama…</option>';
+    getJSON(WEBAPP_URL + '?action=daftarSiswa')
+      .then(function(res){
+        sel.innerHTML = '<option value="">— Pilih nama —</option>';
+        if (res && res.ok && res.siswa){
+          res.siswa.forEach(function(n){
+            var o = document.createElement('option');
+            o.value = n; o.textContent = n;
+            sel.appendChild(o);
+          });
+        }
+      })
+      .catch(function(){
+        sel.innerHTML = '<option value="">Gagal memuat nama</option>';
+      });
+  }
+
+  $('btnKembaliDaftar').onclick = function(){
+    hide($('layar-masuk'));
+    show($('layar-daftar'));
+  };
+
+  $('btnMulai').onclick = function(){
+    var nama = ($('namaSiswa').value || '').trim();
+    var token = ($('tokenLatihan').value || '').trim();
+    if (!nama){ showError('pesanMasuk', 'Pilih namamu dulu.'); return; }
+    if (!token){ showError('pesanMasuk', 'Isi token dari guru.'); return; }
+    if (!latihanAktif){ showError('pesanMasuk', 'Latihan belum dipilih.'); return; }
+
+    $('btnMulai').disabled = true;
+    showError('pesanMasuk', '');
+
+    postJSON({
+      action: 'mulaiLatihan',
+      idLatihan: latihanAktif.idLatihan,
+      token: token,
+      nama: nama
+    }).then(function(res){
+      if (!res || !res.ok){
+        $('btnMulai').disabled = false;
+        showError('pesanMasuk', (res && res.pesan) || 'Tidak bisa memulai latihan.');
+        return;
+      }
+      tokenDipakai = token;
+      namaSiswa = nama;
+      // Ambil soal
+      return getJSON(WEBAPP_URL + '?action=soalLatihan&idLatihan=' + encodeURIComponent(latihanAktif.idLatihan));
+    }).then(function(res){
+      $('btnMulai').disabled = false;
+      if (!res) return;
+      if (!res.ok){
+        showError('pesanMasuk', res.pesan || 'Gagal memuat soal.');
+        return;
+      }
+      soalList = res.soal || [];
+      if (!soalList.length){
+        showError('pesanMasuk', 'Latihan ini belum punya soal.');
+        return;
+      }
+      if (res.latihan){
+        latihanAktif = Object.assign({}, latihanAktif, res.latihan);
+      }
+      mulaiKerjakan();
+    }).catch(function(){
+      $('btnMulai').disabled = false;
+      showError('pesanMasuk', 'Koneksi gagal. Coba lagi.');
+    });
+  };
+
+  /* ========== Layar 3: kerjakan ========== */
+  function mulaiKerjakan(){
+    jawaban = {};
+    idxSoal = 0;
+    hide($('layar-masuk'));
+    hide($('layar-daftar'));
+    show($('layar-kuis'));
+    bangunNavigator();
+    tampilkanSoal(0);
+
+    var menit = Number(latihanAktif.durasiMenit) || 0;
+    if (menit > 0){
+      sisaDetik = menit * 60;
+      updateTimer();
+      if (timerId) clearInterval(timerId);
+      timerId = setInterval(function(){
+        sisaDetik--;
+        updateTimer();
+        if (sisaDetik <= 0){
+          clearInterval(timerId);
+          timerId = null;
+          kumpulkan(true);
+        }
+      }, 1000);
+    } else {
+      $('timerTeks').textContent = '∞';
+      $('timerBox').className = 'timer';
+    }
+  }
+
+  function updateTimer(){
+    $('timerTeks').textContent = formatWaktu(Math.max(0, sisaDetik));
+    var box = $('timerBox');
+    box.className = 'timer';
+    if (sisaDetik <= 60) box.classList.add('danger');
+    else if (sisaDetik <= 180) box.classList.add('warn');
+  }
+
+  function bangunNavigator(){
+    var nav = $('navigator');
+    nav.innerHTML = '';
+    soalList.forEach(function(_, i){
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.textContent = String(i + 1);
+      b.onclick = function(){ simpanJawabanSaatIni(); tampilkanSoal(i); };
+      nav.appendChild(b);
+    });
+  }
+
+  function updateNavigatorUI(){
+    var buttons = $('navigator').querySelectorAll('button');
+    buttons.forEach(function(b, i){
+      b.classList.remove('current', 'answered');
+      if (i === idxSoal) b.classList.add('current');
+      if (jawabanTerisi(i)) b.classList.add('answered');
+    });
+    $('progressTeks').textContent = 'Soal ' + (idxSoal + 1) + ' / ' + soalList.length;
+    $('btnSebelumnya').disabled = idxSoal === 0;
+    $('btnBerikutnya').textContent = (idxSoal === soalList.length - 1) ? 'Selesai' : 'Berikutnya';
+  }
+
+  function jawabanTerisi(i){
+    var j = jawaban[i];
+    var s = soalList[i];
+    if (!s) return false;
+    if (s.tipe === 'pgk') return Array.isArray(j) && j.length > 0;
+    return j != null && j !== '';
+  }
+
+  function simpanJawabanSaatIni(){
+    var s = soalList[idxSoal];
+    if (!s) return;
+    if (s.tipe === 'pgk'){
+      var checked = Array.prototype.map.call(
+        document.querySelectorAll('input[name="opsi"]:checked'),
+        function(el){ return el.value; }
+      );
+      jawaban[idxSoal] = checked;
+    } else {
+      var radio = document.querySelector('input[name="opsi"]:checked');
+      jawaban[idxSoal] = radio ? radio.value : null;
+    }
+  }
+
+  function tampilkanSoal(i){
+    idxSoal = i;
+    var s = soalList[i];
+    var box = $('soalContainer');
+    var meta = '<div class="soal-meta">' +
+      '<span class="pill">' + escapeHtml(s.tipe === 'pgk' ? 'PG kompleks' : 'Pilihan ganda') + '</span>' +
+      (s.kompleksitas ? '<span class="pill">' + escapeHtml(s.kompleksitas) + '</span>' : '') +
+      (s.materi ? '<span class="pill">' + escapeHtml(s.materi) + '</span>' : '') +
+      '</div>';
+
+    var ctx = '';
+    if (s.contextTeks){
+      ctx = '<div class="context-box">' +
+        (s.contextJudul ? '<div class="ctx-title">' + escapeHtml(s.contextJudul) + '</div>' : '') +
+        '<div>' + escapeHtml(s.contextTeks) + '</div></div>';
+    }
+
+    var opsiHtml = '<ul class="opsi-list">';
+    (s.opsi || []).forEach(function(o){
+      var id = 'opsi_' + i + '_' + o.id;
+      var tipe = s.tipe === 'pgk' ? 'checkbox' : 'radio';
+      var checked = false;
+      if (s.tipe === 'pgk'){
+        checked = Array.isArray(jawaban[i]) && jawaban[i].indexOf(o.id) >= 0;
+      } else {
+        checked = jawaban[i] === o.id;
+      }
+      opsiHtml += '<li><label for="'+id+'">' +
+        '<input type="'+tipe+'" name="opsi" id="'+id+'" value="'+escapeHtml(o.id)+'"'+(checked?' checked':'')+'>' +
+        '<span><b>'+escapeHtml(String(o.id).toUpperCase())+'.</b> '+escapeHtml(o.teks)+'</span>' +
+        '</label></li>';
+    });
+    opsiHtml += '</ul>';
+    if (s.tipe === 'pgk'){
+      opsiHtml = '<p style="font-size:.85em;color:var(--ink-soft);margin:0 0 10px">Pilih semua jawaban yang benar.</p>' + opsiHtml;
+    }
+
+    box.innerHTML = meta + ctx +
+      '<p class="pertanyaan">' + escapeHtml(s.pertanyaan) + '</p>' + opsiHtml;
+
+    updateNavigatorUI();
+    showError('pesanKuis', '');
+  }
+
+  $('btnSebelumnya').onclick = function(){
+    simpanJawabanSaatIni();
+    if (idxSoal > 0) tampilkanSoal(idxSoal - 1);
+  };
+  $('btnBerikutnya').onclick = function(){
+    simpanJawabanSaatIni();
+    if (idxSoal < soalList.length - 1) tampilkanSoal(idxSoal + 1);
+    else kumpulkan(false);
+  };
+  $('btnKumpulkan').onclick = function(){ kumpulkan(false); };
+
+  function soalBenar(i){
+    var s = soalList[i];
+    var j = jawaban[i];
+    var kunci = s.kunci || [];
+    if (s.tipe === 'pgk'){
+      return setSama(Array.isArray(j) ? j : [], kunci);
+    }
+    return j != null && kunci.length && String(j) === String(kunci[0]);
+  }
+
+  function hitungHasil(){
+    var skor = 0, maks = 0;
+    var detail = [];
+    soalList.forEach(function(s, i){
+      var poin = Number(s.skor) || 1;
+      maks += poin;
+      var benar = soalBenar(i);
+      if (benar) skor += poin;
+      detail.push({ id: s.id, benar: benar, skor: benar ? poin : 0 });
+    });
+    return {
+      skor: skor,
+      skorMaksimal: maks,
+      persentase: (maks ? Math.round((skor / maks) * 100) : 0) + '%',
+      detail: detail
+    };
+  }
+
+  function kumpulkan(otomatis){
+    if (sedangKirim) return;
+    simpanJawabanSaatIni();
+    var belum = [];
+    soalList.forEach(function(_, i){ if (!jawabanTerisi(i)) belum.push(i + 1); });
+    if (!otomatis && belum.length){
+      var yakin = confirm('Masih ada ' + belum.length + ' soal belum dijawab (no. ' + belum.slice(0,8).join(', ') + (belum.length>8?'…':'') + ').\nKumpulkan sekarang?');
+      if (!yakin) return;
+    }
+    if (!otomatis){
+      if (!confirm('Kirim jawaban sekarang? Pastikan sudah dicek ulang.')) return;
+    }
+
+    sedangKirim = true;
+    $('btnKumpulkan').disabled = true;
+    if (timerId){ clearInterval(timerId); timerId = null; }
+
+    var hasil = hitungHasil();
+    postJSON({
+      action: 'submitLatihan',
+      idLatihan: latihanAktif.idLatihan,
+      token: tokenDipakai,
+      nama: namaSiswa,
+      hasil: hasil
+    }).then(function(res){
+      sedangKirim = false;
+      $('btnKumpulkan').disabled = false;
+      if (!res || !res.ok){
+        showError('pesanKuis', (res && res.pesan) || 'Gagal menyimpan. Coba kumpulkan lagi.');
+        return;
+      }
+      tampilkanHasil(hasil, res.statusEmail, res.percobaanKe);
+    }).catch(function(){
+      sedangKirim = false;
+      $('btnKumpulkan').disabled = false;
+      showError('pesanKuis', 'Koneksi gagal saat mengirim. Coba lagi.');
+    });
+  }
+
+  function tampilkanHasil(hasil, statusEmail, percobaanKe){
+    hide($('layar-kuis'));
+    show($('layar-hasil'));
+    $('hasilAngka').textContent = hasil.skor + ' / ' + hasil.skorMaksimal;
+    $('hasilPersen').textContent = hasil.persentase;
+    $('hasilMeta').textContent =
+      (latihanAktif.namaLatihan || '') +
+      (percobaanKe ? ' · Percobaan ke-' + percobaanKe : '') +
+      ' · ' + namaSiswa;
+
+    var rinci = $('hasilRincian');
+    rinci.innerHTML = '';
+    var benar = 0;
+    soalList.forEach(function(s, i){
+      var ok = soalBenar(i);
+      if (ok) benar++;
+      var baris = document.createElement('div');
+      baris.className = 'hasil-baris';
+      baris.innerHTML = '<span>Soal '+(i+1)+' <span style="color:var(--ink-soft);font-size:.85em">('+escapeHtml(s.kompleksitas||s.tipe)+')</span></span>' +
+        '<span style="font-weight:700;color:'+(ok?'var(--brand)':'var(--red)')+'">'+(ok?'Benar':'Belum tepat')+'</span>';
+      rinci.appendChild(baris);
+    });
+
+    var cat = $('catatanEmail');
+    if (statusEmail === 'Terkirim'){
+      cat.textContent = 'Hasil juga sudah dikirim ke email orang tua/wali.';
+    } else if (statusEmail === 'Email ortu belum diisi' || statusEmail === 'Dilewati'){
+      cat.textContent = 'Hasil sudah tersimpan. Email ke orang tua dilewati atau data email belum lengkap.';
+    } else if (statusEmail === 'Gagal terkirim'){
+      cat.textContent = 'Hasil sudah tersimpan, tetapi email ke orang tua gagal terkirim.';
+    } else {
+      cat.textContent = 'Hasil latihan sudah tersimpan di server.';
+    }
+  }
+
+  $('btnUlang').onclick = function(){
+    hide($('layar-hasil'));
+    show($('layar-daftar'));
+    muatDaftar();
+  };
+  $('btnKeBeranda').onclick = function(){ location.href = '../'; };
+
+  /* ========== Start ========== */
+  muatDaftar();
+})();
+</script>
+</body>
+</html>
