@@ -178,6 +178,12 @@ function doPost(e) {
   if (action === 'loginGuru') {
     return jsonResponse_(loginGuru_(body));
   }
+  if (action === 'loginSiswa') {
+    return jsonResponse_(loginSiswa_(body));
+  }
+  if (action === 'gantiSandiGuru') {
+    return jsonResponse_(gantiSandiGuru_(body));
+  }
   // Setup sekali pakai (dipanggil dari halaman setup HTML, bukan dropdown editor)
   if (action === 'setupLatihan') {
     return jsonResponse_(setupLatihanDariWeb_(body));
@@ -701,23 +707,94 @@ function setupSheetLatihan_() {
  * body: { tokenSetup: string } — harus sama dengan GURU_TOKEN di bawah.
  * Membuat 3 sheet latihan + header.
  */
-const GURU_TOKEN = 'guru-sdm01-2026'; // sandi area guru — ganti setelah deploy
+const GURU_NAMA = 'Arif Azwar Anas';
+const GURU_TOKEN_DEFAULT = 'sdm01kks'; // sandi awal; bisa diganti lewat area guru (tersimpan di Script Properties)
 
+
+
+function getGuruToken_() {
+  const props = PropertiesService.getScriptProperties();
+  const saved = props.getProperty('GURU_TOKEN');
+  return saved ? saved : GURU_TOKEN_DEFAULT;
+}
+
+function setGuruToken_(baru) {
+  PropertiesService.getScriptProperties().setProperty('GURU_TOKEN', String(baru));
+}
 
 function loginGuru_(body) {
   const sandi = String((body && body.sandi) || '').trim();
+  const nama = String((body && body.nama) || '').trim();
   if (!sandi) {
     return { ok: false, pesan: 'Sandi wajib diisi.' };
   }
-  if (sandi !== GURU_TOKEN) {
+  // Nama opsional: kalau diisi harus Arif Azwar Anas
+  if (nama && nama !== GURU_NAMA) {
+    return { ok: false, pesan: 'Nama guru tidak dikenali.' };
+  }
+  if (sandi !== getGuruToken_()) {
     return { ok: false, pesan: 'Sandi salah.' };
   }
-  return { ok: true, pesan: 'Login guru berhasil.' };
+  return { ok: true, pesan: 'Login guru berhasil.', nama: GURU_NAMA };
+}
+
+/**
+ * Login siswa: nama harus ada di Nama_Siswa, sandi = NISN.
+ * body: { nama, nisn }
+ */
+function loginSiswa_(body) {
+  const nama = String((body && body.nama) || '').trim();
+  const nisn = String((body && body.nisn) || '').trim();
+  if (!nama || !nisn) {
+    return { ok: false, pesan: 'Nama dan NISN wajib diisi.' };
+  }
+  if (nama === NAMA_AKUN_TES) {
+    // Akun tes: izinkan NISN apa pun atau tetap cek?
+    return { ok: true, nama: nama, pesan: 'Login tes berhasil.' };
+  }
+  const sheet = getSS_().getSheetByName(SHEET_SISWA);
+  if (!sheet) {
+    return { ok: false, pesan: 'Sheet Nama_Siswa tidak ditemukan.' };
+  }
+  const data = sheet.getDataRange().getValues();
+  for (let i = 1; i < data.length; i++) {
+    const n = String(data[i][0] || '').trim();
+    if (n !== nama) continue;
+    const nisnSheet = String(data[i][2] || '').trim(); // kolom C = NISN
+    if (!nisnSheet) {
+      return { ok: false, pesan: 'NISN untuk nama ini belum diisi di spreadsheet. Hubungi guru.' };
+    }
+    if (nisnSheet !== nisn) {
+      return { ok: false, pesan: 'NISN salah.' };
+    }
+    return { ok: true, nama: nama, pesan: 'Login berhasil.' };
+  }
+  return { ok: false, pesan: 'Nama tidak ditemukan di daftar siswa.' };
+}
+
+/**
+ * Guru mengganti sandi sendiri (harus sudah tahu sandi lama).
+ * body: { sandiLama, sandiBaru }
+ */
+function gantiSandiGuru_(body) {
+  const lama = String((body && body.sandiLama) || '').trim();
+  const baru = String((body && body.sandiBaru) || '').trim();
+  if (!lama || !baru) {
+    return { ok: false, pesan: 'Sandi lama dan baru wajib diisi.' };
+  }
+  if (baru.length < 6) {
+    return { ok: false, pesan: 'Sandi baru minimal 6 karakter.' };
+  }
+  if (lama !== getGuruToken_()) {
+    return { ok: false, pesan: 'Sandi lama salah.' };
+  }
+  setGuruToken_(baru);
+  return { ok: true, pesan: 'Sandi guru berhasil diganti.' };
 }
 
 function setupLatihanDariWeb_(body) {
   const token = String((body && (body.tokenSetup || body.sandi)) || '').trim();
-  if (token !== GURU_TOKEN) {
+  if (token !== getGuruToken_()) {
     return { ok: false, pesan: 'Sandi guru salah.' };
   }
   const hasil = setupSheetLatihan_();
@@ -731,7 +808,7 @@ function setupLatihanDariWeb_(body) {
  */
 function importBankSoalDariWeb_(body) {
   const token = String((body && (body.tokenSetup || body.sandi)) || '').trim();
-  if (token !== GURU_TOKEN) {
+  if (token !== getGuruToken_()) {
     return { ok: false, pesan: 'Sandi guru salah.' };
   }
   const rows = (body && body.rows) || [];
