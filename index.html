@@ -4,110 +4,198 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Masuk — Kuis Digital SDM01KKS</title>
-<meta name="theme-color" content="#0F6B5C">
+<meta name="theme-color" content="#C45C26">
+<meta name="description" content="Masuk ke Kuis Digital SD Muhammadiyah 01 Kukusan">
+<link rel="stylesheet" href="assets/app.css">
 <style>
-  :root{
-    --bg:#F7F6F1; --paper:#fff; --ink:#23241F; --soft:#5B5D55;
-    --line:#E3E0D6; --brand:#0F6B5C; --brand-dark:#0B4F45; --radius:14px; --red:#C24B3F;
-  }
-  *{ box-sizing:border-box; }
   body{
-    margin:0; min-height:100vh; background:var(--bg); color:var(--ink);
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
-    font-size:16px; line-height:1.5; display:flex; flex-direction:column;
+    background:
+      radial-gradient(1200px 600px at 10% -10%, #F3D9C4 0%, transparent 55%),
+      radial-gradient(900px 500px at 100% 0%, #D6E2F0 0%, transparent 50%),
+      radial-gradient(700px 400px at 50% 110%, #D0EDE9 0%, transparent 45%),
+      var(--bg);
+    min-height: 100dvh;
+    display: flex;
+    flex-direction: column;
   }
-  header{ background:var(--brand); color:#F4FBF9; padding:28px 20px 32px; text-align:center; }
-  header .school{ font-size:.75em; letter-spacing:.04em; text-transform:uppercase; opacity:.85; }
-  header h1{ margin:8px 0 0; font-size:1.45em; font-weight:800; }
-  main{ flex:1; max-width:420px; width:100%; margin:0 auto; padding:28px 20px; }
-  .lead{ text-align:center; color:var(--soft); font-size:.95em; margin:0 0 22px; }
-  .role{
-    display:block; width:100%; text-align:left; background:var(--paper);
-    border:1.5px solid var(--line); border-radius:var(--radius); padding:18px 16px;
-    margin-bottom:12px; cursor:pointer; font:inherit; color:inherit;
+  .login-shell{
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr;
+    max-width: 1040px;
+    width: 100%;
+    margin: 0 auto;
+    padding: calc(16px + var(--safe-t)) 16px calc(24px + var(--safe-b));
+    gap: 20px;
+    align-items: center;
   }
-  .role:hover{ border-color:#CFE3DA; }
-  .role.active{ border-color:var(--brand); background:#EAF4F0; }
-  .role .t{ font-weight:700; font-size:1.05em; display:block; }
-  .role .d{ font-size:.85em; color:var(--soft); margin-top:4px; display:block; }
-  .panel{
-    display:none; background:var(--paper); border:1px solid var(--line);
-    border-radius:var(--radius); padding:18px; margin-top:4px; margin-bottom:16px;
+  @media (min-width: 880px){
+    .login-shell{
+      grid-template-columns: 1.05fr .95fr;
+      gap: 40px;
+      padding-top: 40px;
+      padding-bottom: 40px;
+    }
   }
-  .panel.show{ display:block; }
-  label{ display:block; font-size:.85em; font-weight:600; color:var(--soft); margin-bottom:6px; }
-  input, select{
-    width:100%; padding:12px 14px; border:1.5px solid var(--line); border-radius:10px;
-    font:inherit; margin-bottom:12px; background:#fff;
+  .intro{ padding: 8px 4px 0; }
+  .intro .pill{
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(255,252,250,.75);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 6px 12px 6px 6px;
+    font-size: .8rem; font-weight: 700; color: var(--ink-soft);
+    margin-bottom: 16px;
   }
-  .btn{
-    width:100%; border:0; border-radius:12px; padding:13px; font:inherit; font-weight:700;
-    background:var(--brand); color:#fff; cursor:pointer;
+  .intro .pill .dot{
+    width: 22px; height: 22px; border-radius: 50%;
+    background: linear-gradient(145deg, var(--brand), #E08A4F);
+    color: #fff; display: grid; place-items: center; font-size: .65rem; font-weight: 800;
   }
-  .btn:disabled{ opacity:.55; }
-  .msg{ display:none; margin-top:10px; padding:10px 12px; border-radius:10px; font-size:.9em; }
-  .msg.show{ display:block; }
-  .msg.err{ background:#FBEAE6; color:var(--red); }
-  .msg.ok{ background:#E4F3EC; color:var(--brand-dark); }
-  footer{ text-align:center; color:var(--soft); font-size:.8em; padding:16px; }
-  .hint{ font-size:.82em; color:var(--soft); margin:-6px 0 12px; }
+  .intro h1{
+    margin: 0 0 10px;
+    font-size: clamp(1.85rem, 5.5vw, 2.75rem);
+    line-height: 1.08;
+    letter-spacing: -.03em;
+  }
+  .intro h1 em{ font-style: normal; color: var(--brand); }
+  .intro .lead{
+    margin: 0;
+    color: var(--ink-soft);
+    font-size: 1.02rem;
+    max-width: 34ch;
+  }
+  .intro .stats{ display: none; gap: 10px; margin-top: 28px; }
+  @media (min-width: 880px){
+    .intro .stats{ display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); }
+  }
+  .intro .stat{
+    background: rgba(255,252,250,.7);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 12px;
+  }
+  .intro .stat b{ display: block; font-size: 1.15rem; letter-spacing: -.02em; }
+  .intro .stat span{ font-size: .75rem; color: var(--ink-soft); }
+  .auth-card{
+    background: var(--paper);
+    border: 1px solid var(--line);
+    border-radius: 24px;
+    box-shadow: var(--shadow);
+    padding: 20px 18px 22px;
+    width: 100%;
+    max-width: 420px;
+    margin: 0 auto;
+  }
+  @media (min-width: 880px){
+    .auth-card{ margin: 0; max-width: none; padding: 28px 26px 30px; }
+  }
+  .tabs{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    background: var(--bg);
+    border-radius: 14px;
+    padding: 5px;
+    margin-bottom: 18px;
+  }
+  .tabs button{
+    appearance: none; border: 0; cursor: pointer;
+    background: transparent;
+    min-height: 42px;
+    border-radius: 11px;
+    font-weight: 800;
+    color: var(--ink-soft);
+  }
+  .tabs button.active{
+    background: #fff;
+    color: var(--ink);
+    box-shadow: var(--shadow-sm);
+  }
+  .panel{ display: none; }
+  .panel.show{ display: block; }
+  .auth-title{ margin: 0 0 4px; font-size: 1.2rem; letter-spacing: -.015em; }
+  .auth-sub{ margin: 0 0 16px; font-size: .88rem; color: var(--ink-soft); }
+  .login-foot{
+    text-align: center;
+    font-size: .78rem;
+    color: var(--ink-soft);
+    padding-bottom: 12px;
+  }
 </style>
 </head>
 <body>
-<header>
-  <div class="school">SD Muhammadiyah 01 Kukusan</div>
-  <h1>Kuis Digital</h1>
-</header>
-<main>
-  <p class="lead">Masuk sebagai siswa atau guru.</p>
+  <div class="login-shell">
+    <section class="intro" aria-label="Selamat datang">
+      <div class="pill">
+        <span class="dot">5</span>
+        SD Muhammadiyah 01 Kukusan · Kelas 5
+      </div>
+      <h1>Belajar kuis jadi <em>lebih seru</em>.</h1>
+      <p class="lead">Masuk dulu, lalu pilih mata pelajaran atau latihan asesmen. Cepat, jelas, dan nyaman di HP maupun komputer.</p>
+      <div class="stats" aria-hidden="true">
+        <div class="stat"><b>Kuis</b><span>Per mapel</span></div>
+        <div class="stat"><b>Latihan</b><span>ATS / AAS</span></div>
+        <div class="stat"><b>Hasil</b><span>Ke orang tua</span></div>
+      </div>
+    </section>
 
-  <button type="button" class="role" id="btnTabSiswa">
-    <span class="t">Siswa</span>
-    <span class="d">Nama lengkap + NISN</span>
-  </button>
-  <div class="panel" id="panelSiswa">
-    <label for="namaSiswa">Nama lengkap</label>
-    <select id="namaSiswa"><option value="">Memuat daftar nama…</option></select>
-    <label for="nisnSiswa">NISN (sandi)</label>
-    <input id="nisnSiswa" type="password" inputmode="numeric" autocomplete="off" placeholder="Nomor NISN">
-    <p class="hint">NISN sama dengan yang tercatat di data sekolah / spreadsheet.</p>
-    <button type="button" class="btn" id="btnLoginSiswa">Masuk</button>
-    <div id="msgSiswa" class="msg"></div>
-  </div>
+    <section class="auth-card" aria-label="Form masuk">
+      <div class="tabs" role="tablist">
+        <button type="button" role="tab" id="btnTabSiswa" class="active" aria-selected="true">Siswa</button>
+        <button type="button" role="tab" id="btnTabGuru" aria-selected="false">Guru</button>
+      </div>
 
-  <button type="button" class="role" id="btnTabGuru">
-    <span class="t">Guru</span>
-    <span class="d">Arif Azwar Anas</span>
-  </button>
-  <div class="panel" id="panelGuru">
-    <label>Nama</label>
-    <input type="text" value="Arif Azwar Anas" readonly style="background:#F1EFE8;color:var(--soft)">
-    <label for="sandiGuru">Sandi</label>
-    <input id="sandiGuru" type="password" autocomplete="current-password" placeholder="Sandi guru">
-    <button type="button" class="btn" id="btnLoginGuru">Masuk sebagai guru</button>
-    <div id="msgGuru" class="msg"></div>
+      <div id="panelSiswa" class="panel show" role="tabpanel">
+        <h2 class="auth-title">Halo, siswa!</h2>
+        <p class="auth-sub">Pilih namamu dan isi NISN sebagai sandi.</p>
+        <div id="msgSiswa" class="msg" role="status"></div>
+        <div class="field">
+          <label for="namaSiswa">Nama lengkap</label>
+          <select id="namaSiswa"><option value="">Memuat nama…</option></select>
+        </div>
+        <div class="field">
+          <label for="nisnSiswa">NISN</label>
+          <input id="nisnSiswa" type="password" inputmode="numeric" autocomplete="off" placeholder="Nomor NISN">
+        </div>
+        <button type="button" class="btn btn-primary btn-block" id="btnLoginSiswa">Masuk belajar</button>
+      </div>
+
+      <div id="panelGuru" class="panel" role="tabpanel">
+        <h2 class="auth-title">Area guru</h2>
+        <p class="auth-sub">Masuk untuk mengelola sesi latihan, bank soal, dan laporan.</p>
+        <div id="msgGuru" class="msg" role="status"></div>
+        <div class="field">
+          <label for="sandiGuru">Sandi guru</label>
+          <input id="sandiGuru" type="password" autocomplete="current-password" placeholder="Sandi">
+        </div>
+        <button type="button" class="btn btn-navy btn-block" id="btnLoginGuru">Masuk sebagai guru</button>
+      </div>
+    </section>
   </div>
-</main>
-<footer>Kelas 5 · SD Muhammadiyah 01 Kukusan</footer>
+  <p class="login-foot">Kuis Digital · SD Muhammadiyah 01 Kukusan</p>
 <script>
 (function(){
   var WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbwotrwYBt0_-_9g4o2gNs6ktaTn1sw41f3jJlgoK5pN2N5RofwRjOeiSqzQq1JZsjhclw/exec';
-
   function showMsg(id, ok, text){
     var el = document.getElementById(id);
     el.className = 'msg show ' + (ok ? 'ok' : 'err');
     el.textContent = text;
   }
   function showPanel(which){
-    document.getElementById('panelSiswa').classList.toggle('show', which === 'siswa');
-    document.getElementById('panelGuru').classList.toggle('show', which === 'guru');
-    document.getElementById('btnTabSiswa').classList.toggle('active', which === 'siswa');
-    document.getElementById('btnTabGuru').classList.toggle('active', which === 'guru');
+    var siswa = which === 'siswa';
+    document.getElementById('panelSiswa').classList.toggle('show', siswa);
+    document.getElementById('panelGuru').classList.toggle('show', !siswa);
+    document.getElementById('btnTabSiswa').classList.toggle('active', siswa);
+    document.getElementById('btnTabGuru').classList.toggle('active', !siswa);
+    document.getElementById('btnTabSiswa').setAttribute('aria-selected', siswa ? 'true' : 'false');
+    document.getElementById('btnTabGuru').setAttribute('aria-selected', !siswa ? 'true' : 'false');
   }
-
   document.getElementById('btnTabSiswa').onclick = function(){ showPanel('siswa'); };
-  document.getElementById('btnTabGuru').onclick = function(){ showPanel('guru'); document.getElementById('sandiGuru').focus(); };
-
+  document.getElementById('btnTabGuru').onclick = function(){
+    showPanel('guru');
+    document.getElementById('sandiGuru').focus();
+  };
   fetch(WEBAPP_URL + '?action=daftarSiswa')
     .then(function(r){ return r.json(); })
     .then(function(res){
@@ -125,7 +213,6 @@
     .catch(function(){
       document.getElementById('namaSiswa').innerHTML = '<option value="">Gagal memuat nama</option>';
     });
-
   document.getElementById('btnLoginSiswa').onclick = function(){
     var btn = this;
     var nama = (document.getElementById('namaSiswa').value || '').trim();
@@ -152,7 +239,6 @@
       showMsg('msgSiswa', false, 'Tidak terhubung ke server. Pastikan Code.gs sudah di-deploy.');
     });
   };
-
   document.getElementById('btnLoginGuru').onclick = function(){
     var btn = this;
     var sandi = (document.getElementById('sandiGuru').value || '').trim();
@@ -178,7 +264,6 @@
       showMsg('msgGuru', false, 'Tidak terhubung ke server. Pastikan Code.gs sudah di-deploy.');
     });
   };
-
   showPanel('siswa');
 })();
 </script>

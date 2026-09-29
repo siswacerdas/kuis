@@ -3,477 +3,171 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Kuis Digital — SD Muhammadiyah 01 Kukusan</title>
-<meta name="description" content="Kuis dan evaluasi singkat untuk siswa kelas 5 SD Muhammadiyah 01 Kukusan.">
-<meta name="theme-color" content="#0F6B5C">
-<style>
-  :root{
-    --bg: #F7F6F1;
-    --paper: #FFFFFF;
-    --ink: #23241F;
-    --ink-soft: #5B5D55;
-    --line: #E3E0D6;
-    --brand: #0F6B5C;
-    --brand-dark: #0B4F45;
-    --amber: #E0952E;
-    --radius: 14px;
-    --step: 0px; /* font-size adjustment, applied in px via JS */
-    --maxw: 1040px;
-  }
-
-  *{ box-sizing: border-box; }
-  html{ -webkit-text-size-adjust: 100%; }
-
-  body{
-    margin: 0;
-    background: var(--bg);
-    color: var(--ink);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    font-size: calc(16px + var(--step));
-    line-height: 1.5;
-    -webkit-font-smoothing: antialiased;
-  }
-
-  a{ color: inherit; }
-
-  .wrap{
-    max-width: var(--maxw);
-    margin: 0 auto;
-    padding: 0 20px;
-  }
-
-  /* ---------- Header ---------- */
-  header.site{
-    background: var(--brand);
-    color: #F4FBF9;
-    padding: 24px 0 28px;
-  }
-
-  .brand-row{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
-  }
-
-  .brand{
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    min-width: 0;
-  }
-
-  .brand-mark{
-    width: 38px;
-    height: 38px;
-    flex: none;
-    border-radius: 10px;
-    background: var(--brand-dark);
-    display: grid;
-    place-items: center;
-  }
-  .brand-mark svg{ width: 22px; height: 22px; }
-
-  .brand-text .school{
-    font-size: 0.72em;
-    letter-spacing: .04em;
-    text-transform: uppercase;
-    opacity: .8;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .brand-text .app{
-    font-weight: 700;
-    font-size: 1.08em;
-    letter-spacing: -0.01em;
-  }
-
-  .font-ctrl{
-    display: flex;
-    align-items: center;
-    gap: 2px;
-    background: rgba(255,255,255,.12);
-    border-radius: 999px;
-    padding: 3px;
-    flex: none;
-  }
-  .font-ctrl button{
-    appearance: none;
-    border: 0;
-    background: transparent;
-    color: #F4FBF9;
-    min-width: 32px;
-    height: 32px;
-    padding: 0 8px;
-    border-radius: 999px;
-    font-weight: 700;
-    font-size: 13px;
-    line-height: 1;
-    white-space: nowrap;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .font-ctrl button:hover{ background: rgba(255,255,255,.18); }
-  .font-ctrl button:active{ background: rgba(255,255,255,.28); }
-  .font-ctrl button:focus-visible{ outline: 2px solid #fff; outline-offset: 2px; }
-  .font-ctrl .lg{ font-size: 15px; }
-
-  .hero{
-    margin-top: 22px;
-    max-width: 46ch;
-  }
-  .hero h1{
-    margin: 0 0 8px;
-    font-size: clamp(1.4rem, 3.4vw, 2rem);
-    line-height: 1.25;
-    font-weight: 800;
-    letter-spacing: -0.01em;
-  }
-  .hero p{
-    margin: 0;
-    color: #E3F2ED;
-    font-size: 0.95em;
-  }
-
-  /* ---------- Konten ---------- */
-  main{ padding: 28px 0 30px; }
-
-  .section-title{
-    font-size: 0.85em;
-    text-transform: uppercase;
-    letter-spacing: .06em;
-    color: var(--ink-soft);
-    font-weight: 700;
-    margin: 0 0 12px;
-  }
-
-  /* ---------- Kartu mata pelajaran ---------- */
-  .subject-grid{
-    list-style: none;
-    margin: 0 0 30px;
-    padding: 0;
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
-
-  .subject-card{
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    background: var(--paper);
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    padding: 16px;
-    text-decoration: none;
-    color: inherit;
-    box-shadow: 0 1px 2px rgba(20,30,25,.04);
-  }
-  a.subject-card:hover{ border-color: #CFE3DA; box-shadow: 0 4px 14px -8px rgba(15,60,45,.25); }
-  .subject-card:focus-visible{ outline: 2px solid var(--brand); outline-offset: 2px; }
-
-  .icon{
-    width: 46px;
-    height: 46px;
-    border-radius: 12px;
-    display: grid;
-    place-items: center;
-    flex: none;
-  }
-  .icon svg{ width: 24px; height: 24px; }
-
-  .subject-body{ min-width: 0; flex: 1; }
-  .subj-name{
-    font-weight: 700;
-    font-size: 1em;
-    letter-spacing: -0.005em;
-    display: block;
-  }
-  .subj-meta{
-    margin-top: 2px;
-    font-size: 0.82em;
-    color: var(--ink-soft);
-    display: block;
-  }
-
-  .status{
-    flex: none;
-    font-size: 0.74em;
-    font-weight: 700;
-    padding: 5px 10px;
-    border-radius: 999px;
-    white-space: nowrap;
-  }
-  .status.ready{ background: #E4F3EC; color: var(--brand-dark); }
-  .status.soon{ background: #F1EFE8; color: var(--ink-soft); }
-
-  /* subject accent tints (used only as small icon backgrounds, not whole cards) */
-  .t-pancasila{ background:#FBEAE6; color:#B85C3E; }
-  .t-bindo{ background:#EAF1FB; color:#3E6BB8; }
-  .t-mtk{ background:#F6EAFB; color:#8A46B0; }
-  .t-ipas{ background:#E7F6EE; color:#1F8A55; }
-  .t-seni{ background:#FBF2E1; color:#B8823E; }
-
-  /* ---------- Info section ---------- */
-  .info-panel{
-    background: var(--paper);
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    padding: 20px;
-  }
-  .steps{
-    list-style: none;
-    margin: 0; padding: 0;
-    display: grid;
-    gap: 12px;
-  }
-  .steps li{
-    display: flex;
-    gap: 12px;
-    align-items: flex-start;
-    font-size: 0.92em;
-    color: var(--ink-soft);
-  }
-  .steps .num{
-    flex: none;
-    width: 24px; height: 24px;
-    border-radius: 999px;
-    background: var(--brand);
-    color: #fff;
-    font-size: 0.72em;
-    font-weight: 700;
-    display: grid;
-    place-items: center;
-    margin-top: 1px;
-  }
-  .steps b{ color: var(--ink); }
-
-  footer{
-    margin: 34px 0 10px;
-    text-align: center;
-    color: var(--ink-soft);
-    font-size: 0.82em;
-  }
-  footer .muh{ color: var(--brand-dark); font-weight: 700; }
-
-  .menu-section{ margin-top: 30px; }
-  .t-riwayat{ background:#EAEBF7; color:#4A4FB0; }
-
-  @media (min-width: 640px){
-    header.site{ padding: 32px 0 36px; }
-    .subject-grid{ grid-template-columns: 1fr 1fr; gap: 14px; }
-    .subject-card{ padding: 18px; }
-  }
-
-  @media (min-width: 960px){
-    .layout{
-      display: grid;
-      grid-template-columns: 1fr 300px;
-      gap: 22px;
-      align-items: start;
-    }
-    .subject-grid{ margin-bottom: 0; }
-    .info-panel{ position: sticky; top: 20px; }
-  }
-
-  @media (prefers-reduced-motion: no-preference){
-    a.subject-card{ transition: border-color .15s ease, box-shadow .15s ease; }
-    .font-ctrl button{ transition: background-color .15s ease; }
-  }
-</style>
+<title>Beranda — Kuis Digital SDM01KKS</title>
+<meta name="theme-color" content="#C45C26">
+<meta name="description" content="Beranda siswa Kuis Digital SD Muhammadiyah 01 Kukusan">
+<link rel="stylesheet" href="assets/app.css">
 </head>
 <body>
-
-<header class="site">
-  <div class="wrap">
-    <div class="brand-row">
-      <div class="brand">
-        <span class="brand-mark" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none"><path d="M4 6.5 12 3l8 3.5-8 3.5-8-3.5Z" stroke="#F4FBF9" stroke-width="1.6" stroke-linejoin="round"/><path d="M7 10.2v4.3c0 1.4 2.2 2.5 5 2.5s5-1.1 5-2.5v-4.3" stroke="#F4FBF9" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M20 8.2v5.6" stroke="#F4FBF9" stroke-width="1.6" stroke-linecap="round"/></svg>
-        </span>
-        <span class="brand-text">
+  <header class="app-top">
+    <div class="inner">
+      <div class="brand-lockup">
+        <div class="brand-mark" aria-hidden="true">K</div>
+        <div class="brand-text">
+          <span class="app-name">Kuis Digital</span>
           <span class="school">SD Muhammadiyah 01 Kukusan</span>
-          <span class="app">Kuis Digital</span>
-        </span>
+        </div>
       </div>
-      <div class="font-ctrl" role="group" aria-label="Ukuran tulisan">
-        <button type="button" id="fontDown" aria-label="Perkecil tulisan">A−</button>
-        <button type="button" id="fontUp" class="lg" aria-label="Perbesar tulisan">A+</button>
-      </div>
-    </div>
-    <div class="hero">
-      <h1>Yuk, latihan kuis harian!</h1>
-      <p>Halo, <strong id="namaLogin">siswa</strong>. Pilih mata pelajaran di bawah untuk mulai kuis.</p>
-    </div>
-  </div>
-</header>
-
-<main>
-  <div class="wrap">
-    <div class="layout">
-      <div>
-        <h2 class="section-title">Mata pelajaran</h2>
-        <ul class="subject-grid">
-
-          <li>
-            <a class="subject-card" href="pendidikan-pancasila/">
-              <span class="icon t-pancasila" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none"><path d="M12 3 4 6.5 5.2 15c.5 3.4 3.4 5.6 6.8 6.5 3.4-.9 6.3-3.1 6.8-6.5L20 6.5 12 3Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9.5 12.2l1.8 1.8 3.2-3.6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              </span>
-              <span class="subject-body">
-                <span class="subj-name">Pendidikan Pancasila</span>
-                <span class="subj-meta">Kuis pilihan ganda</span>
-              </span>
-              <span class="status soon">Segera hadir</span>
-            </a>
-          </li>
-
-          <li>
-            <a class="subject-card" href="bahasa-indonesia/">
-              <span class="icon t-bindo" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none"><path d="M4 5.5h13a2 2 0 0 1 2 2v10.7L15.5 16H4V5.5Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M7.5 9h7M7.5 12.2h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-              </span>
-              <span class="subject-body">
-                <span class="subj-name">Bahasa Indonesia</span>
-                <span class="subj-meta">Kuis pilihan ganda</span>
-              </span>
-              <span class="status ready">2 kuis tersedia</span>
-            </a>
-          </li>
-
-          <li>
-            <a class="subject-card" href="matematika/">
-              <span class="icon t-mtk" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none"><path d="M6 4h12M9 4v5.5L5 19h14l-4-9.5V4" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M8 15.5h8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-              </span>
-              <span class="subject-body">
-                <span class="subj-name">Matematika</span>
-                <span class="subj-meta">Kuis pilihan ganda</span>
-              </span>
-              <span class="status soon">Segera hadir</span>
-            </a>
-          </li>
-
-          <li>
-            <a class="subject-card" href="ipas/">
-              <span class="icon t-ipas" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8.2" stroke="currentColor" stroke-width="1.6"/><path d="M12 3.8c2.6 2.4 4 5.3 4 8.2s-1.4 5.8-4 8.2c-2.6-2.4-4-5.3-4-8.2s1.4-5.8 4-8.2Z" stroke="currentColor" stroke-width="1.6"/><path d="M4.3 12h15.4" stroke="currentColor" stroke-width="1.6"/></svg>
-              </span>
-              <span class="subject-body">
-                <span class="subj-name">IPAS</span>
-                <span class="subj-meta">Ilmu Pengetahuan Alam &amp; Sosial</span>
-              </span>
-              <span class="status ready">2 kuis tersedia</span>
-            </a>
-          </li>
-
-          <li>
-            <a class="subject-card" href="seni-budaya/">
-              <span class="icon t-seni" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none"><path d="M12 3.5c-4.7 0-8.5 3.5-8.5 7.8 0 2.6 2 4 4 4h1.1c.9 0 1.5.9 1.1 1.7l-.3.6c-.5 1 .3 2.1 1.4 1.9 4.4-.7 9.7-4.3 9.7-9.2 0-3.7-4-6.8-8.5-6.8Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="8.7" cy="10.2" r=".9" fill="currentColor"/><circle cx="12" cy="8" r=".9" fill="currentColor"/><circle cx="15.3" cy="10.2" r=".9" fill="currentColor"/></svg>
-              </span>
-              <span class="subject-body">
-                <span class="subj-name">Seni Budaya</span>
-                <span class="subj-meta">Seni Rupa &amp; Seni Musik</span>
-              </span>
-              <span class="status soon">Segera hadir</span>
-            </a>
-          </li>
-
-        </ul>
-      </div>
-
-      <div class="info-panel">
-        <h2 class="section-title">Cara mengerjakan</h2>
-        <ul class="steps">
-          <li><span class="num">1</span><span><b>Pilih mata pelajaran</b> yang akan diujikan hari ini.</span></li>
-          <li><span class="num">2</span><span><b>Jawab setiap soal</b> sesuai waktu yang diberikan guru.</span></li>
-          <li><span class="num">3</span><span><b>Lihat hasil</b> setelah selesai mengerjakan seluruh soal.</span></li>
-        </ul>
+      <div style="display:flex;align-items:center;gap:8px">
+        <div class="font-ctrl" role="group" aria-label="Ukuran tulisan">
+          <button type="button" id="fontDown" aria-label="Perkecil">A−</button>
+          <button type="button" id="fontUp" aria-label="Perbesar">A+</button>
+        </div>
+        <div class="chip-user" title="Akun siswa">
+          <span class="avatar" id="avatarInisial">S</span>
+          <span class="name" id="namaChip">Siswa</span>
+        </div>
       </div>
     </div>
+  </header>
 
-    <section class="menu-section">
-      <h2 class="section-title">Latihan asesmen</h2>
-      <ul class="subject-grid">
-        <li>
-          <a class="subject-card" href="latihan/">
-            <span class="icon t-ipas" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none"><path d="M5 19V6.5A1.5 1.5 0 0 1 6.5 5H14l5 5v9a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 5 19Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M14 5v4.5H19M8 13h8M8 16.5h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </span>
-            <span class="subject-body">
-              <span class="subj-name">Latihan ATS / AAS</span>
-              <span class="subj-meta">Persiapan asesmen — boleh diulang</span>
-            </span>
-            <span class="status ready">Mulai latihan</span>
-          </a>
-        </li>
-      </ul>
+  <main class="page">
+    <section class="greeting">
+      <h1 id="salam">Halo!</h1>
+      <p>Pilih kegiatan di bawah. Bisa dikerjakan dari HP atau komputer.</p>
     </section>
 
-    <section class="menu-section">
-      <h2 class="section-title">Nilai &amp; Riwayat</h2>
-      <ul class="subject-grid">
-        <li>
-          <a class="subject-card" href="riwayat-kuis/">
-            <span class="icon t-riwayat" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none"><path d="M5 4.5h14v15l-3.2-2.1-3.3 2.1-3.3-2.1L10 19.5l-3.3-2.1L5 19.5v-15Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M8.3 9h7.4M8.3 12.5h7.4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-            </span>
-            <span class="subject-body">
-              <span class="subj-name">Riwayat Kuis</span>
-              <span class="subj-meta">Nilai akhir siswa per mata pelajaran &amp; materi</span>
-            </span>
-            <span class="status ready">Lihat riwayat</span>
-          </a>
-        </li>
-      </ul>
-    </section>
+    <h2 class="section-label">Utama</h2>
+    <div class="bento">
+      <a class="tile hero-feature span-2" href="latihan/">
+        <div class="top">
+          <span class="ico" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" width="24" height="24"><path d="M5 19V6.5A1.5 1.5 0 0 1 6.5 5H14l5 5v9a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 5 19Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M14 5v4.5H19M8 13h8M8 16.5h5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+          <span class="badge badge-hot">Boleh diulang</span>
+        </div>
+        <div>
+          <h3>Latihan ATS / AAS</h3>
+          <p>Persiapan asesmen tengah &amp; akhir semester. Kerjakan sesi dari guru, pakai token.</p>
+        </div>
+        <div class="foot">
+          <span class="badge">Mulai latihan →</span>
+        </div>
+      </a>
+    </div>
 
-    <footer>
-      <a href="index.html" id="btnKeluarSiswa" style="color:inherit;opacity:.85">Keluar</a> &middot; Dibuat untuk siswa kelas 5 &middot; <span class="muh">SD Muhammadiyah 01 Kukusan</span>
-    </footer>
-  </div>
-</main>
+    <h2 class="section-label">Mata pelajaran</h2>
+    <div class="bento">
+      <a class="tile c-rose" href="pendidikan-pancasila/">
+        <div class="top">
+          <span class="ico" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" width="24" height="24"><path d="M12 3 4 6.5 5.2 15c.5 3.4 3.4 5.6 6.8 6.5 3.4-.9 6.3-3.1 6.8-6.5L20 6.5 12 3Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M9.5 12.2l1.8 1.8 3.2-3.6" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+          <span class="badge badge-soon">Segera</span>
+        </div>
+        <div>
+          <h3>Pendidikan Pancasila</h3>
+          <p>Kuis pilihan ganda</p>
+        </div>
+      </a>
+
+      <a class="tile c-navy" href="bahasa-indonesia/">
+        <div class="top">
+          <span class="ico" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" width="24" height="24"><path d="M4 5.5h13a2 2 0 0 1 2 2v10.7L15.5 16H4V5.5Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M7.5 9h7M7.5 12.2h5" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+          </span>
+          <span class="badge badge-go">2 kuis</span>
+        </div>
+        <div>
+          <h3>Bahasa Indonesia</h3>
+          <p>Kuis pilihan ganda</p>
+        </div>
+      </a>
+
+      <a class="tile c-amber" href="matematika/">
+        <div class="top">
+          <span class="ico" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" width="24" height="24"><path d="M6 4h12M9 4v5.5L5 19h14l-4-9.5V4" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M8 15.5h8" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+          </span>
+          <span class="badge badge-soon">Segera</span>
+        </div>
+        <div>
+          <h3>Matematika</h3>
+          <p>Kuis pilihan ganda</p>
+        </div>
+      </a>
+
+      <a class="tile c-teal" href="ipas/">
+        <div class="top">
+          <span class="ico" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" width="24" height="24"><circle cx="12" cy="12" r="8.2" stroke="currentColor" stroke-width="1.7"/><path d="M12 7.5v9M7.5 12h9" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+          </span>
+          <span class="badge badge-go">Tersedia</span>
+        </div>
+        <div>
+          <h3>IPAS</h3>
+          <p>Ilmu pengetahuan alam &amp; sosial</p>
+        </div>
+      </a>
+    </div>
+
+    <h2 class="section-label">Nilai &amp; riwayat</h2>
+    <div class="bento">
+      <a class="tile c-violet span-2" href="riwayat-kuis/">
+        <div class="top">
+          <span class="ico" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" width="24" height="24"><path d="M5 4.5h14v15l-3.2-2.1-3.3 2.1-3.3-2.1L5 19.5v-15Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/><path d="M8.3 9h7.4M8.3 12.5h7.4" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+          </span>
+          <span class="badge badge-go">Lihat</span>
+        </div>
+        <div>
+          <h3>Riwayat kuis</h3>
+          <p>Nilai akhir per mata pelajaran dan materi</p>
+        </div>
+      </a>
+    </div>
+
+    <p class="footer-mini">
+      <a href="#" id="btnKeluarSiswa">Keluar</a>
+      · Kelas 5 · SD Muhammadiyah 01 Kukusan
+    </p>
+  </main>
 
 <script>
 (function(){
   var root = document.documentElement;
-  var KEY = "kuis-font-step";
-  var MIN = -2, MAX = 4, STEP = 1; // px increments applied to base 16px
-
+  var KEY = 'kuis-font-step';
+  var MIN = -2, MAX = 4, STEP = 1;
   function apply(step){
     step = Math.max(MIN, Math.min(MAX, step));
-    root.style.setProperty("--step", step + "px");
+    root.style.setProperty('--step', step + 'px');
     localStorage.setItem(KEY, String(step));
     return step;
   }
-
   var saved = parseInt(localStorage.getItem(KEY), 10);
   var current = apply(isNaN(saved) ? 0 : saved);
-
-  document.getElementById("fontUp").addEventListener("click", function(){
-    current = apply(current + STEP);
-  });
-  document.getElementById("fontDown").addEventListener("click", function(){
-    current = apply(current - STEP);
-  });
+  document.getElementById('fontUp').onclick = function(){ current = apply(current + STEP); };
+  document.getElementById('fontDown').onclick = function(){ current = apply(current - STEP); };
 })();
 </script>
-
 <script>
 (function(){
   if (sessionStorage.getItem('kuis-siswa-ok') !== '1') {
     location.replace('index.html');
     return;
   }
-  var nama = sessionStorage.getItem('kuis-siswa-nama') || '';
-  var el = document.getElementById('namaLogin');
-  if (el && nama) el.textContent = nama;
-  var k = document.getElementById('btnKeluarSiswa');
-  if (k) k.onclick = function(e){
+  var nama = sessionStorage.getItem('kuis-siswa-nama') || 'Siswa';
+  document.getElementById('namaChip').textContent = nama;
+  var parts = nama.trim().split(/\s+/);
+  var ini = (parts[0][0] || 'S').toUpperCase();
+  if (parts.length > 1) ini += (parts[parts.length-1][0] || '').toUpperCase();
+  document.getElementById('avatarInisial').textContent = ini;
+
+  var h = new Date().getHours();
+  var salam = h < 11 ? 'Selamat pagi' : h < 15 ? 'Selamat siang' : h < 18 ? 'Selamat sore' : 'Selamat malam';
+  document.getElementById('salam').textContent = salam + ', ' + (parts[0] || nama) + '!';
+
+  document.getElementById('btnKeluarSiswa').onclick = function(e){
     e.preventDefault();
     sessionStorage.removeItem('kuis-siswa-ok');
     sessionStorage.removeItem('kuis-siswa-nama');
