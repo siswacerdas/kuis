@@ -7,19 +7,55 @@
     "kelas": "5",
     "semester": "ganjil",
     "tahun_ajaran": "2026/2027",
-    "deskripsi": "Pool soal latihan ATS/AAS: Gelombang Bunyi, Gelombang Cahaya, Ekosistem, serta Bencana Alam & Perubahan Lingkungan. Hanya PG dan PGK.",
+    "deskripsi": "Pool soal latihan ATS/AAS. Hanya PG dan PGK. Total 126 soal.",
     "total_soal": 126
   },
   "materi": [
-    {"id": "Gelombang Bunyi", "kode": "BUNYI", "label": "Gelombang Bunyi", "file": "ipas/bunyi-1.json", "file2": "ipas/bunyi-2.json", "jumlah": 55},
-    {"id": "Gelombang Cahaya", "kode": "CAHAYA", "label": "Gelombang Cahaya", "file": "ipas/cahaya.json", "jumlah": 29},
-    {"id": "Ekosistem", "kode": "EKOSISTEM", "label": "Ekosistem", "file": "ipas/ekosistem.json", "jumlah": 29},
-    {"id": "Bencana Alam & Perubahan Lingkungan", "kode": "LINGKUNGAN", "label": "Bencana Alam & Perubahan Lingkungan", "file": "ipas/lingkungan.json", "jumlah": 13}
+    {
+      "id": "Gelombang Bunyi",
+      "kode": "BUNYI",
+      "jumlah": 55,
+      "files": [
+        "ipas/bunyi-1-1.json",
+        "ipas/bunyi-1-2.json",
+        "ipas/bunyi-1-3.json",
+        "ipas/bunyi-2-1.json",
+        "ipas/bunyi-2-2.json",
+        "ipas/bunyi-2-3.json"
+      ]
+    },
+    {
+      "id": "Gelombang Cahaya",
+      "kode": "CAHAYA",
+      "jumlah": 29,
+      "files": [
+        "ipas/cahaya-1.json",
+        "ipas/cahaya-2.json",
+        "ipas/cahaya-3.json"
+      ]
+    },
+    {
+      "id": "Ekosistem",
+      "kode": "EKOSISTEM",
+      "jumlah": 29,
+      "files": [
+        "ipas/ekosistem-1.json",
+        "ipas/ekosistem-2.json",
+        "ipas/ekosistem-3.json"
+      ]
+    },
+    {
+      "id": "Bencana Alam & Perubahan Lingkungan",
+      "kode": "LINGKUNGAN",
+      "jumlah": 13,
+      "files": ["ipas/lingkungan.json"]
+    }
   ],
   "kompleksitas": [
     {"id": "L1", "label": "L1 — Dasar (mengingat & memahami)"},
     {"id": "L2", "label": "L2 — Menengah (menerapkan & menganalisis)"},
     {"id": "L3", "label": "L3 — Lanjut (mengevaluasi & mencipta / multi-jawaban)"}
   ],
-  "cara_muat": "Gabungkan array soal dari semua file di folder bank-soal/ipas/. File indeksi ini tidak berisi soal."
+  "cara_muat": "Gabungkan array soal dari semua file di materi[].files. File penuh 126 soal: artifacts/bank-soal/ipas-ganjil-2026.json di workspace proyek.",
+  "upload_otomatis": "scripts/upload-github-file.sh — butuh GITHUB_TOKEN (PAT contents:write)"
 }
