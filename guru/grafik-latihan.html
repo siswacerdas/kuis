@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Grafik perkembangan — Area guru</title>
+<meta name="theme-color" content="#0F6B5C">
+<style>
+  :root{ --bg:#F7F6F1; --paper:#fff; --ink:#23241F; --soft:#5B5D55; --line:#E3E0D6; --brand:#0F6B5C; --brand-dark:#0B4F45; --radius:14px; }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:var(--bg); color:var(--ink); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif; font-size:15px; line-height:1.45; }
+  header{ background:var(--brand); color:#F4FBF9; padding:16px 20px; }
+  header .wrap{ max-width:960px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; }
+  header a{ color:#E3F2ED; text-decoration:none; font-weight:600; font-size:.9em; }
+  header h1{ margin:0; font-size:1.15em; }
+  main{ max-width:960px; margin:0 auto; padding:20px 16px 48px; }
+  .card{ background:var(--paper); border:1px solid var(--line); border-radius:var(--radius); padding:14px 16px; margin-bottom:12px; }
+  .card h2{ margin:0 0 10px; font-size:.75em; text-transform:uppercase; letter-spacing:.05em; color:var(--soft); }
+  label{ display:block; font-size:.78em; font-weight:600; color:var(--soft); margin-bottom:4px; }
+  select{ width:100%; padding:9px 11px; border:1.5px solid var(--line); border-radius:9px; font:inherit; background:#fff; margin-bottom:8px; }
+  .row{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; }
+  @media (max-width:640px){ .row{ grid-template-columns:1fr; } }
+  .btn{ appearance:none; border:0; border-radius:10px; padding:10px 14px; font:inherit; font-weight:700; background:var(--brand); color:#fff; cursor:pointer; }
+  .btn.secondary{ background:#EDEBE3; color:var(--ink); }
+  .toolbar{ display:flex; flex-wrap:wrap; gap:8px; margin-top:4px; }
+  .chart-wrap{ position:relative; width:100%; overflow-x:auto; }
+  canvas{ display:block; width:100%; max-width:100%; height:auto; }
+  .legend{ display:flex; flex-wrap:wrap; gap:10px 16px; margin-top:10px; font-size:.82em; color:var(--soft); }
+  .legend span{ display:inline-flex; align-items:center; gap:6px; }
+  .dot{ width:10px; height:10px; border-radius:50%; display:inline-block; }
+  .stats{ display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:12px; }
+  @media (max-width:640px){ .stats{ grid-template-columns:1fr 1fr; } }
+  .stat{ background:var(--paper); border:1px solid var(--line); border-radius:12px; padding:12px 14px; }
+  .stat .n{ font-size:1.25em; font-weight:800; color:var(--brand-dark); }
+  .stat .l{ font-size:.75em; color:var(--soft); }
+  .empty{ text-align:center; color:var(--soft); padding:32px 12px; }
+  .note{ font-size:.85em; color:var(--soft); margin:0 0 8px; }
+</style>
+</head>
+<body>
+<script>
+if (sessionStorage.getItem('kuis-guru-ok') !== '1') location.replace('../index.html');
+</script>
+<header>
+  <div class="wrap">
+    <h1>Grafik perkembangan</h1>
+    <a href="./">← Area guru</a>
+  </div>
+</header>
+<main>
+  <div class="card">
+    <h2>Pilih data</h2>
+    <div class="row">
+      <div>
+        <label for="fNama">Siswa</label>
+        <select id="fNama"><option value="">— Semua siswa (rata-rata kelas) —</option></select>
+      </div>
+      <div>
+        <label for="fMapel">Mapel</label>
+        <select id="fMapel"><option value="">Semua</option></select>
+      </div>
+      <div>
+        <label for="fMateri">Materi</label>
+        <select id="fMateri"><option value="">Semua</option></select>
+      </div>
+    </div>
+    <div class="toolbar">
+      <button type="button" class="btn" id="btnTampil">Tampilkan grafik</button>
+      <button type="button" class="btn secondary" id="btnReset">Reset</button>
+    </div>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="n" id="sPercobaan">—</div><div class="l">Percobaan</div></div>
+    <div class="stat"><div class="n" id="sAwal">—</div><div class="l">Skor awal</div></div>
+    <div class="stat"><div class="n" id="sAkhir">—</div><div class="l">Skor terakhir</div></div>
+    <div class="stat"><div class="n" id="sDelta">—</div><div class="l">Perubahan</div></div>
+  </div>
+
+  <div class="card">
+    <h2>Tren skor (%)</h2>
+    <p class="note" id="chartNote">Setiap titik = satu percobaan latihan (urutan waktu).</p>
+    <div class="chart-wrap">
+      <canvas id="chart" width="900" height="320"></canvas>
+    </div>
+    <div class="legend" id="legend"></div>
+    <div id="empty" class="empty" style="display:none">Belum ada data untuk filter ini.</div>
+  </div>
+
+  <div class="card">
+    <h2>Rata-rata per materi (pada filter saat ini)</h2>
+    <div class="chart-wrap">
+      <canvas id="chartBar" width="900" height="260"></canvas>
+    </div>
+  </div>
+</main>
+<script>
+(function(){
+  var WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbwotrwYBt0_-_9g4o2gNs6ktaTn1sw41f3jJlgoK5pN2N5RofwRjOeiSqzQq1JZsjhclw/exec';
+  var COLORS = ['#0F6B5C','#3E6BB8','#B8823E','#8A46B0','#C24B3F','#1F8A55','#4A4FB0'];
+
+  function pct(v){
+    var n = Number(v);
+    if (isNaN(n)) return null;
+    if (n <= 1) n = n * 100;
+    return Math.round(n * 10) / 10;
+  }
+  function fillSelect(id, arr, firstLabel){
+    var s = document.getElementById(id);
+    var cur = s.value;
+    s.innerHTML = '';
+    var o0 = document.createElement('option');
+    o0.value = '';
+    o0.textContent = firstLabel || 'Semua';
+    s.appendChild(o0);
+    (arr || []).forEach(function(v){
+      var o = document.createElement('option');
+      o.value = v; o.textContent = v;
+      s.appendChild(o);
+    });
+    if (cur) s.value = cur;
+  }
+  function loadMetaAndData(cb){
+    var q = '?action=riwayatLatihan'
+      + '&nama=' + encodeURIComponent(document.getElementById('fNama').value)
+      + '&mapel=' + encodeURIComponent(document.getElementById('fMapel').value)
+      + '&materi=' + encodeURIComponent(document.getElementById('fMateri').value);
+    fetch(WEBAPP_URL + q)
+      .then(function(r){ return r.json(); })
+      .then(function(res){
+        if (!res || !res.ok){ cb(new Error('gagal')); return; }
+        if (res.filter){
+          fillSelect('fNama', res.filter.nama, '— Semua siswa (rata-rata kelas) —');
+          fillSelect('fMapel', res.filter.mapel, 'Semua');
+          fillSelect('fMateri', res.filter.materi, 'Semua');
+        }
+        cb(null, res.hasil || []);
+      })
+      .catch(function(){ cb(new Error('net')); });
+  }
+
+  function seriesFrom(list){
+    var items = list.slice().reverse();
+    var namaFilter = document.getElementById('fNama').value;
+    if (namaFilter){
+      return items.filter(function(h){ return h.namaSiswa === namaFilter; }).map(function(h, i){
+        return {
+          x: i + 1,
+          y: pct(h.persentase),
+          label: (h.tanggal || '') + ' · ' + (h.namaLatihan || '') + ' (ke-' + (h.percobaanKe || '?') + ')'
+        };
+      }).filter(function(p){ return p.y != null; });
+    }
+    var buckets = {}, order = [];
+    items.forEach(function(h){
+      var key = String(h.idLatihan || '') + '|' + String(h.percobaanKe || '') + '|' + String(h.tanggal || '');
+      var p = pct(h.persentase);
+      if (p == null) return;
+      if (!buckets[key]){
+        buckets[key] = { sum: 0, n: 0, label: (h.tanggal || '') + ' · ' + (h.namaLatihan || '') };
+        order.push(key);
+      }
+      buckets[key].sum += p;
+      buckets[key].n++;
+    });
+    return order.map(function(k, i){
+      var b = buckets[k];
+      return { x: i + 1, y: Math.round((b.sum / b.n) * 10) / 10, label: b.label + ' (rata-rata kelas)' };
+    });
+  }
+
+  function materiAvg(list){
+    var namaFilter = document.getElementById('fNama').value;
+    var items = list.filter(function(h){
+      if (namaFilter && h.namaSiswa !== namaFilter) return false;
+      return pct(h.persentase) != null;
+    });
+    var m = {};
+    items.forEach(function(h){
+      var key = (h.materi || h.mapel || 'Lainnya').trim() || 'Lainnya';
+      var p = pct(h.persentase);
+      if (!m[key]) m[key] = { sum: 0, n: 0 };
+      m[key].sum += p;
+      m[key].n++;
+    });
+    return Object.keys(m).sort().map(function(k){
+      return { label: k, y: Math.round((m[k].sum / m[k].n) * 10) / 10, n: m[k].n };
+    });
+  }
+
+  function drawLine(canvas, points){
+    var ctx = canvas.getContext('2d');
+    var dpr = window.devicePixelRatio || 1;
+    var cssW = canvas.parentElement.clientWidth || 900;
+    var cssH = 320;
+    canvas.width = cssW * dpr;
+    canvas.height = cssH * dpr;
+    canvas.style.width = cssW + 'px';
+    canvas.style.height = cssH + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, cssW, cssH);
+    var pad = { t: 24, r: 16, b: 40, l: 44 };
+    var w = cssW - pad.l - pad.r;
+    var h = cssH - pad.t - pad.b;
+    ctx.strokeStyle = '#E3E0D6';
+    ctx.lineWidth = 1;
+    ctx.fillStyle = '#5B5D55';
+    ctx.font = '11px system-ui,sans-serif';
+    ctx.textAlign = 'right';
+    for (var g = 0; g <= 4; g++){
+      var yy = pad.t + h - (g / 4) * h;
+      ctx.beginPath();
+      ctx.moveTo(pad.l, yy);
+      ctx.lineTo(pad.l + w, yy);
+      ctx.stroke();
+      ctx.fillText(String(g * 25), pad.l - 6, yy + 4);
+    }
+    if (!points.length) return;
+    var maxX = points.length;
+    function X(i){ return pad.l + (maxX === 1 ? w / 2 : (i / (maxX - 1)) * w); }
+    function Y(v){ return pad.t + h - (Math.max(0, Math.min(100, v)) / 100) * h; }
+    ctx.beginPath();
+    points.forEach(function(p, i){
+      var x = X(i), y = Y(p.y);
+      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    });
+    ctx.lineTo(X(points.length - 1), pad.t + h);
+    ctx.lineTo(X(0), pad.t + h);
+    ctx.closePath();
+    ctx.fillStyle = 'rgba(15,107,92,0.12)';
+    ctx.fill();
+    ctx.beginPath();
+    points.forEach(function(p, i){
+      var x = X(i), y = Y(p.y);
+      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    });
+    ctx.strokeStyle = '#0F6B5C';
+    ctx.lineWidth = 2.5;
+    ctx.lineJoin = 'round';
+    ctx.stroke();
+    points.forEach(function(p, i){
+      var x = X(i), y = Y(p.y);
+      ctx.beginPath();
+      ctx.arc(x, y, 4.5, 0, Math.PI * 2);
+      ctx.fillStyle = '#0F6B5C';
+      ctx.fill();
+      ctx.strokeStyle = '#fff';
+      ctx.lineWidth = 1.5;
+      ctx.stroke();
+      ctx.fillStyle = '#23241F';
+      ctx.font = 'bold 11px system-ui,sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(String(Math.round(p.y)), x, y - 10);
+    });
+    ctx.fillStyle = '#5B5D55';
+    ctx.font = '10px system-ui,sans-serif';
+    ctx.textAlign = 'center';
+    var step = points.length > 8 ? Math.ceil(points.length / 6) : 1;
+    points.forEach(function(p, i){
+      if (i % step !== 0 && i !== points.length - 1) return;
+      var lab = p.label || ('#' + p.x);
+      if (lab.length > 18) lab = lab.slice(0, 16) + '…';
+      ctx.fillText(lab, X(i), pad.t + h + 16);
+    });
+  }
+
+  function drawBars(canvas, bars){
+    var ctx = canvas.getContext('2d');
+    var dpr = window.devicePixelRatio || 1;
+    var cssW = canvas.parentElement.clientWidth || 900;
+    var cssH = 260;
+    canvas.width = cssW * dpr;
+    canvas.height = cssH * dpr;
+    canvas.style.width = cssW + 'px';
+    canvas.style.height = cssH + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.clearRect(0, 0, cssW, cssH);
+    var pad = { t: 20, r: 12, b: 56, l: 44 };
+    var w = cssW - pad.l - pad.r;
+    var h = cssH - pad.t - pad.b;
+    ctx.strokeStyle = '#E3E0D6';
+    ctx.fillStyle = '#5B5D55';
+    ctx.font = '11px system-ui,sans-serif';
+    ctx.textAlign = 'right';
+    for (var g = 0; g <= 4; g++){
+      var yy = pad.t + h - (g / 4) * h;
+      ctx.beginPath();
+      ctx.moveTo(pad.l, yy);
+      ctx.lineTo(pad.l + w, yy);
+      ctx.stroke();
+      ctx.fillText(String(g * 25), pad.l - 6, yy + 4);
+    }
+    if (!bars.length) return;
+    var gap = 8;
+    var bw = Math.max(12, (w - gap * (bars.length + 1)) / bars.length);
+    bars.forEach(function(b, i){
+      var x = pad.l + gap + i * (bw + gap);
+      var bh = (Math.max(0, Math.min(100, b.y)) / 100) * h;
+      var y = pad.t + h - bh;
+      ctx.fillStyle = COLORS[i % COLORS.length];
+      ctx.fillRect(x, y, bw, bh);
+      ctx.fillStyle = '#23241F';
+      ctx.font = 'bold 11px system-ui,sans-serif';
+      ctx.textAlign = 'center';
+      ctx.fillText(String(Math.round(b.y)), x + bw / 2, y - 6);
+      ctx.fillStyle = '#5B5D55';
+      ctx.font = '10px system-ui,sans-serif';
+      var lab = b.label;
+      if (lab.length > 14) lab = lab.slice(0, 12) + '…';
+      ctx.save();
+      ctx.translate(x + bw / 2, pad.t + h + 12);
+      ctx.rotate(-0.35);
+      ctx.textAlign = 'right';
+      ctx.fillText(lab, 0, 0);
+      ctx.restore();
+    });
+  }
+
+  function updateStats(points){
+    document.getElementById('sPercobaan').textContent = points.length || '—';
+    if (!points.length){
+      document.getElementById('sAwal').textContent = '—';
+      document.getElementById('sAkhir').textContent = '—';
+      document.getElementById('sDelta').textContent = '—';
+      return;
+    }
+    var a = points[0].y, z = points[points.length - 1].y;
+    document.getElementById('sAwal').textContent = Math.round(a) + '%';
+    document.getElementById('sAkhir').textContent = Math.round(z) + '%';
+    var d = Math.round(z - a);
+    document.getElementById('sDelta').textContent = (d > 0 ? '+' : '') + d + '%';
+  }
+
+  function render(){
+    loadMetaAndData(function(err, list){
+      var empty = document.getElementById('empty');
+      if (err){
+        empty.style.display = 'block';
+        empty.textContent = 'Gagal memuat data. Deploy Code.gs terbaru?';
+        return;
+      }
+      var points = seriesFrom(list);
+      var bars = materiAvg(list);
+      updateStats(points);
+      empty.style.display = points.length ? 'none' : 'block';
+      var nama = document.getElementById('fNama').value;
+      document.getElementById('chartNote').textContent = nama
+        ? ('Tren skor untuk ' + nama + ' (setiap titik = satu percobaan).')
+        : 'Rata-rata kelas per sesi/percobaan.';
+      drawLine(document.getElementById('chart'), points);
+      drawBars(document.getElementById('chartBar'), bars);
+      document.getElementById('legend').innerHTML = points.length
+        ? '<span><i class="dot" style="background:#0F6B5C"></i> Skor percobaan (%)</span>'
+        : '';
+    });
+  }
+
+  document.getElementById('btnTampil').onclick = render;
+  document.getElementById('btnReset').onclick = function(){
+    document.getElementById('fNama').value = '';
+    document.getElementById('fMapel').value = '';
+    document.getElementById('fMateri').value = '';
+    render();
+  };
+  render();
+})();
+</script>
+</body>
+</html>
