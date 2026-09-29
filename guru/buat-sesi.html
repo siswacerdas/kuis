@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Buat sesi latihan — Area guru</title>
+<meta name="theme-color" content="#0F6B5C">
+<style>
+  :root{
+    --bg:#F7F6F1; --paper:#fff; --ink:#23241F; --soft:#5B5D55;
+    --line:#E3E0D6; --brand:#0F6B5C; --brand-dark:#0B4F45; --red:#C24B3F; --radius:14px;
+  }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:var(--bg); color:var(--ink); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif; font-size:15px; line-height:1.45; }
+  header{ background:var(--brand); color:#F4FBF9; padding:16px 20px; }
+  header .wrap{ max-width:720px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; }
+  header a{ color:#E3F2ED; text-decoration:none; font-weight:600; font-size:.9em; }
+  header h1{ margin:0; font-size:1.15em; }
+  main{ max-width:720px; margin:0 auto; padding:20px 16px 48px; }
+  .card{ background:var(--paper); border:1px solid var(--line); border-radius:var(--radius); padding:16px; margin-bottom:14px; }
+  .card h2{ margin:0 0 12px; font-size:.78em; text-transform:uppercase; letter-spacing:.05em; color:var(--soft); }
+  label{ display:block; font-size:.82em; font-weight:600; color:var(--soft); margin-bottom:5px; }
+  input[type=text], input[type=number], select, textarea{
+    width:100%; padding:10px 12px; border:1.5px solid var(--line); border-radius:10px;
+    font:inherit; margin-bottom:10px; background:#fff;
+  }
+  textarea{ min-height:64px; resize:vertical; }
+  .row{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  @media (max-width:560px){ .row{ grid-template-columns:1fr; } }
+  .checks{ display:flex; flex-wrap:wrap; gap:12px 18px; margin:8px 0 4px; }
+  .checks label{ display:flex; align-items:center; gap:6px; font-weight:500; color:var(--ink); margin:0; }
+  .btn{
+    appearance:none; border:0; border-radius:12px; padding:12px 16px; font:inherit; font-weight:700;
+    background:var(--brand); color:#fff; cursor:pointer; width:100%;
+  }
+  .btn:disabled{ opacity:.55; }
+  .btn.secondary{ background:#EDEBE3; color:var(--ink); margin-top:8px; }
+  .msg{ display:none; margin-top:10px; padding:10px 12px; border-radius:10px; font-size:.9em; }
+  .msg.show{ display:block; }
+  .msg.ok{ background:#E4F3EC; color:var(--brand-dark); }
+  .msg.err{ background:#FBEAE6; color:var(--red); }
+  .toolbar{ display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-bottom:10px; }
+  .toolbar .meta{ font-size:.85em; color:var(--soft); flex:1; }
+  .list{ max-height:380px; overflow:auto; border:1px solid var(--line); border-radius:10px; }
+  .item{
+    display:flex; gap:10px; align-items:flex-start; padding:10px 12px; border-bottom:1px solid var(--line);
+    cursor:pointer;
+  }
+  .item:last-child{ border-bottom:0; }
+  .item:hover{ background:#F7F6F1; }
+  .item.on{ background:#EAF4F0; }
+  .item input{ margin-top:3px; flex:none; }
+  .item .body{ min-width:0; flex:1; }
+  .item .id{ font-size:.72em; font-weight:700; color:var(--brand-dark); }
+  .item .q{ font-size:.88em; margin-top:2px; }
+  .item .tags{ font-size:.72em; color:var(--soft); margin-top:4px; }
+  .pill{ display:inline-block; background:#F1EFE8; padding:1px 7px; border-radius:999px; margin-right:4px; }
+</style>
+</head>
+<body>
+<script>
+if (sessionStorage.getItem('kuis-guru-ok') !== '1') location.replace('../index.html');
+</script>
+<header>
+  <div class="wrap">
+    <h1>Buat sesi latihan</h1>
+    <a href="./">← Area guru</a>
+  </div>
+</header>
+<main>
+  <div class="card">
+    <h2>1. Detail sesi</h2>
+    <label for="nama">Nama latihan</label>
+    <input id="nama" type="text" placeholder="Contoh: Latihan ATS IPAS — Gelombang Bunyi">
+    <div class="row">
+      <div>
+        <label for="token">Token siswa</label>
+        <input id="token" type="text" placeholder="Otomatis jika kosong" autocomplete="off">
+      </div>
+      <div>
+        <label for="durasi">Durasi (menit, opsional)</label>
+        <input id="durasi" type="number" min="0" placeholder="Kosong = tanpa batas">
+      </div>
+    </div>
+    <div class="checks">
+      <label><input type="checkbox" id="bolehUlang" checked> Boleh diulang</label>
+      <label><input type="checkbox" id="kirimEmail" checked> Kirim hasil ke orang tua</label>
+    </div>
+    <label for="catatan">Catatan (opsional)</label>
+    <textarea id="catatan" placeholder="Catatan internal guru"></textarea>
+  </div>
+
+  <div class="card">
+    <h2>2. Pilih soal dari bank</h2>
+    <div class="row">
+      <div>
+        <label for="fMapel">Mapel</label>
+        <select id="fMapel"><option value="">Semua</option></select>
+      </div>
+      <div>
+        <label for="fMateri">Materi</label>
+        <select id="fMateri"><option value="">Semua</option></select>
+      </div>
+    </div>
+    <div class="row">
+      <div>
+        <label for="fKomp">Kompleksitas</label>
+        <select id="fKomp"><option value="">Semua</option></select>
+      </div>
+      <div>
+        <label for="fQ">Cari teks / ID</label>
+        <input id="fQ" type="text" placeholder="Kata kunci…">
+      </div>
+    </div>
+    <div class="toolbar">
+      <button type="button" class="btn secondary" id="btnFilter" style="width:auto;padding:8px 14px">Terapkan filter</button>
+      <button type="button" class="btn secondary" id="btnAll" style="width:auto;padding:8px 14px">Centang semua hasil</button>
+      <button type="button" class="btn secondary" id="btnNone" style="width:auto;padding:8px 14px">Hapus centang</button>
+      <span class="meta" id="metaHasil">—</span>
+    </div>
+    <div class="list" id="listSoal"></div>
+  </div>
+
+  <div class="card">
+    <h2>3. Simpan</h2>
+    <p style="margin:0 0 10px;color:var(--soft);font-size:.9em">Terpilih: <strong id="jml">0</strong> soal</p>
+    <button type="button" class="btn" id="btnSimpan">Buat sesi latihan</button>
+    <div id="msg" class="msg"></div>
+  </div>
+</main>
+<script>
+(function(){
+  var WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbwotrwYBt0_-_9g4o2gNs6ktaTn1sw41f3jJlgoK5pN2N5RofwRjOeiSqzQq1JZsjhclw/exec';
+  var selected = {};
+  var currentList = [];
+
+  function sandi(){ return sessionStorage.getItem('kuis-guru-token') || ''; }
+  function showMsg(ok, text){
+    var el = document.getElementById('msg');
+    el.className = 'msg show ' + (ok ? 'ok' : 'err');
+    el.textContent = text;
+  }
+  function updateJml(){
+    document.getElementById('jml').textContent = Object.keys(selected).length;
+  }
+  function fillSelect(id, arr){
+    var s = document.getElementById(id);
+    var cur = s.value;
+    s.innerHTML = '<option value="">Semua</option>';
+    (arr || []).forEach(function(v){
+      var o = document.createElement('option');
+      o.value = v; o.textContent = v;
+      s.appendChild(o);
+    });
+    if (cur) s.value = cur;
+  }
+  function renderList(soal){
+    currentList = soal || [];
+    var box = document.getElementById('listSoal');
+    if (!currentList.length){
+      box.innerHTML = '<div style="padding:16px;color:#5B5D55">Tidak ada soal. Cek filter atau isi bank soal dulu.</div>';
+      return;
+    }
+    box.innerHTML = '';
+    currentList.forEach(function(s){
+      var div = document.createElement('div');
+      div.className = 'item' + (selected[s.id] ? ' on' : '');
+      div.innerHTML =
+        '<input type="checkbox" ' + (selected[s.id] ? 'checked' : '') + '>' +
+        '<div class="body">' +
+          '<div class="id">' + s.id + ' · ' + (s.tipe || '').toUpperCase() + ' · ' + (s.kompleksitas || '') + '</div>' +
+          '<div class="q">' + escapeHtml(s.pertanyaan) + '</div>' +
+          '<div class="tags"><span class="pill">' + escapeHtml(s.mapel) + '</span><span class="pill">' + escapeHtml(s.materi) + '</span></div>' +
+        '</div>';
+      var cb = div.querySelector('input');
+      function toggle(){
+        if (selected[s.id]) delete selected[s.id]; else selected[s.id] = true;
+        cb.checked = !!selected[s.id];
+        div.classList.toggle('on', !!selected[s.id]);
+        updateJml();
+      }
+      cb.addEventListener('click', function(e){ e.stopPropagation(); toggle(); });
+      div.addEventListener('click', function(e){ if (e.target === cb) return; toggle(); });
+      box.appendChild(div);
+    });
+  }
+  function escapeHtml(t){
+    return String(t || '').replace(/[&<>"']/g, function(c){
+      return ({'&':'&','<':'<','>':'>','"':'"',"'":'&#39;'})[c];
+    });
+  }
+  function loadMeta(){
+    fetch(WEBAPP_URL + '?action=metaBankSoal')
+      .then(function(r){ return r.json(); })
+      .then(function(res){
+        if (!res || !res.ok) return;
+        fillSelect('fMapel', res.mapel);
+        fillSelect('fMateri', res.materi);
+        fillSelect('fKomp', res.kompleksitas);
+      });
+  }
+  function loadSoal(){
+    var q = '?action=daftarBankSoal'
+      + '&mapel=' + encodeURIComponent(document.getElementById('fMapel').value)
+      + '&materi=' + encodeURIComponent(document.getElementById('fMateri').value)
+      + '&kompleksitas=' + encodeURIComponent(document.getElementById('fKomp').value)
+      + '&q=' + encodeURIComponent(document.getElementById('fQ').value.trim());
+    document.getElementById('metaHasil').textContent = 'Memuat…';
+    fetch(WEBAPP_URL + q)
+      .then(function(r){ return r.json(); })
+      .then(function(res){
+        if (!res || !res.ok){
+          document.getElementById('metaHasil').textContent = 'Gagal memuat';
+          return;
+        }
+        var t = res.total + ' soal';
+        if (res.terpotong) t += ' (ditampilkan 200 pertama)';
+        document.getElementById('metaHasil').textContent = t;
+        renderList(res.soal);
+      })
+      .catch(function(){
+        document.getElementById('metaHasil').textContent = 'Koneksi gagal';
+      });
+  }
+
+  document.getElementById('btnFilter').onclick = loadSoal;
+  document.getElementById('fQ').addEventListener('keydown', function(e){
+    if (e.key === 'Enter') loadSoal();
+  });
+  document.getElementById('btnAll').onclick = function(){
+    currentList.forEach(function(s){ selected[s.id] = true; });
+    renderList(currentList);
+    updateJml();
+  };
+  document.getElementById('btnNone').onclick = function(){
+    selected = {};
+    renderList(currentList);
+    updateJml();
+  };
+
+  document.getElementById('btnSimpan').onclick = function(){
+    var btn = this;
+    var ids = Object.keys(selected);
+    var nama = document.getElementById('nama').value.trim();
+    if (!nama){ showMsg(false, 'Isi nama latihan.'); return; }
+    if (!ids.length){ showMsg(false, 'Pilih minimal satu soal.'); return; }
+    if (!sandi()){ showMsg(false, 'Sesi guru hilang. Login ulang.'); return; }
+
+    var mapel = document.getElementById('fMapel').value || 'Campuran';
+    var materi = document.getElementById('fMateri').value || 'Campuran';
+    var komp = document.getElementById('fKomp').value || 'Campuran';
+
+    btn.disabled = true;
+    showMsg(true, 'Menyimpan…');
+    fetch(WEBAPP_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({
+        action: 'buatSesiLatihan',
+        sandi: sandi(),
+        namaLatihan: nama,
+        mapel: mapel,
+        materi: materi,
+        kompleksitas: komp,
+        idSoalList: ids,
+        token: document.getElementById('token').value.trim(),
+        durasiMenit: document.getElementById('durasi').value,
+        bolehUlang: document.getElementById('bolehUlang').checked,
+        kirimEmailOrtu: document.getElementById('kirimEmail').checked,
+        catatan: document.getElementById('catatan').value.trim()
+      })
+    }).then(function(r){ return r.json(); }).then(function(res){
+      btn.disabled = false;
+      if (res && res.ok){
+        showMsg(true, res.pesan + ' Token: ' + res.token + ' · ' + res.jumlahSoal + ' soal · ID: ' + res.idLatihan);
+        selected = {};
+        updateJml();
+        renderList(currentList);
+        document.getElementById('token').value = '';
+      } else {
+        showMsg(false, (res && res.pesan) || 'Gagal menyimpan. Deploy Code.gs terbaru?');
+      }
+    }).catch(function(){
+      btn.disabled = false;
+      showMsg(false, 'Koneksi gagal.');
+    });
+  };
+
+  loadMeta();
+  loadSoal();
+  updateJml();
+})();
+</script>
+</body>
+</html>
