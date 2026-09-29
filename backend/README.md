@@ -4,24 +4,36 @@
 Google Apps Script project yang terhubung ke Spreadsheet `Database_Kuis`
 (ID: `1jT4Lbqkg7YfnGcS7OH5mHBWrJ7k4V23Vz5DobKrX1U0`).
 
-**Penting:** menyimpan file ini di repo **tidak otomatis men-deploy**
-perubahan apa pun — Apps Script tidak membaca dari GitHub/repo ini. Setiap
-kali `Code.gs` di sini diperbarui, perubahan yang sama harus **disalin manual**
-ke editor Apps Script (script.google.com), lalu di-deploy ulang lewat
-"Manage deployments" agar aktif di URL Web App yang dipakai semua halaman
-kuis (`WEBAPP_URL`).
-
-File ini disimpan supaya:
-1. Ada riwayat/versi dari sisi backend, sinkron dengan histori sisi frontend di repo ini.
-2. Saat perlu menambah fitur baru yang butuh perubahan backend (mis. endpoint
-   baru), perubahan bisa direncanakan berdasarkan kode yang benar-benar
-   berjalan, bukan tebakan.
+**Penting:** menyimpan file ini di repo **tidak otomatis men-deploy**.
+Setiap perubahan harus **disalin manual** ke editor Apps Script, lalu
+di-deploy ulang lewat "Manage deployments".
 
 ## Aksi yang tersedia
 
-| Method | `action` | Dipanggil dari | Keterangan |
-|---|---|---|---|
-| GET | `daftarSiswa` | Semua halaman kuis (layar masuk) | Daftar nama siswa untuk dropdown |
-| GET | `riwayatKuis` | `riwayat-kuis/index.html` | Data riwayat kuis live (siswa, daftar kuis, hasil terbaru per siswa), akun "Tes Sistem" dikecualikan |
-| POST | `mulaiKuis` | Semua halaman kuis (tombol "Mulai Kuis") | Validasi token & cek belum pernah mengerjakan |
-| POST | `submitKuis` | Semua halaman kuis (tombol "Selesai & Kumpulkan") | Simpan hasil ke sheet `Hasil_Kuis` + kirim email ke orang tua |
+### Kuis resmi
+
+| Method | `action` | Keterangan |
+|---|---|---|
+| GET | `daftarSiswa` | Daftar nama siswa |
+| GET | `riwayatKuis` | Riwayat kuis live |
+| GET | `cekStatusKuis` | Cek sudah mengerjakan |
+| POST | `mulaiKuis` | Validasi token kuis |
+| POST | `submitKuis` | Simpan hasil + email ortu |
+
+### Latihan (ATS/AAS)
+
+| Method | `action` | Keterangan |
+|---|---|---|
+| GET | `daftarLatihan` | Sesi latihan aktif |
+| GET | `soalLatihan` | Soal by `idLatihan` |
+| GET | `riwayatLatihan` | Filter nama/mapel/materi |
+| POST | `mulaiLatihan` | Validasi token latihan |
+| POST | `submitLatihan` | Simpan Hasil_Latihan + email |
+
+### Fungsi manual (Run di editor)
+
+- `setupSheetLatihan_()` — buat sheet Bank_Soal, Daftar_Latihan, Hasil_Latihan
+- `importBankSoalDariStaging_()` — impor dari sheet Import_Bank_Staging
+- `tesKirimEmail()` — tes MailApp
+
+Lihat juga: panduan deploy di artifacts dan `docs/desain-sheet-latihan.md`.
