@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ganti sandi guru</title>
+<meta name="theme-color" content="#0F6B5C">
+<style>
+  :root{ --bg:#F7F6F1; --paper:#fff; --ink:#23241F; --soft:#5B5D55; --line:#E3E0D6; --brand:#0F6B5C; --red:#C24B3F; }
+  body{ margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif; background:var(--bg); color:var(--ink); }
+  .wrap{ max-width:420px; margin:0 auto; padding:24px 20px; }
+  label{ display:block; font-size:.85em; font-weight:600; color:var(--soft); margin-bottom:6px; }
+  input{ width:100%; padding:12px; border:1.5px solid var(--line); border-radius:10px; font:inherit; margin-bottom:12px; box-sizing:border-box; }
+  button{ width:100%; border:0; border-radius:12px; padding:13px; font:inherit; font-weight:700; background:var(--brand); color:#fff; cursor:pointer; }
+  .msg{ display:none; margin-top:10px; padding:10px; border-radius:10px; font-size:.9em; }
+  .msg.show{ display:block; }
+  .msg.ok{ background:#E4F3EC; }
+  .msg.err{ background:#FBEAE6; color:var(--red); }
+  a{ color:var(--brand); }
+</style>
+</head>
+<body>
+<script>
+if (sessionStorage.getItem('kuis-guru-ok') !== '1') location.replace('../index.html');
+</script>
+<div class="wrap">
+  <p><a href="./">← Area guru</a></p>
+  <h1>Ganti sandi</h1>
+  <p style="color:#5B5D55;font-size:.9em">Guru: Arif Azwar Anas</p>
+  <label>Sandi lama</label>
+  <input id="lama" type="password">
+  <label>Sandi baru (min. 6 karakter)</label>
+  <input id="baru" type="password">
+  <label>Ulangi sandi baru</label>
+  <input id="baru2" type="password">
+  <button type="button" id="btn">Simpan sandi baru</button>
+  <div id="msg" class="msg"></div>
+</div>
+<script>
+(function(){
+  var WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbwotrwYBt0_-_9g4o2gNs6ktaTn1sw41f3jJlgoK5pN2N5RofwRjOeiSqzQq1JZsjhclw/exec';
+  document.getElementById('btn').onclick = function(){
+    var lama = document.getElementById('lama').value.trim();
+    var baru = document.getElementById('baru').value.trim();
+    var baru2 = document.getElementById('baru2').value.trim();
+    var msg = document.getElementById('msg');
+    if (!lama || !baru){ msg.className='msg show err'; msg.textContent='Lengkapi semua isian.'; return; }
+    if (baru !== baru2){ msg.className='msg show err'; msg.textContent='Sandi baru tidak sama.'; return; }
+    if (baru.length < 6){ msg.className='msg show err'; msg.textContent='Minimal 6 karakter.'; return; }
+    fetch(WEBAPP_URL, {
+      method:'POST',
+      headers:{'Content-Type':'text/plain;charset=utf-8'},
+      body: JSON.stringify({ action:'gantiSandiGuru', sandiLama:lama, sandiBaru:baru })
+    }).then(function(r){ return r.json(); }).then(function(res){
+      if (res && res.ok){
+        sessionStorage.setItem('kuis-guru-token', baru);
+        msg.className='msg show ok';
+        msg.textContent=res.pesan || 'Berhasil diganti.';
+      } else {
+        msg.className='msg show err';
+        msg.textContent=(res && res.pesan) || 'Gagal.';
+      }
+    }).catch(function(){
+      msg.className='msg show err';
+      msg.textContent='Koneksi gagal.';
+    });
+  };
+})();
+</script>
+</body>
+</html>
