@@ -175,6 +175,13 @@ function doPost(e) {
   if (action === 'submitLatihan') {
     return jsonResponse_(submitLatihan_(body));
   }
+  // Setup sekali pakai (dipanggil dari halaman setup HTML, bukan dropdown editor)
+  if (action === 'setupLatihan') {
+    return jsonResponse_(setupLatihanDariWeb_(body));
+  }
+  if (action === 'importBankSoal') {
+    return jsonResponse_(importBankSoalDariWeb_(body));
+  }
   return jsonResponse_({ ok: false, pesan: 'Aksi POST tidak dikenal.' });
 }
 
@@ -682,6 +689,41 @@ function setupSheetLatihan_() {
 
   Logger.log('setupSheetLatihan_ selesai: ' + hasil.join(' | '));
   return hasil;
+}
+
+
+
+/**
+ * Dipanggil dari halaman HTML setup (POST action=setupLatihan).
+ * body: { tokenSetup: string } — harus sama dengan SETUP_TOKEN di bawah.
+ * Membuat 3 sheet latihan + header.
+ */
+const SETUP_TOKEN = 'SETUP-LATIHAN-2026'; // ganti setelah setup selesai (opsional)
+
+function setupLatihanDariWeb_(body) {
+  const token = String((body && body.tokenSetup) || '').trim();
+  if (token !== SETUP_TOKEN) {
+    return { ok: false, pesan: 'Token setup salah.' };
+  }
+  const hasil = setupSheetLatihan_();
+  return { ok: true, pesan: 'Sheet latihan siap.', detail: hasil };
+}
+
+/**
+ * Impor baris bank soal dari halaman HTML.
+ * body: { tokenSetup, rows: [ { ID_Soal, Mapel, ... }, ... ] }
+ * Maksimal disarankan ~50 baris per request agar tidak timeout.
+ */
+function importBankSoalDariWeb_(body) {
+  const token = String((body && body.tokenSetup) || '').trim();
+  if (token !== SETUP_TOKEN) {
+    return { ok: false, pesan: 'Token setup salah.' };
+  }
+  const rows = (body && body.rows) || [];
+  if (!rows.length) {
+    return { ok: false, pesan: 'Tidak ada baris soal.' };
+  }
+  return importBankSoalRows_(rows);
 }
 
 function pastikanSheetDenganHeader_(ss, namaSheet, header) {
