@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Kelola sesi latihan — Area guru</title>
+<meta name="theme-color" content="#0F6B5C">
+<style>
+  :root{ --bg:#F7F6F1; --paper:#fff; --ink:#23241F; --soft:#5B5D55; --line:#E3E0D6; --brand:#0F6B5C; --brand-dark:#0B4F45; --red:#C24B3F; --radius:14px; }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:var(--bg); color:var(--ink); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif; font-size:15px; line-height:1.45; }
+  header{ background:var(--brand); color:#F4FBF9; padding:16px 20px; }
+  header .wrap{ max-width:720px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; }
+  header a{ color:#E3F2ED; text-decoration:none; font-weight:600; font-size:.9em; }
+  header h1{ margin:0; font-size:1.15em; }
+  main{ max-width:720px; margin:0 auto; padding:20px 16px 48px; }
+  .toolbar{ display:flex; flex-wrap:wrap; gap:8px; margin-bottom:14px; }
+  .btn{
+    appearance:none; border:0; border-radius:10px; padding:10px 14px; font:inherit; font-weight:700;
+    background:var(--brand); color:#fff; cursor:pointer; text-decoration:none; display:inline-block;
+  }
+  .btn.secondary{ background:#EDEBE3; color:var(--ink); }
+  .btn.danger{ background:#FBEAE6; color:var(--red); }
+  .btn.ok{ background:#E4F3EC; color:var(--brand-dark); }
+  .btn:disabled{ opacity:.55; }
+  .card{
+    background:var(--paper); border:1px solid var(--line); border-radius:var(--radius);
+    padding:14px 16px; margin-bottom:10px;
+  }
+  .card .title{ font-weight:700; margin:0 0 6px; }
+  .meta{ font-size:.82em; color:var(--soft); display:flex; flex-wrap:wrap; gap:6px 12px; }
+  .meta code{ background:#F1EFE8; padding:1px 6px; border-radius:4px; font-size:.95em; color:var(--ink); }
+  .actions{ margin-top:10px; display:flex; flex-wrap:wrap; gap:8px; }
+  .badge{
+    display:inline-block; font-size:.72em; font-weight:700; padding:3px 8px; border-radius:999px;
+  }
+  .badge.aktif{ background:#E4F3EC; color:var(--brand-dark); }
+  .badge.nonaktif{ background:#F1EFE8; color:var(--soft); }
+  .empty{ color:var(--soft); padding:24px; text-align:center; }
+  .msg{ display:none; margin-bottom:12px; padding:10px 12px; border-radius:10px; font-size:.9em; }
+  .msg.show{ display:block; }
+  .msg.ok{ background:#E4F3EC; color:var(--brand-dark); }
+  .msg.err{ background:#FBEAE6; color:var(--red); }
+</style>
+</head>
+<body>
+<script>
+if (sessionStorage.getItem('kuis-guru-ok') !== '1') location.replace('../index.html');
+</script>
+<header>
+  <div class="wrap">
+    <h1>Kelola sesi latihan</h1>
+    <a href="./">← Area guru</a>
+  </div>
+</header>
+<main>
+  <div class="toolbar">
+    <a class="btn" href="buat-sesi.html">+ Buat sesi baru</a>
+    <button type="button" class="btn secondary" id="btnRefresh">Muat ulang</button>
+  </div>
+  <div id="msg" class="msg"></div>
+  <div id="list"><div class="empty">Memuat…</div></div>
+</main>
+<script>
+(function(){
+  var WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbwotrwYBt0_-_9g4o2gNs6ktaTn1sw41f3jJlgoK5pN2N5RofwRjOeiSqzQq1JZsjhclw/exec';
+  function sandi(){ return sessionStorage.getItem('kuis-guru-token') || ''; }
+  function showMsg(ok, text){
+    var el = document.getElementById('msg');
+    el.className = 'msg show ' + (ok ? 'ok' : 'err');
+    el.textContent = text;
+  }
+  function load(){
+    var box = document.getElementById('list');
+    box.innerHTML = '<div class="empty">Memuat…</div>';
+    fetch(WEBAPP_URL + '?action=daftarLatihanGuru')
+      .then(function(r){ return r.json(); })
+      .then(function(res){
+        if (!res || !res.ok){
+          box.innerHTML = '<div class="empty">Gagal memuat. Deploy Code.gs terbaru?</div>';
+          return;
+        }
+        var list = res.latihan || [];
+        if (!list.length){
+          box.innerHTML = '<div class="empty">Belum ada sesi. Buat sesi baru dulu.</div>';
+          return;
+        }
+        list = list.slice().reverse();
+        box.innerHTML = '';
+        list.forEach(function(L){
+          var status = String(L.status || '').toLowerCase() || 'aktif';
+          var div = document.createElement('div');
+          div.className = 'card';
+          div.innerHTML =
+            '<div class="title">' + esc(L.namaLatihan) + ' <span class="badge ' + (status === 'aktif' ? 'aktif' : 'nonaktif') + '">' + esc(status) + '</span></div>' +
+            '<div class="meta">' +
+              '<span>Token <code>' + esc(L.token) + '</code></span>' +
+              '<span>' + esc(L.mapel) + '</span>' +
+              '<span>' + esc(L.materi) + '</span>' +
+              '<span>' + (L.jumlahSoal || 0) + ' soal</span>' +
+              (L.durasiMenit ? '<span>' + L.durasiMenit + ' menit</span>' : '') +
+              '<span>ID ' + esc(L.idLatihan) + '</span>' +
+            '</div>' +
+            '<div class="actions"></div>';
+          var act = div.querySelector('.actions');
+          var btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'btn ' + (status === 'aktif' ? 'danger' : 'ok');
+          btn.textContent = status === 'aktif' ? 'Nonaktifkan' : 'Aktifkan';
+          btn.onclick = function(){
+            var next = status === 'aktif' ? 'nonaktif' : 'aktif';
+            btn.disabled = true;
+            fetch(WEBAPP_URL, {
+              method: 'POST',
+              headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+              body: JSON.stringify({
+                action: 'ubahStatusLatihan',
+                sandi: sandi(),
+                idLatihan: L.idLatihan,
+                status: next
+              })
+            }).then(function(r){ return r.json(); }).then(function(r2){
+              if (r2 && r2.ok){
+                showMsg(true, r2.pesan);
+                load();
+              } else {
+                btn.disabled = false;
+                showMsg(false, (r2 && r2.pesan) || 'Gagal mengubah status.');
+              }
+            }).catch(function(){
+              btn.disabled = false;
+              showMsg(false, 'Koneksi gagal.');
+            });
+          };
+          act.appendChild(btn);
+          box.appendChild(div);
+        });
+      })
+      .catch(function(){
+        box.innerHTML = '<div class="empty">Koneksi gagal.</div>';
+      });
+  }
+  function esc(s){
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){
+      return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c];
+    });
+  }
+  document.getElementById('btnRefresh').onclick = load;
+  load();
+})();
+</script>
+</body>
+</html>
