@@ -2,111 +2,11 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Setup Latihan (sekali pakai) — SDM01KKS</title>
-<meta name="theme-color" content="#0F6B5C">
-<style>
-  :root{ --bg:#F7F6F1; --paper:#fff; --ink:#23241F; --soft:#5B5D55; --line:#E3E0D6; --brand:#0F6B5C; --red:#C24B3F; }
-  *{ box-sizing:border-box; }
-  body{ margin:0; font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif; background:var(--bg); color:var(--ink); line-height:1.5; }
-  .wrap{ max-width:640px; margin:0 auto; padding:24px 20px 48px; }
-  h1{ font-size:1.35em; margin:0 0 8px; }
-  .note{ color:var(--soft); font-size:.92em; margin:0 0 20px; }
-  .card{ background:var(--paper); border:1px solid var(--line); border-radius:14px; padding:18px; margin-bottom:14px; }
-  .card h2{ font-size:.8em; text-transform:uppercase; letter-spacing:.05em; color:var(--soft); margin:0 0 12px; }
-  label{ display:block; font-size:.85em; font-weight:600; color:var(--soft); margin-bottom:6px; }
-  input, textarea{ width:100%; padding:11px 12px; border:1.5px solid var(--line); border-radius:10px; font:inherit; margin-bottom:12px; }
-  textarea{ min-height:120px; font-family:ui-monospace,monospace; font-size:12px; }
-  button{ appearance:none; border:0; border-radius:12px; padding:12px 16px; font:inherit; font-weight:700; cursor:pointer; background:var(--brand); color:#fff; width:100%; }
-  button:disabled{ opacity:.55; cursor:not-allowed; }
-  button.secondary{ background:#F1EFE8; color:var(--ink); margin-top:8px; }
-  .msg{ display:none; padding:10px 12px; border-radius:10px; margin-top:10px; font-size:.9em; }
-  .msg.show{ display:block; }
-  .msg.ok{ background:#E4F3EC; color:#0B4F45; }
-  .msg.err{ background:#FBEAE6; color:var(--red); }
-  ol{ margin:0; padding-left:1.2em; color:var(--soft); font-size:.92em; }
-  ol li{ margin-bottom:6px; }
-  code{ background:#F1EFE8; padding:1px 6px; border-radius:4px; font-size:.9em; }
-  a{ color:var(--brand); }
-</style>
+<meta http-equiv="refresh" content="0;url=../guru/setup.html">
+<title>Pindah ke area guru</title>
 </head>
 <body>
-<div class="wrap">
-  <h1>Setup latihan (sekali pakai)</h1>
-  <p class="note">Halaman ini untuk guru. Membuat sheet Bank_Soal, Daftar_Latihan, dan Hasil_Latihan lewat tombol — tanpa membuka dropdown Run di Apps Script.</p>
-
-  <div class="card">
-    <h2>1. Buat sheet latihan</h2>
-    <label for="token">Token setup</label>
-    <input id="token" type="text" value="SETUP-LATIHAN-2026" autocomplete="off">
-    <p class="note" style="margin-top:0">Harus sama dengan <code>SETUP_TOKEN</code> di Code.gs. Ganti di Code.gs setelah setup selesai bila perlu.</p>
-    <button type="button" id="btnSetup">Buat / perbarui sheet latihan</button>
-    <div id="msgSetup" class="msg"></div>
-  </div>
-
-  <div class="card">
-    <h2>2. Impor bank soal (CSV)</h2>
-    <ol>
-      <li>Buka spreadsheet <strong>Database_Kuis</strong>.</li>
-      <li>Buka sheet <code>Bank_Soal</code> (sudah dibuat di langkah 1).</li>
-      <li>Menu <strong>File → Import → Upload</strong> → pilih file <code>4-Spreadsheet-Bank_Soal.csv</code>.</li>
-      <li>Pilih <strong>Append</strong> atau ganti data (jangan dobel header).</li>
-    </ol>
-    <p class="note">Impor 126 soal lewat CSV di Sheets lebih stabil daripada lewat web (batas waktu Apps Script).</p>
-  </div>
-
-  <div class="card">
-    <h2>3. Isi sesi latihan</h2>
-    <ol>
-      <li>Buka sheet <code>Daftar_Latihan</code>.</li>
-      <li>Salin baris dari file <code>5-Spreadsheet-Daftar_Latihan.csv</code> (token contoh <code>LATIHAN1</code>).</li>
-      <li>Pastikan kolom <code>ID_Soal_List</code> memakai ID yang ada di Bank_Soal, dipisah titik koma.</li>
-    </ol>
-  </div>
-
-  <div class="card">
-    <h2>4. Selesai</h2>
-    <ol>
-      <li>Pastikan Code.gs sudah di-Deploy (New version) <em>sebelum</em> menekan tombol di atas.</li>
-      <li>Buka halaman siswa: <a href="./">latihan/index.html</a></li>
-      <li>Setelah setup berhasil, halaman ini boleh dihapus dari repo atau tidak dibagikan ke siswa.</li>
-    </ol>
-  </div>
-</div>
-<script>
-(function(){
-  // SAMAKAN dengan WEBAPP_URL di halaman kuis / latihan
-  var WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbwotrwYBt0_-_9g4o2gNs6ktaTn1sw41f3jJlgoK5pN2N5RofwRjOeiSqzQq1JZsjhclw/exec';
-
-  function show(id, ok, text){
-    var el = document.getElementById(id);
-    el.className = 'msg show ' + (ok ? 'ok' : 'err');
-    el.textContent = text;
-  }
-
-  document.getElementById('btnSetup').onclick = function(){
-    var btn = this;
-    var token = (document.getElementById('token').value || '').trim();
-    if (!token){ show('msgSetup', false, 'Isi token setup.'); return; }
-    btn.disabled = true;
-    show('msgSetup', true, 'Memproses…');
-    fetch(WEBAPP_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify({ action: 'setupLatihan', tokenSetup: token })
-    }).then(function(r){ return r.json(); }).then(function(res){
-      btn.disabled = false;
-      if (res && res.ok){
-        show('msgSetup', true, res.pesan + (res.detail ? ' → ' + res.detail.join(' | ') : ''));
-      } else {
-        show('msgSetup', false, (res && res.pesan) || 'Gagal. Pastikan Code.gs baru sudah di-Deploy.');
-      }
-    }).catch(function(){
-      btn.disabled = false;
-      show('msgSetup', false, 'Koneksi gagal. Cek WEBAPP_URL dan deployment.');
-    });
-  };
-})();
-</script>
+<p>Setup latihan sekarang ada di area guru. <a href="../guru/setup.html">Lanjut</a></p>
+<script>location.replace('../guru/setup.html');</script>
 </body>
 </html>
