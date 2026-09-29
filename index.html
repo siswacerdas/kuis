@@ -221,23 +221,30 @@
     if (!nisn){ showMsg('msgSiswa', false, 'Isi NISN.'); return; }
     btn.disabled = true;
     showMsg('msgSiswa', true, 'Memeriksa…');
-    fetch(WEBAPP_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify({ action: 'loginSiswa', nama: nama, nisn: nisn })
-    }).then(function(r){ return r.json(); }).then(function(res){
-      btn.disabled = false;
-      if (res && res.ok){
-        sessionStorage.setItem('kuis-siswa-ok', '1');
-        sessionStorage.setItem('kuis-siswa-nama', nama);
-        location.href = 'beranda.html';
-      } else {
-        showMsg('msgSiswa', false, (res && res.pesan) || 'Login gagal.');
-      }
-    }).catch(function(){
-      btn.disabled = false;
-      showMsg('msgSiswa', false, 'Tidak terhubung ke server. Pastikan Code.gs sudah di-deploy.');
-    });
+    // GET lebih andal untuk login (hindari masalah redirect POST Apps Script)
+    var url = WEBAPP_URL
+      + '?action=loginSiswa'
+      + '&nama=' + encodeURIComponent(nama)
+      + '&nisn=' + encodeURIComponent(nisn);
+    fetch(url, { method: 'GET', redirect: 'follow' })
+      .then(function(r){
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        return r.json();
+      })
+      .then(function(res){
+        btn.disabled = false;
+        if (res && res.ok){
+          sessionStorage.setItem('kuis-siswa-ok', '1');
+          sessionStorage.setItem('kuis-siswa-nama', nama);
+          location.href = 'beranda.html';
+        } else {
+          showMsg('msgSiswa', false, (res && res.pesan) || 'Login gagal.');
+        }
+      })
+      .catch(function(err){
+        btn.disabled = false;
+        showMsg('msgSiswa', false, 'Tidak terhubung ke server (' + (err && err.message ? err.message : 'jaringan') + '). Deploy ulang Code.gs (New version), akses: Anyone.');
+      });
   };
   document.getElementById('btnLoginGuru').onclick = function(){
     var btn = this;
@@ -245,24 +252,30 @@
     if (!sandi){ showMsg('msgGuru', false, 'Isi sandi.'); return; }
     btn.disabled = true;
     showMsg('msgGuru', true, 'Memeriksa…');
-    fetch(WEBAPP_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify({ action: 'loginGuru', nama: 'Arif Azwar Anas', sandi: sandi })
-    }).then(function(r){ return r.json(); }).then(function(res){
-      btn.disabled = false;
-      if (res && res.ok){
-        sessionStorage.setItem('kuis-guru-ok', '1');
-        sessionStorage.setItem('kuis-guru-token', sandi);
-        sessionStorage.setItem('kuis-guru-nama', 'Arif Azwar Anas');
-        location.href = 'guru/';
-      } else {
-        showMsg('msgGuru', false, (res && res.pesan) || 'Sandi salah.');
-      }
-    }).catch(function(){
-      btn.disabled = false;
-      showMsg('msgGuru', false, 'Tidak terhubung ke server. Pastikan Code.gs sudah di-deploy.');
-    });
+    var url = WEBAPP_URL
+      + '?action=loginGuru'
+      + '&nama=' + encodeURIComponent('Arif Azwar Anas')
+      + '&sandi=' + encodeURIComponent(sandi);
+    fetch(url, { method: 'GET', redirect: 'follow' })
+      .then(function(r){
+        if (!r.ok) throw new Error('HTTP ' + r.status);
+        return r.json();
+      })
+      .then(function(res){
+        btn.disabled = false;
+        if (res && res.ok){
+          sessionStorage.setItem('kuis-guru-ok', '1');
+          sessionStorage.setItem('kuis-guru-token', sandi);
+          sessionStorage.setItem('kuis-guru-nama', 'Arif Azwar Anas');
+          location.href = 'guru/';
+        } else {
+          showMsg('msgGuru', false, (res && res.pesan) || 'Sandi salah.');
+        }
+      })
+      .catch(function(err){
+        btn.disabled = false;
+        showMsg('msgGuru', false, 'Tidak terhubung ke server (' + (err && err.message ? err.message : 'jaringan') + '). Deploy ulang Code.gs (New version), akses: Anyone.');
+      });
   };
   showPanel('siswa');
 })();
