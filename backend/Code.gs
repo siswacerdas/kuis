@@ -175,6 +175,9 @@ function doPost(e) {
   if (action === 'submitLatihan') {
     return jsonResponse_(submitLatihan_(body));
   }
+  if (action === 'loginGuru') {
+    return jsonResponse_(loginGuru_(body));
+  }
   // Setup sekali pakai (dipanggil dari halaman setup HTML, bukan dropdown editor)
   if (action === 'setupLatihan') {
     return jsonResponse_(setupLatihanDariWeb_(body));
@@ -695,15 +698,27 @@ function setupSheetLatihan_() {
 
 /**
  * Dipanggil dari halaman HTML setup (POST action=setupLatihan).
- * body: { tokenSetup: string } — harus sama dengan SETUP_TOKEN di bawah.
+ * body: { tokenSetup: string } — harus sama dengan GURU_TOKEN di bawah.
  * Membuat 3 sheet latihan + header.
  */
-const SETUP_TOKEN = 'SETUP-LATIHAN-2026'; // ganti setelah setup selesai (opsional)
+const GURU_TOKEN = 'guru-sdm01-2026'; // sandi area guru — ganti setelah deploy
+
+
+function loginGuru_(body) {
+  const sandi = String((body && body.sandi) || '').trim();
+  if (!sandi) {
+    return { ok: false, pesan: 'Sandi wajib diisi.' };
+  }
+  if (sandi !== GURU_TOKEN) {
+    return { ok: false, pesan: 'Sandi salah.' };
+  }
+  return { ok: true, pesan: 'Login guru berhasil.' };
+}
 
 function setupLatihanDariWeb_(body) {
-  const token = String((body && body.tokenSetup) || '').trim();
-  if (token !== SETUP_TOKEN) {
-    return { ok: false, pesan: 'Token setup salah.' };
+  const token = String((body && (body.tokenSetup || body.sandi)) || '').trim();
+  if (token !== GURU_TOKEN) {
+    return { ok: false, pesan: 'Sandi guru salah.' };
   }
   const hasil = setupSheetLatihan_();
   return { ok: true, pesan: 'Sheet latihan siap.', detail: hasil };
@@ -715,9 +730,9 @@ function setupLatihanDariWeb_(body) {
  * Maksimal disarankan ~50 baris per request agar tidak timeout.
  */
 function importBankSoalDariWeb_(body) {
-  const token = String((body && body.tokenSetup) || '').trim();
-  if (token !== SETUP_TOKEN) {
-    return { ok: false, pesan: 'Token setup salah.' };
+  const token = String((body && (body.tokenSetup || body.sandi)) || '').trim();
+  if (token !== GURU_TOKEN) {
+    return { ok: false, pesan: 'Sandi guru salah.' };
   }
   const rows = (body && body.rows) || [];
   if (!rows.length) {
