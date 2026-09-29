@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Riwayat latihan — Area guru</title>
+<meta name="theme-color" content="#0F6B5C">
+<style>
+  :root{ --bg:#F7F6F1; --paper:#fff; --ink:#23241F; --soft:#5B5D55; --line:#E3E0D6; --brand:#0F6B5C; --brand-dark:#0B4F45; --radius:14px; }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:var(--bg); color:var(--ink); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif; font-size:15px; line-height:1.45; }
+  header{ background:var(--brand); color:#F4FBF9; padding:16px 20px; }
+  header .wrap{ max-width:960px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; }
+  header a{ color:#E3F2ED; text-decoration:none; font-weight:600; font-size:.9em; }
+  header h1{ margin:0; font-size:1.15em; }
+  main{ max-width:960px; margin:0 auto; padding:20px 16px 48px; }
+  .card{ background:var(--paper); border:1px solid var(--line); border-radius:var(--radius); padding:14px 16px; margin-bottom:12px; }
+  .card h2{ margin:0 0 10px; font-size:.75em; text-transform:uppercase; letter-spacing:.05em; color:var(--soft); }
+  label{ display:block; font-size:.78em; font-weight:600; color:var(--soft); margin-bottom:4px; }
+  select, input{
+    width:100%; padding:9px 11px; border:1.5px solid var(--line); border-radius:9px; font:inherit; background:#fff; margin-bottom:8px;
+  }
+  .row{ display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
+  @media (max-width:720px){ .row{ grid-template-columns:1fr 1fr; } }
+  @media (max-width:420px){ .row{ grid-template-columns:1fr; } }
+  .btn{
+    appearance:none; border:0; border-radius:10px; padding:10px 14px; font:inherit; font-weight:700;
+    background:var(--brand); color:#fff; cursor:pointer;
+  }
+  .btn.secondary{ background:#EDEBE3; color:var(--ink); }
+  .stats{ display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:12px; }
+  @media (max-width:520px){ .stats{ grid-template-columns:1fr; } }
+  .stat{ background:var(--paper); border:1px solid var(--line); border-radius:12px; padding:12px 14px; }
+  .stat .n{ font-size:1.4em; font-weight:800; color:var(--brand-dark); }
+  .stat .l{ font-size:.78em; color:var(--soft); }
+  table{ width:100%; border-collapse:collapse; font-size:.88em; }
+  th, td{ text-align:left; padding:8px 6px; border-bottom:1px solid var(--line); vertical-align:top; }
+  th{ font-size:.72em; text-transform:uppercase; letter-spacing:.04em; color:var(--soft); font-weight:700; }
+  .pct{ font-weight:700; }
+  .pct.high{ color:#1F8A55; }
+  .pct.mid{ color:#B8823E; }
+  .pct.low{ color:#C24B3F; }
+  .empty{ text-align:center; color:var(--soft); padding:28px 12px; }
+  .scroll{ overflow-x:auto; }
+  .toolbar{ display:flex; flex-wrap:wrap; gap:8px; align-items:center; margin-top:4px; }
+</style>
+</head>
+<body>
+<script>
+if (sessionStorage.getItem('kuis-guru-ok') !== '1') location.replace('../index.html');
+</script>
+<header>
+  <div class="wrap">
+    <h1>Riwayat latihan</h1>
+    <a href="./">← Area guru</a>
+  </div>
+</header>
+<main>
+  <div class="card">
+    <h2>Filter</h2>
+    <div class="row">
+      <div>
+        <label for="fNama">Nama siswa</label>
+        <select id="fNama"><option value="">Semua</option></select>
+      </div>
+      <div>
+        <label for="fMapel">Mapel</label>
+        <select id="fMapel"><option value="">Semua</option></select>
+      </div>
+      <div>
+        <label for="fMateri">Materi</label>
+        <select id="fMateri"><option value="">Semua</option></select>
+      </div>
+      <div>
+        <label for="fLatihan">Nama sesi</label>
+        <select id="fLatihan"><option value="">Semua</option></select>
+      </div>
+    </div>
+    <div class="toolbar">
+      <button type="button" class="btn" id="btnFilter">Terapkan</button>
+      <button type="button" class="btn secondary" id="btnReset">Reset</button>
+    </div>
+  </div>
+
+  <div class="stats" id="stats">
+    <div class="stat"><div class="n" id="sJumlah">—</div><div class="l">Percobaan</div></div>
+    <div class="stat"><div class="n" id="sRata">—</div><div class="l">Rata-rata skor</div></div>
+    <div class="stat"><div class="n" id="sSiswa">—</div><div class="l">Siswa unik</div></div>
+  </div>
+
+  <div class="card">
+    <h2>Hasil</h2>
+    <div class="scroll">
+      <table>
+        <thead>
+          <tr>
+            <th>Tanggal</th>
+            <th>Siswa</th>
+            <th>Sesi</th>
+            <th>Mapel / Materi</th>
+            <th>Ke</th>
+            <th>Skor</th>
+            <th>%</th>
+            <th>Email</th>
+          </tr>
+        </thead>
+        <tbody id="tbody">
+          <tr><td colspan="8" class="empty">Memuat…</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</main>
+<script>
+(function(){
+  var WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbwotrwYBt0_-_9g4o2gNs6ktaTn1sw41f3jJlgoK5pN2N5RofwRjOeiSqzQq1JZsjhclw/exec';
+
+  function fillSelect(id, arr, keep){
+    var s = document.getElementById(id);
+    var cur = keep ? s.value : '';
+    s.innerHTML = '<option value="">Semua</option>';
+    (arr || []).forEach(function(v){
+      var o = document.createElement('option');
+      o.value = v; o.textContent = v;
+      s.appendChild(o);
+    });
+    if (cur) s.value = cur;
+  }
+
+  function pctClass(p){
+    var n = Number(p);
+    if (isNaN(n)) return 'pct';
+    if (n >= 80) return 'pct high';
+    if (n >= 60) return 'pct mid';
+    return 'pct low';
+  }
+
+  function fmtPct(p){
+    if (p == null || p === '') return '—';
+    var n = Number(p);
+    if (isNaN(n)) return String(p);
+    if (n <= 1) n = n * 100;
+    return Math.round(n) + '%';
+  }
+
+  function load(){
+    var q = '?action=riwayatLatihan'
+      + '&nama=' + encodeURIComponent(document.getElementById('fNama').value)
+      + '&mapel=' + encodeURIComponent(document.getElementById('fMapel').value)
+      + '&materi=' + encodeURIComponent(document.getElementById('fMateri').value)
+      + '&namaLatihan=' + encodeURIComponent(document.getElementById('fLatihan').value);
+    var tb = document.getElementById('tbody');
+    tb.innerHTML = '<tr><td colspan="8" class="empty">Memuat…</td></tr>';
+    fetch(WEBAPP_URL + q)
+      .then(function(r){ return r.json(); })
+      .then(function(res){
+        if (!res || !res.ok){
+          tb.innerHTML = '<tr><td colspan="8" class="empty">Gagal memuat. Deploy Code.gs terbaru?</td></tr>';
+          return;
+        }
+        if (res.filter){
+          fillSelect('fNama', res.filter.nama, true);
+          fillSelect('fMapel', res.filter.mapel, true);
+          fillSelect('fMateri', res.filter.materi, true);
+          fillSelect('fLatihan', res.filter.namaLatihan, true);
+        }
+        var list = res.hasil || [];
+        var sum = 0, cnt = 0, siswa = {};
+        list.forEach(function(h){
+          var p = Number(h.persentase);
+          if (!isNaN(p)){
+            if (p <= 1) p = p * 100;
+            sum += p; cnt++;
+          }
+          if (h.namaSiswa) siswa[h.namaSiswa] = true;
+        });
+        document.getElementById('sJumlah').textContent = list.length;
+        document.getElementById('sRata').textContent = cnt ? Math.round(sum / cnt) + '%' : '—';
+        document.getElementById('sSiswa').textContent = Object.keys(siswa).length;
+
+        if (!list.length){
+          tb.innerHTML = '<tr><td colspan="8" class="empty">Belum ada hasil untuk filter ini.</td></tr>';
+          return;
+        }
+        tb.innerHTML = '';
+        list.forEach(function(h){
+          var tr = document.createElement('tr');
+          var p = h.persentase;
+          var pNum = Number(p);
+          if (!isNaN(pNum) && pNum <= 1) pNum = pNum * 100;
+          tr.innerHTML =
+            '<td>' + esc(h.tanggal || '') + '</td>' +
+            '<td>' + esc(h.namaSiswa) + '</td>' +
+            '<td>' + esc(h.namaLatihan) + '</td>' +
+            '<td>' + esc(h.mapel) + (h.materi ? '<br><span style="color:#5B5D55;font-size:.9em">' + esc(h.materi) + '</span>' : '') + '</td>' +
+            '<td>' + esc(h.percobaanKe) + '</td>' +
+            '<td>' + esc(h.skor) + '/' + esc(h.skorMaksimal) + '</td>' +
+            '<td class="' + pctClass(pNum) + '">' + fmtPct(p) + '</td>' +
+            '<td>' + esc(h.statusEmail || '—') + '</td>';
+          tb.appendChild(tr);
+        });
+      })
+      .catch(function(){
+        tb.innerHTML = '<tr><td colspan="8" class="empty">Koneksi gagal.</td></tr>';
+      });
+  }
+
+  function esc(s){
+    return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){
+      return ({'&':'&','<':'<','>':'>','"':'"',"'":'&#39;'})[c];
+    });
+  }
+
+  document.getElementById('btnFilter').onclick = load;
+  document.getElementById('btnReset').onclick = function(){
+    ['fNama','fMapel','fMateri','fLatihan'].forEach(function(id){ document.getElementById(id).value = ''; });
+    load();
+  };
+  load();
+})();
+</script>
+</body>
+</html>
