@@ -8,7 +8,7 @@
 <style>
   :root{
     --bg:#F7F6F1; --paper:#fff; --ink:#23241F; --soft:#5B5D55;
-    --line:#E3E0D6; --brand:#0F6B5C; --brand-dark:#0B4F45; --radius:14px;
+    --line:#E3E0D6; --brand:#0F6B5C; --brand-dark:#0B4F45; --radius:14px; --red:#C24B3F;
   }
   *{ box-sizing:border-box; }
   body{
@@ -16,9 +16,7 @@
     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
     font-size:16px; line-height:1.5; display:flex; flex-direction:column;
   }
-  header{
-    background:var(--brand); color:#F4FBF9; padding:28px 20px 32px; text-align:center;
-  }
+  header{ background:var(--brand); color:#F4FBF9; padding:28px 20px 32px; text-align:center; }
   header .school{ font-size:.75em; letter-spacing:.04em; text-transform:uppercase; opacity:.85; }
   header h1{ margin:8px 0 0; font-size:1.45em; font-weight:800; }
   main{ flex:1; max-width:420px; width:100%; margin:0 auto; padding:28px 20px; }
@@ -29,17 +27,18 @@
     margin-bottom:12px; cursor:pointer; font:inherit; color:inherit;
   }
   .role:hover{ border-color:#CFE3DA; }
+  .role.active{ border-color:var(--brand); background:#EAF4F0; }
   .role .t{ font-weight:700; font-size:1.05em; display:block; }
   .role .d{ font-size:.85em; color:var(--soft); margin-top:4px; display:block; }
-  .guru-panel{
+  .panel{
     display:none; background:var(--paper); border:1px solid var(--line);
-    border-radius:var(--radius); padding:18px; margin-top:8px;
+    border-radius:var(--radius); padding:18px; margin-top:4px; margin-bottom:16px;
   }
-  .guru-panel.show{ display:block; }
+  .panel.show{ display:block; }
   label{ display:block; font-size:.85em; font-weight:600; color:var(--soft); margin-bottom:6px; }
-  input{
+  input, select{
     width:100%; padding:12px 14px; border:1.5px solid var(--line); border-radius:10px;
-    font:inherit; margin-bottom:12px;
+    font:inherit; margin-bottom:12px; background:#fff;
   }
   .btn{
     width:100%; border:0; border-radius:12px; padding:13px; font:inherit; font-weight:700;
@@ -48,9 +47,10 @@
   .btn:disabled{ opacity:.55; }
   .msg{ display:none; margin-top:10px; padding:10px 12px; border-radius:10px; font-size:.9em; }
   .msg.show{ display:block; }
-  .msg.err{ background:#FBEAE6; color:#C24B3F; }
+  .msg.err{ background:#FBEAE6; color:var(--red); }
   .msg.ok{ background:#E4F3EC; color:var(--brand-dark); }
   footer{ text-align:center; color:var(--soft); font-size:.8em; padding:16px; }
+  .hint{ font-size:.82em; color:var(--soft); margin:-6px 0 12px; }
 </style>
 </head>
 <body>
@@ -59,22 +59,32 @@
   <h1>Kuis Digital</h1>
 </header>
 <main>
-  <p class="lead">Pilih bagaimana kamu masuk.</p>
+  <p class="lead">Masuk sebagai siswa atau guru.</p>
 
-  <button type="button" class="role" id="btnSiswa">
-    <span class="t">Saya siswa</span>
-    <span class="d">Kerjakan kuis dan latihan asesmen</span>
+  <button type="button" class="role" id="btnTabSiswa">
+    <span class="t">Siswa</span>
+    <span class="d">Nama lengkap + NISN</span>
   </button>
+  <div class="panel" id="panelSiswa">
+    <label for="namaSiswa">Nama lengkap</label>
+    <select id="namaSiswa"><option value="">Memuat daftar nama…</option></select>
+    <label for="nisnSiswa">NISN (sandi)</label>
+    <input id="nisnSiswa" type="password" inputmode="numeric" autocomplete="off" placeholder="Nomor NISN">
+    <p class="hint">NISN sama dengan yang tercatat di data sekolah / spreadsheet.</p>
+    <button type="button" class="btn" id="btnLoginSiswa">Masuk</button>
+    <div id="msgSiswa" class="msg"></div>
+  </div>
 
-  <button type="button" class="role" id="btnGuruShow">
-    <span class="t">Saya guru</span>
-    <span class="d">Kelola latihan, bank soal, dan pengaturan</span>
+  <button type="button" class="role" id="btnTabGuru">
+    <span class="t">Guru</span>
+    <span class="d">Arif Azwar Anas</span>
   </button>
-
-  <div class="guru-panel" id="guruPanel">
-    <label for="sandiGuru">Sandi guru</label>
-    <input id="sandiGuru" type="password" autocomplete="current-password" placeholder="Sandi dari admin">
-    <button type="button" class="btn" id="btnGuruLogin">Masuk sebagai guru</button>
+  <div class="panel" id="panelGuru">
+    <label>Nama</label>
+    <input type="text" value="Arif Azwar Anas" readonly style="background:#F1EFE8;color:var(--soft)">
+    <label for="sandiGuru">Sandi</label>
+    <input id="sandiGuru" type="password" autocomplete="current-password" placeholder="Sandi guru">
+    <button type="button" class="btn" id="btnLoginGuru">Masuk sebagai guru</button>
     <div id="msgGuru" class="msg"></div>
   </div>
 </main>
@@ -82,48 +92,94 @@
 <script>
 (function(){
   var WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbwotrwYBt0_-_9g4o2gNs6ktaTn1sw41f3jJlgoK5pN2N5RofwRjOeiSqzQq1JZsjhclw/exec';
-  var KEY = 'kuis-guru-ok';
 
-  document.getElementById('btnSiswa').onclick = function(){
-    location.href = 'beranda.html';
-  };
-  document.getElementById('btnGuruShow').onclick = function(){
-    document.getElementById('guruPanel').classList.add('show');
-    document.getElementById('sandiGuru').focus();
-  };
+  function showMsg(id, ok, text){
+    var el = document.getElementById(id);
+    el.className = 'msg show ' + (ok ? 'ok' : 'err');
+    el.textContent = text;
+  }
+  function showPanel(which){
+    document.getElementById('panelSiswa').classList.toggle('show', which === 'siswa');
+    document.getElementById('panelGuru').classList.toggle('show', which === 'guru');
+    document.getElementById('btnTabSiswa').classList.toggle('active', which === 'siswa');
+    document.getElementById('btnTabGuru').classList.toggle('active', which === 'guru');
+  }
 
-  document.getElementById('btnGuruLogin').onclick = function(){
+  document.getElementById('btnTabSiswa').onclick = function(){ showPanel('siswa'); };
+  document.getElementById('btnTabGuru').onclick = function(){ showPanel('guru'); document.getElementById('sandiGuru').focus(); };
+
+  fetch(WEBAPP_URL + '?action=daftarSiswa')
+    .then(function(r){ return r.json(); })
+    .then(function(res){
+      var sel = document.getElementById('namaSiswa');
+      sel.innerHTML = '<option value="">— Pilih nama —</option>';
+      if (res && res.ok && res.siswa){
+        res.siswa.forEach(function(n){
+          if (n === 'Tes Sistem') return;
+          var o = document.createElement('option');
+          o.value = n; o.textContent = n;
+          sel.appendChild(o);
+        });
+      }
+    })
+    .catch(function(){
+      document.getElementById('namaSiswa').innerHTML = '<option value="">Gagal memuat nama</option>';
+    });
+
+  document.getElementById('btnLoginSiswa').onclick = function(){
     var btn = this;
-    var sandi = (document.getElementById('sandiGuru').value || '').trim();
-    var msg = document.getElementById('msgGuru');
-    if (!sandi) {
-      msg.className = 'msg show err';
-      msg.textContent = 'Isi sandi guru.';
-      return;
-    }
+    var nama = (document.getElementById('namaSiswa').value || '').trim();
+    var nisn = (document.getElementById('nisnSiswa').value || '').trim();
+    if (!nama){ showMsg('msgSiswa', false, 'Pilih namamu.'); return; }
+    if (!nisn){ showMsg('msgSiswa', false, 'Isi NISN.'); return; }
     btn.disabled = true;
-    msg.className = 'msg show ok';
-    msg.textContent = 'Memeriksa…';
+    showMsg('msgSiswa', true, 'Memeriksa…');
     fetch(WEBAPP_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify({ action: 'loginGuru', sandi: sandi })
+      body: JSON.stringify({ action: 'loginSiswa', nama: nama, nisn: nisn })
     }).then(function(r){ return r.json(); }).then(function(res){
       btn.disabled = false;
-      if (res && res.ok) {
-        sessionStorage.setItem(KEY, '1');
-        sessionStorage.setItem('kuis-guru-token', sandi);
-        location.href = 'guru/';
+      if (res && res.ok){
+        sessionStorage.setItem('kuis-siswa-ok', '1');
+        sessionStorage.setItem('kuis-siswa-nama', nama);
+        location.href = 'beranda.html';
       } else {
-        msg.className = 'msg show err';
-        msg.textContent = (res && res.pesan) || 'Sandi salah.';
+        showMsg('msgSiswa', false, (res && res.pesan) || 'Login gagal.');
       }
     }).catch(function(){
       btn.disabled = false;
-      msg.className = 'msg show err';
-      msg.textContent = 'Tidak terhubung ke server. Pastikan Code.gs sudah di-deploy.';
+      showMsg('msgSiswa', false, 'Tidak terhubung ke server. Pastikan Code.gs sudah di-deploy.');
     });
   };
+
+  document.getElementById('btnLoginGuru').onclick = function(){
+    var btn = this;
+    var sandi = (document.getElementById('sandiGuru').value || '').trim();
+    if (!sandi){ showMsg('msgGuru', false, 'Isi sandi.'); return; }
+    btn.disabled = true;
+    showMsg('msgGuru', true, 'Memeriksa…');
+    fetch(WEBAPP_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ action: 'loginGuru', nama: 'Arif Azwar Anas', sandi: sandi })
+    }).then(function(r){ return r.json(); }).then(function(res){
+      btn.disabled = false;
+      if (res && res.ok){
+        sessionStorage.setItem('kuis-guru-ok', '1');
+        sessionStorage.setItem('kuis-guru-token', sandi);
+        sessionStorage.setItem('kuis-guru-nama', 'Arif Azwar Anas');
+        location.href = 'guru/';
+      } else {
+        showMsg('msgGuru', false, (res && res.pesan) || 'Sandi salah.');
+      }
+    }).catch(function(){
+      btn.disabled = false;
+      showMsg('msgGuru', false, 'Tidak terhubung ke server. Pastikan Code.gs sudah di-deploy.');
+    });
+  };
+
+  showPanel('siswa');
 })();
 </script>
 </body>
