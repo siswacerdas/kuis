@@ -1,0 +1,224 @@
+{
+  "schema_version": "1.0-latihan",
+  "pool": {
+    "id": "ipas-ganjil-2026",
+    "mapel": "IPAS",
+    "judul": "IPAS Kelas 5 — Semester Ganjil 2026/2027",
+    "kelas": "5",
+    "semester": "ganjil",
+    "tahun_ajaran": "2026/2027",
+    "deskripsi": "Pool soal latihan ATS/AAS: Gelombang Bunyi, Gelombang Cahaya, Ekosistem, serta Bencana Alam & Perubahan Lingkungan. Hanya PG dan PGK.",
+    "part": "Bencana Alam & Perubahan Lingkungan"
+  },
+  "materi": [
+    {
+      "id": "Bencana Alam & Perubahan Lingkungan",
+      "kode": "LINGKUNGAN",
+      "label": "Bencana Alam & Perubahan Lingkungan"
+    }
+  ],
+  "kompleksitas": [
+    {
+      "id": "L1",
+      "label": "L1 — Dasar (mengingat & memahami)"
+    },
+    {
+      "id": "L2",
+      "label": "L2 — Menengah (menerapkan & menganalisis)"
+    },
+    {
+      "id": "L3",
+      "label": "L3 — Lanjut (mengevaluasi & mencipta / multi-jawaban)"
+    }
+  ],
+  "contexts": {
+    "ctx_5": {
+      "judul": "Bencana Alam di Indonesia",
+      "teks": "Indonesia terletak di pertemuan tiga lempeng tektonik sehingga sering terjadi gempa bumi. Gempa di laut dapat menimbulkan tsunami. Selain itu, banyak gunung berapi aktif yang sewaktu-waktu dapat meletus. Di musim hujan, angin kencang dan puting beliung juga sering terjadi di beberapa daerah."
+    }
+  },
+  "soal": [
+    {
+      "mapel": "IPAS",
+      "materi": "Bencana Alam & Perubahan Lingkungan",
+      "sub_materi": "Bencana Alam: Gempa, Tsunami, Gunung Berapi, Angin Topan",
+      "tipe": "pg",
+      "kompleksitas": "L2",
+      "pertanyaan": "Gempa bumi terjadi karena …",
+      "opsi": [{"id": "a", "teks": "Pergerakan lempeng tektonik bumi"}, {"id": "b", "teks": "Angin kencang"}, {"id": "c", "teks": "Hujan deras"}, {"id": "d", "teks": "Pasang surut laut"}],
+      "kunci": ["a"],
+      "pembahasan": "Konsep bencana alam di Indonesia.",
+      "skor": 1,
+      "context_id": null,
+      "id": "IPAS-LINGKUNGAN-009"
+    },
+    {
+      "mapel": "IPAS",
+      "materi": "Bencana Alam & Perubahan Lingkungan",
+      "sub_materi": "Bencana Alam: Gempa, Tsunami, Gunung Berapi, Angin Topan",
+      "tipe": "pg",
+      "kompleksitas": "L1",
+      "pertanyaan": "Gelombang air laut sangat besar akibat gempa di dasar laut disebut …",
+      "opsi": [{"id": "a", "teks": "Tsunami"}, {"id": "b", "teks": "Banjir"}, {"id": "c", "teks": "Rob"}, {"id": "d", "teks": "Ombak biasa"}],
+      "kunci": ["a"],
+      "pembahasan": "Konsep bencana alam di Indonesia.",
+      "skor": 1,
+      "context_id": null,
+      "id": "IPAS-LINGKUNGAN-003"
+    },
+    {
+      "mapel": "IPAS",
+      "materi": "Bencana Alam & Perubahan Lingkungan",
+      "sub_materi": "Bencana Alam: Gempa, Tsunami, Gunung Berapi, Angin Topan",
+      "tipe": "pg",
+      "kompleksitas": "L3",
+      "pertanyaan": "Berdasarkan teks 'Bencana Alam di Indonesia', mengapa Indonesia sering gempa?",
+      "opsi": [{"id": "a", "teks": "Karena terletak di pertemuan tiga lempeng tektonik"}, {"id": "b", "teks": "Karena banyak hutan"}, {"id": "c", "teks": "Karena iklim tropis"}, {"id": "d", "teks": "Karena banyak sungai"}],
+      "kunci": ["a"],
+      "pembahasan": "Konsep bencana alam di Indonesia.",
+      "skor": 1,
+      "context_id": "ctx_5",
+      "id": "IPAS-LINGKUNGAN-013"
+    },
+    {
+      "mapel": "IPAS",
+      "materi": "Bencana Alam & Perubahan Lingkungan",
+      "sub_materi": "Bencana Alam: Gempa, Tsunami, Gunung Berapi, Angin Topan",
+      "tipe": "pg",
+      "kompleksitas": "L1",
+      "pertanyaan": "Angin yang berputar dengan kecepatan tinggi berbentuk corong disebut …",
+      "opsi": [{"id": "a", "teks": "Puting beliung"}, {"id": "b", "teks": "Angin laut"}, {"id": "c", "teks": "Angin gunung"}, {"id": "d", "teks": "Angin fohn"}],
+      "kunci": ["a"],
+      "pembahasan": "Konsep bencana alam di Indonesia.",
+      "skor": 1,
+      "context_id": null,
+      "id": "IPAS-LINGKUNGAN-001"
+    },
+    {
+      "mapel": "IPAS",
+      "materi": "Bencana Alam & Perubahan Lingkungan",
+      "sub_materi": "Bencana Alam: Gempa, Tsunami, Gunung Berapi, Angin Topan",
+      "tipe": "pg",
+      "kompleksitas": "L2",
+      "pertanyaan": "Gunung berapi yang sedang meletus mengeluarkan …",
+      "opsi": [{"id": "a", "teks": "Lava, abu, dan gas beracun"}, {"id": "b", "teks": "Hanya air"}, {"id": "c", "teks": "Hanya angin"}, {"id": "d", "teks": "Hanya tanah"}],
+      "kunci": ["a"],
+      "pembahasan": "Konsep bencana alam di Indonesia.",
+      "skor": 1,
+      "context_id": null,
+      "id": "IPAS-LINGKUNGAN-010"
+    },
+    {
+      "mapel": "IPAS",
+      "materi": "Bencana Alam & Perubahan Lingkungan",
+      "sub_materi": "Bencana Alam: Gempa, Tsunami, Gunung Berapi, Angin Topan",
+      "tipe": "pg",
+      "kompleksitas": "L1",
+      "pertanyaan": "Tanda-tanda akan terjadi tsunami setelah gempa di laut adalah …",
+      "opsi": [{"id": "a", "teks": "Air laut surut secara tiba-tiba"}, {"id": "b", "teks": "Langit menjadi gelap"}, {"id": "c", "teks": "Angin berhenti"}, {"id": "d", "teks": "Burung terbang tinggi"}],
+      "kunci": ["a"],
+      "pembahasan": "Konsep bencana alam di Indonesia.",
+      "skor": 1,
+      "context_id": null,
+      "id": "IPAS-LINGKUNGAN-007"
+    },
+    {
+      "mapel": "IPAS",
+      "materi": "Bencana Alam & Perubahan Lingkungan",
+      "sub_materi": "Bencana Alam: Gempa, Tsunami, Gunung Berapi, Angin Topan",
+      "tipe": "pg",
+      "kompleksitas": "L2",
+      "pertanyaan": "Untuk mengurangi risiko korban gempa, bangunan sebaiknya …",
+      "opsi": [{"id": "a", "teks": "Dibuat tahan gempa dan memiliki jalur evakuasi"}, {"id": "b", "teks": "Dibuat setinggi mungkin"}, {"id": "c", "teks": "Tanpa jendela"}, {"id": "d", "teks": "Dari bahan kaca saja"}],
+      "kunci": ["a"],
+      "pembahasan": "Konsep bencana alam di Indonesia.",
+      "skor": 1,
+      "context_id": null,
+      "id": "IPAS-LINGKUNGAN-012"
+    },
+    {
+      "mapel": "IPAS",
+      "materi": "Bencana Alam & Perubahan Lingkungan",
+      "sub_materi": "Bencana Alam: Gempa, Tsunami, Gunung Berapi, Angin Topan",
+      "tipe": "pg",
+      "kompleksitas": "L1",
+      "pertanyaan": "Puting beliung paling sering terjadi pada musim …",
+      "opsi": [{"id": "a", "teks": "Peralihan / hujan"}, {"id": "b", "teks": "Kemarau panjang"}, {"id": "c", "teks": "Dingin"}, {"id": "d", "teks": "Salju"}],
+      "kunci": ["a"],
+      "pembahasan": "Konsep bencana alam di Indonesia.",
+      "skor": 1,
+      "context_id": null,
+      "id": "IPAS-LINGKUNGAN-006"
+    },
+    {
+      "mapel": "IPAS",
+      "materi": "Bencana Alam & Perubahan Lingkungan",
+      "sub_materi": "Bencana Alam: Gempa, Tsunami, Gunung Berapi, Angin Topan",
+      "tipe": "pg",
+      "kompleksitas": "L2",
+      "pertanyaan": "Salah satu cara melindungi diri saat terjadi gempa bumi di dalam ruangan adalah …",
+      "opsi": [{"id": "a", "teks": "Berlindung di bawah meja yang kuat"}, {"id": "b", "teks": "Berlari ke luar segera tanpa melindungi kepala"}, {"id": "c", "teks": "Naik ke lantai tertinggi"}, {"id": "d", "teks": "Membuka semua jendela"}],
+      "kunci": ["a"],
+      "pembahasan": "Mitigasi bencana.",
+      "skor": 1,
+      "context_id": null,
+      "id": "IPAS-LINGKUNGAN-011"
+    },
+    {
+      "mapel": "IPAS",
+      "materi": "Bencana Alam & Perubahan Lingkungan",
+      "sub_materi": "Perubahan Lingkungan Akibat Manusia dan Pengelolaan Sampah",
+      "tipe": "pg",
+      "kompleksitas": "L1",
+      "pertanyaan": "Prinsip pengelolaan sampah 3R adalah …",
+      "opsi": [{"id": "a", "teks": "Reduce, Reuse, Recycle"}, {"id": "b", "teks": "Membawa tas sendiri"}, {"id": "c", "teks": "Kompos"}],
+      "kunci": ["a"],
+      "pembahasan": "Konsep pengelolaan lingkungan.",
+      "skor": 1,
+      "context_id": null,
+      "id": "IPAS-LINGKUNGAN-005"
+    },
+    {
+      "mapel": "IPAS",
+      "materi": "Bencana Alam & Perubahan Lingkungan",
+      "sub_materi": "Perubahan Lingkungan Akibat Manusia dan Pengelolaan Sampah",
+      "tipe": "pg",
+      "kompleksitas": "L1",
+      "pertanyaan": "Contoh tindakan Reduce adalah …",
+      "opsi": [{"id": "a", "teks": "Membawa tas belanja sendiri"}, {"id": "b", "teks": "Membuang sampah ke sungai"}, {"id": "c", "teks": "Membakar plastik"}, {"id": "d", "teks": "Menebang hutan"}],
+      "kunci": ["a"],
+      "pembahasan": "Konsep pengelolaan lingkungan.",
+      "skor": 1,
+      "context_id": null,
+      "id": "IPAS-LINGKUNGAN-002"
+    },
+    {
+      "mapel": "IPAS",
+      "materi": "Bencana Alam & Perubahan Lingkungan",
+      "sub_materi": "Permasalahan Lingkungan dan Interaksi Manusia",
+      "tipe": "pg",
+      "kompleksitas": "L1",
+      "pertanyaan": "Kebutuhan manusia akan sandang, pangan, papan dapat merusak lingkungan jika …",
+      "opsi": [{"id": "a", "teks": "Dilakukan berlebihan dan merusak alam"}, {"id": "b", "teks": "Dilakukan ramah lingkungan"}, {"id": "c", "teks": "Hanya untuk sendiri"}, {"id": "d", "teks": "Tidak pakai teknologi"}],
+      "kunci": ["a"],
+      "pembahasan": "Konsep pengelolaan lingkungan.",
+      "skor": 1,
+      "context_id": null,
+      "id": "IPAS-LINGKUNGAN-004"
+    },
+    {
+      "mapel": "IPAS",
+      "materi": "Bencana Alam & Perubahan Lingkungan",
+      "sub_materi": "Perubahan Lingkungan Akibat Manusia dan Pengelolaan Sampah",
+      "tipe": "pg",
+      "kompleksitas": "L2",
+      "pertanyaan": "Contoh penerapan Reuse dalam kehidupan sehari-hari adalah …",
+      "opsi": [{"id": "a", "teks": "Memakai botol minum berulang kali"}, {"id": "b", "teks": "Membuang botol sekali pakai"}, {"id": "c", "teks": "Membakar sampah plastik"}, {"id": "d", "teks": "Menebang pohon"}],
+      "kunci": ["a"],
+      "pembahasan": "Interaksi manusia dengan lingkungan.",
+      "skor": 1,
+      "context_id": null,
+      "id": "IPAS-LINGKUNGAN-008"
+    }
+  ]
+}
