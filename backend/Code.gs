@@ -131,8 +131,22 @@ function doGet(e) {
     return jsonResponse_(cekStatusKuis_(idKuis, nama));
   }
   // --- LATIHAN (fungsi di file Latihan.gs) ---
+  if (action === 'metaBankSoal') {
+    return jsonResponse_(metaBankSoal_());
+  }
+  if (action === 'daftarBankSoal') {
+    return jsonResponse_(daftarBankSoal_({
+      mapel: e.parameter.mapel || '',
+      materi: e.parameter.materi || '',
+      kompleksitas: e.parameter.kompleksitas || '',
+      q: e.parameter.q || ''
+    }));
+  }
   if (action === 'daftarLatihan') {
     return jsonResponse_(ambilDaftarLatihan_());
+  }
+  if (action === 'daftarLatihanGuru') {
+    return jsonResponse_(ambilDaftarLatihanGuru_());
   }
   if (action === 'soalLatihan') {
     const idLatihan = String(e.parameter.idLatihan || '').trim();
@@ -183,6 +197,12 @@ function doPost(e) {
   }
   if (action === 'gantiSandiGuru') {
     return jsonResponse_(gantiSandiGuru_(body));
+  }
+  if (action === 'buatSesiLatihan') {
+    return jsonResponse_(buatSesiLatihan_(body));
+  }
+  if (action === 'ubahStatusLatihan') {
+    return jsonResponse_(ubahStatusLatihan_(body));
   }
   // Setup sekali pakai (dipanggil dari halaman setup HTML, bukan dropdown editor)
   if (action === 'setupLatihan') {
@@ -1275,3 +1295,246 @@ function ambilRiwayatLatihan_(filter) {
   }
   return { ok: true, hasil: hasil };
 }
+
+
+// ============================================================
+//  BANK SOAL + BUAT SESI LATIHAN (area guru)
+// ============================================================
+
+function assertGuruSandi_(body) {
+  const token = String((body && (body.sandi || body.tokenSetup || body.guruToken)) || '').trim();
+  if (!token || token !== getGuruToken_()) {
+    return { ok: false, pesan: 'Sandi guru salah atau sesi kadaluarsa. Login ulang.' };
+  }
+  return { ok: true };
+}
+
+function metaBankSoal_() {
+  const sheet = getSS_().getSheetByName(SHEET_BANK_SOAL);
+  if (!sheet || sheet.getLastRow() < 2) {
+    return { ok: true, mapel: [], materi: [], kompleksitas: [] };
+  }
+  const data = sheet.getDataRange().getValues();
+  const mapelSet = {};
+  const materiSet = {};
+  const kompSet = {};
+  for (let i = 1; i < data.length; i++) {
+    const status = String(data[i][14] || 'aktif').trim().toLowerCase();
+    if (status && status !== 'aktif') continue;
+    const mapel = String(data[i][1] || '').trim();
+    const materi = String(data[i][2] || '').trim();
+    const komp = String(data[i][5] || '').trim();
+    if (mapel) mapelSet[mapel] = true;
+    if (materi) materiSet[materi] = true;
+    if (komp) kompSet[komp] = true;
+  }
+  return {
+    ok: true,
+    mapel: Object.keys(mapelSet).sort(),
+    materi: Object.keys(materiSet).sort(),
+    kompleksitas: Object.keys(kompSet).sort()
+  };
+}
+
+/**
+ * Daftar soal untuk dipilih guru (tanpa kunci jawaban).
+ * filter: { mapel, materi, kompleksitas, q }
+ */
+function daftarBankSoal_(filter) {
+  filter = filter || {};
+  const fMapel = String(filter.mapel || '').trim().toLowerCase();
+  const fMateri = String(filter.materi || '').trim().toLowerCase();
+  const fKomp = String(filter.kompleksitas || '').trim().toLowerCase();
+  const fQ = String(filter.q || '').trim().toLowerCase();
+
+  const sheet = getSS_().getSheetByName(SHEET_BANK_SOAL);
+  if (!sheet || sheet.getLastRow() < 2) {
+    return { ok: true, soal: [], total: 0 };
+  }
+  const data = sheet.getDataRange().getValues();
+  const soal = [];
+  for (let i = 1; i < data.length; i++) {
+    const status = String(data[i][14] || 'aktif').trim().toLowerCase();
+    if (status && status !== 'aktif') continue;
+    const id = String(data[i][0] || '').trim();
+    if (!id) continue;
+    const mapel = String(data[i][1] || '').trim();
+    const materi = String(data[i][2] || '').trim();
+    const sub = String(data[i][3] || '').trim();
+    const tipe = String(data[i][4] || '').trim();
+    const komp = String(data[i][5] || '').trim();
+    const pertanyaan = String(data[i][6] || '').trim();
+    const skor = Number(data[i][10]) || 1;
+
+    if (fMapel && mapel.toLowerCase() !== fMapel) continue;
+    if (fMateri && materi.toLowerCase() !== fMateri) continue;
+    if (fKomp && komp.toLowerCase() !== fKomp) continue;
+    if (fQ && pertanyaan.toLowerCase().indexOf(fQ) === -1 && id.toLowerCase().indexOf(fQ) === -1) continue;
+
+    soal.push({
+      id: id,
+      mapel: mapel,
+      materi: materi,
+      subMateri: sub,
+      tipe: tipe,
+      kompleksitas: komp,
+      pertanyaan: pertanyaan.length > 160 ? pertanyaan.substring(0, 160) + '…' : pertanyaan,
+      skor: skor
+    });
+  }
+  // batasi 200 agar respons tidak terlalu besar
+  const max = 200;
+  return {
+    ok: true,
+    total: soal.length,
+    soal: soal.slice(0, max),
+    terpotong: soal.length > max
+  };
+}
+
+/** Semua sesi latihan termasuk non-aktif (untuk guru). */
+function ambilDaftarLatihanGuru_() {
+  const sheet = getSS_().getSheetByName(SHEET_DAFTAR_LATIHAN);
+  if (!sheet || sheet.getLastRow() < 2) {
+    return { ok: true, latihan: [] };
+  }
+  const data = sheet.getDataRange().getValues();
+  const list = [];
+  for (let i = 1; i < data.length; i++) {
+    list.push({
+      idLatihan: String(data[i][0] || '').trim(),
+      namaLatihan: data[i][1],
+      mapel: data[i][2],
+      materi: data[i][3],
+      kompleksitas: data[i][4],
+      idSoalList: String(data[i][5] || '').trim(),
+      jumlahSoal: data[i][6],
+      durasiMenit: data[i][7],
+      token: String(data[i][8] || '').trim(),
+      bolehUlang: String(data[i][9] || 'ya').trim().toLowerCase() !== 'tidak',
+      kirimEmailOrtu: String(data[i][10] || 'ya').trim().toLowerCase() !== 'tidak',
+      status: String(data[i][11] || '').trim(),
+      dibuat: data[i][12],
+      catatan: data[i][13]
+    });
+  }
+  return { ok: true, latihan: list };
+}
+
+/**
+ * body: {
+ *   sandi, namaLatihan, mapel, materi, kompleksitas,
+ *   idSoalList: string[] | string, durasiMenit, token,
+ *   bolehUlang: bool, kirimEmailOrtu: bool, catatan
+ * }
+ */
+function buatSesiLatihan_(body) {
+  const auth = assertGuruSandi_(body);
+  if (!auth.ok) return auth;
+
+  const nama = String((body && body.namaLatihan) || '').trim();
+  let token = String((body && body.token) || '').trim().toUpperCase().replace(/\s+/g, '');
+  let ids = body && body.idSoalList;
+  if (typeof ids === 'string') {
+    ids = ids.split(/[;,]/).map(function(s){ return s.trim(); }).filter(Boolean);
+  }
+  if (!Array.isArray(ids)) ids = [];
+  ids = ids.map(function(s){ return String(s).trim(); }).filter(Boolean);
+
+  if (!nama) return { ok: false, pesan: 'Nama latihan wajib diisi.' };
+  if (!ids.length) return { ok: false, pesan: 'Pilih minimal satu soal.' };
+  if (!token) {
+    token = 'LAT' + Utilities.formatDate(new Date(), Session.getScriptTimeZone() || 'Asia/Jakarta', 'MMddHHmm');
+  }
+
+  // Validasi ID ada di bank
+  const sheetBank = getSS_().getSheetByName(SHEET_BANK_SOAL);
+  if (!sheetBank || sheetBank.getLastRow() < 2) {
+    return { ok: false, pesan: 'Bank soal kosong.' };
+  }
+  const bankData = sheetBank.getDataRange().getValues();
+  const ada = {};
+  for (let i = 1; i < bankData.length; i++) {
+    const id = String(bankData[i][0] || '').trim();
+    if (id) ada[id] = true;
+  }
+  const hilang = ids.filter(function(id){ return !ada[id]; });
+  if (hilang.length) {
+    return { ok: false, pesan: 'ID soal tidak ditemukan: ' + hilang.slice(0, 5).join(', ') };
+  }
+
+  const sheet = getSS_().getSheetByName(SHEET_DAFTAR_LATIHAN);
+  if (!sheet) {
+    return { ok: false, pesan: 'Sheet Daftar_Latihan belum ada. Jalankan setup dulu.' };
+  }
+
+  // Cek token unik
+  if (sheet.getLastRow() >= 2) {
+    const existing = sheet.getRange(2, 9, sheet.getLastRow(), 9).getValues();
+    for (let i = 0; i < existing.length; i++) {
+      if (String(existing[i][0] || '').trim().toUpperCase() === token) {
+        return { ok: false, pesan: 'Token "' + token + '" sudah dipakai. Ganti token.' };
+      }
+    }
+  }
+
+  const mapel = String((body && body.mapel) || '').trim() || 'Campuran';
+  const materi = String((body && body.materi) || '').trim() || 'Campuran';
+  const komp = String((body && body.kompleksitas) || '').trim() || 'Campuran';
+  const durasi = Number(body && body.durasiMenit);
+  const bolehUlang = (body && body.bolehUlang === false) ? 'tidak' : 'ya';
+  const kirimEmail = (body && body.kirimEmailOrtu === false) ? 'tidak' : 'ya';
+  const catatan = String((body && body.catatan) || '').trim();
+  const idLatihan = 'LAT-' + Utilities.formatDate(new Date(), Session.getScriptTimeZone() || 'Asia/Jakarta', 'yyyyMMdd-HHmmss');
+
+  sheet.appendRow([
+    idLatihan,
+    nama,
+    mapel,
+    materi,
+    komp,
+    ids.join(';'),
+    ids.length,
+    isNaN(durasi) || durasi <= 0 ? '' : durasi,
+    token,
+    bolehUlang,
+    kirimEmail,
+    'aktif',
+    new Date(),
+    catatan
+  ]);
+
+  return {
+    ok: true,
+    pesan: 'Sesi latihan berhasil dibuat.',
+    idLatihan: idLatihan,
+    token: token,
+    jumlahSoal: ids.length
+  };
+}
+
+/**
+ * body: { sandi, idLatihan, status: 'aktif'|'nonaktif' }
+ */
+function ubahStatusLatihan_(body) {
+  const auth = assertGuruSandi_(body);
+  if (!auth.ok) return auth;
+  const id = String((body && body.idLatihan) || '').trim();
+  const status = String((body && body.status) || '').trim().toLowerCase();
+  if (!id || (status !== 'aktif' && status !== 'nonaktif')) {
+    return { ok: false, pesan: 'idLatihan dan status (aktif/nonaktif) wajib.' };
+  }
+  const sheet = getSS_().getSheetByName(SHEET_DAFTAR_LATIHAN);
+  if (!sheet || sheet.getLastRow() < 2) {
+    return { ok: false, pesan: 'Data latihan kosong.' };
+  }
+  const data = sheet.getDataRange().getValues();
+  for (let i = 1; i < data.length; i++) {
+    if (String(data[i][0] || '').trim() === id) {
+      sheet.getRange(i + 1, 12).setValue(status); // kolom Status
+      return { ok: true, pesan: 'Status diubah menjadi ' + status + '.', idLatihan: id, status: status };
+    }
+  }
+  return { ok: false, pesan: 'ID latihan tidak ditemukan.' };
+}
+
