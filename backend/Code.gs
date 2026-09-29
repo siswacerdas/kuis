@@ -160,7 +160,8 @@ function doGet(e) {
       nama: e.parameter.nama || '',
       mapel: e.parameter.mapel || '',
       materi: e.parameter.materi || '',
-      idLatihan: e.parameter.idLatihan || ''
+      idLatihan: e.parameter.idLatihan || '',
+      namaLatihan: e.parameter.namaLatihan || ''
     }));
   }
   return jsonResponse_({ ok: false, pesan: 'Aksi GET tidak dikenal.' });
@@ -1277,6 +1278,8 @@ function ambilRiwayatLatihan_(filter) {
     const materi = String(data[i][5] || '');
     if (mapelFilter && mapel.toLowerCase().indexOf(mapelFilter) === -1) continue;
     if (materiFilter && materi.toLowerCase().indexOf(materiFilter) === -1) continue;
+    const namaLatihanFilter = String(filter.namaLatihan || '').trim().toLowerCase();
+    if (namaLatihanFilter && String(data[i][2] || '').toLowerCase().indexOf(namaLatihanFilter) === -1) continue;
 
     hasil.push({
       timestamp: data[i][0],
@@ -1293,7 +1296,41 @@ function ambilRiwayatLatihan_(filter) {
       statusEmail: data[i][11]
     });
   }
-  return { ok: true, hasil: hasil };
+  // terbaru di atas
+  hasil.sort(function(a, b) {
+    var ta = a.timestamp ? new Date(a.timestamp).getTime() : 0;
+    var tb = b.timestamp ? new Date(b.timestamp).getTime() : 0;
+    return tb - ta;
+  });
+
+  // opsi filter (dari seluruh data, bukan hanya hasil terfilter)
+  const sheetAll = getSS_().getSheetByName(SHEET_HASIL_LATIHAN);
+  const mapelSet = {}, materiSet = {}, namaSet = {}, latihanSet = {};
+  if (sheetAll && sheetAll.getLastRow() >= 2) {
+    const all = sheetAll.getDataRange().getValues();
+    for (let j = 1; j < all.length; j++) {
+      const n = String(all[j][3] || '').trim();
+      if (!n || n === NAMA_AKUN_TES) continue;
+      namaSet[n] = true;
+      const mp = String(all[j][4] || '').trim();
+      const mt = String(all[j][5] || '').trim();
+      const nl = String(all[j][2] || '').trim();
+      if (mp) mapelSet[mp] = true;
+      if (mt) materiSet[mt] = true;
+      if (nl) latihanSet[nl] = true;
+    }
+  }
+
+  return {
+    ok: true,
+    hasil: hasil,
+    filter: {
+      nama: Object.keys(namaSet).sort(),
+      mapel: Object.keys(mapelSet).sort(),
+      materi: Object.keys(materiSet).sort(),
+      namaLatihan: Object.keys(latihanSet).sort()
+    }
+  };
 }
 
 
