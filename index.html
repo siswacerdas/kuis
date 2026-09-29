@@ -3,465 +3,128 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Kuis Digital — SD Muhammadiyah 01 Kukusan</title>
-<meta name="description" content="Kuis dan evaluasi singkat untuk siswa kelas 5 SD Muhammadiyah 01 Kukusan.">
+<title>Masuk — Kuis Digital SDM01KKS</title>
 <meta name="theme-color" content="#0F6B5C">
 <style>
   :root{
-    --bg: #F7F6F1;
-    --paper: #FFFFFF;
-    --ink: #23241F;
-    --ink-soft: #5B5D55;
-    --line: #E3E0D6;
-    --brand: #0F6B5C;
-    --brand-dark: #0B4F45;
-    --amber: #E0952E;
-    --radius: 14px;
-    --step: 0px; /* font-size adjustment, applied in px via JS */
-    --maxw: 1040px;
+    --bg:#F7F6F1; --paper:#fff; --ink:#23241F; --soft:#5B5D55;
+    --line:#E3E0D6; --brand:#0F6B5C; --brand-dark:#0B4F45; --radius:14px;
   }
-
-  *{ box-sizing: border-box; }
-  html{ -webkit-text-size-adjust: 100%; }
-
+  *{ box-sizing:border-box; }
   body{
-    margin: 0;
-    background: var(--bg);
-    color: var(--ink);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-    font-size: calc(16px + var(--step));
-    line-height: 1.5;
-    -webkit-font-smoothing: antialiased;
+    margin:0; min-height:100vh; background:var(--bg); color:var(--ink);
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    font-size:16px; line-height:1.5; display:flex; flex-direction:column;
   }
-
-  a{ color: inherit; }
-
-  .wrap{
-    max-width: var(--maxw);
-    margin: 0 auto;
-    padding: 0 20px;
+  header{
+    background:var(--brand); color:#F4FBF9; padding:28px 20px 32px; text-align:center;
   }
-
-  /* ---------- Header ---------- */
-  header.site{
-    background: var(--brand);
-    color: #F4FBF9;
-    padding: 24px 0 28px;
+  header .school{ font-size:.75em; letter-spacing:.04em; text-transform:uppercase; opacity:.85; }
+  header h1{ margin:8px 0 0; font-size:1.45em; font-weight:800; }
+  main{ flex:1; max-width:420px; width:100%; margin:0 auto; padding:28px 20px; }
+  .lead{ text-align:center; color:var(--soft); font-size:.95em; margin:0 0 22px; }
+  .role{
+    display:block; width:100%; text-align:left; background:var(--paper);
+    border:1.5px solid var(--line); border-radius:var(--radius); padding:18px 16px;
+    margin-bottom:12px; cursor:pointer; font:inherit; color:inherit;
   }
-
-  .brand-row{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
+  .role:hover{ border-color:#CFE3DA; }
+  .role .t{ font-weight:700; font-size:1.05em; display:block; }
+  .role .d{ font-size:.85em; color:var(--soft); margin-top:4px; display:block; }
+  .guru-panel{
+    display:none; background:var(--paper); border:1px solid var(--line);
+    border-radius:var(--radius); padding:18px; margin-top:8px;
   }
-
-  .brand{
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    min-width: 0;
+  .guru-panel.show{ display:block; }
+  label{ display:block; font-size:.85em; font-weight:600; color:var(--soft); margin-bottom:6px; }
+  input{
+    width:100%; padding:12px 14px; border:1.5px solid var(--line); border-radius:10px;
+    font:inherit; margin-bottom:12px;
   }
-
-  .brand-mark{
-    width: 38px;
-    height: 38px;
-    flex: none;
-    border-radius: 10px;
-    background: var(--brand-dark);
-    display: grid;
-    place-items: center;
+  .btn{
+    width:100%; border:0; border-radius:12px; padding:13px; font:inherit; font-weight:700;
+    background:var(--brand); color:#fff; cursor:pointer;
   }
-  .brand-mark svg{ width: 22px; height: 22px; }
-
-  .brand-text .school{
-    font-size: 0.72em;
-    letter-spacing: .04em;
-    text-transform: uppercase;
-    opacity: .8;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .brand-text .app{
-    font-weight: 700;
-    font-size: 1.08em;
-    letter-spacing: -0.01em;
-  }
-
-  .font-ctrl{
-    display: flex;
-    align-items: center;
-    gap: 2px;
-    background: rgba(255,255,255,.12);
-    border-radius: 999px;
-    padding: 3px;
-    flex: none;
-  }
-  .font-ctrl button{
-    appearance: none;
-    border: 0;
-    background: transparent;
-    color: #F4FBF9;
-    min-width: 32px;
-    height: 32px;
-    padding: 0 8px;
-    border-radius: 999px;
-    font-weight: 700;
-    font-size: 13px;
-    line-height: 1;
-    white-space: nowrap;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-  }
-  .font-ctrl button:hover{ background: rgba(255,255,255,.18); }
-  .font-ctrl button:active{ background: rgba(255,255,255,.28); }
-  .font-ctrl button:focus-visible{ outline: 2px solid #fff; outline-offset: 2px; }
-  .font-ctrl .lg{ font-size: 15px; }
-
-  .hero{
-    margin-top: 22px;
-    max-width: 46ch;
-  }
-  .hero h1{
-    margin: 0 0 8px;
-    font-size: clamp(1.4rem, 3.4vw, 2rem);
-    line-height: 1.25;
-    font-weight: 800;
-    letter-spacing: -0.01em;
-  }
-  .hero p{
-    margin: 0;
-    color: #E3F2ED;
-    font-size: 0.95em;
-  }
-
-  /* ---------- Konten ---------- */
-  main{ padding: 28px 0 30px; }
-
-  .section-title{
-    font-size: 0.85em;
-    text-transform: uppercase;
-    letter-spacing: .06em;
-    color: var(--ink-soft);
-    font-weight: 700;
-    margin: 0 0 12px;
-  }
-
-  /* ---------- Kartu mata pelajaran ---------- */
-  .subject-grid{
-    list-style: none;
-    margin: 0 0 30px;
-    padding: 0;
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
-
-  .subject-card{
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    background: var(--paper);
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    padding: 16px;
-    text-decoration: none;
-    color: inherit;
-    box-shadow: 0 1px 2px rgba(20,30,25,.04);
-  }
-  a.subject-card:hover{ border-color: #CFE3DA; box-shadow: 0 4px 14px -8px rgba(15,60,45,.25); }
-  .subject-card:focus-visible{ outline: 2px solid var(--brand); outline-offset: 2px; }
-
-  .icon{
-    width: 46px;
-    height: 46px;
-    border-radius: 12px;
-    display: grid;
-    place-items: center;
-    flex: none;
-  }
-  .icon svg{ width: 24px; height: 24px; }
-
-  .subject-body{ min-width: 0; flex: 1; }
-  .subj-name{
-    font-weight: 700;
-    font-size: 1em;
-    letter-spacing: -0.005em;
-    display: block;
-  }
-  .subj-meta{
-    margin-top: 2px;
-    font-size: 0.82em;
-    color: var(--ink-soft);
-    display: block;
-  }
-
-  .status{
-    flex: none;
-    font-size: 0.74em;
-    font-weight: 700;
-    padding: 5px 10px;
-    border-radius: 999px;
-    white-space: nowrap;
-  }
-  .status.ready{ background: #E4F3EC; color: var(--brand-dark); }
-  .status.soon{ background: #F1EFE8; color: var(--ink-soft); }
-
-  /* subject accent tints (used only as small icon backgrounds, not whole cards) */
-  .t-pancasila{ background:#FBEAE6; color:#B85C3E; }
-  .t-bindo{ background:#EAF1FB; color:#3E6BB8; }
-  .t-mtk{ background:#F6EAFB; color:#8A46B0; }
-  .t-ipas{ background:#E7F6EE; color:#1F8A55; }
-  .t-seni{ background:#FBF2E1; color:#B8823E; }
-
-  /* ---------- Info section ---------- */
-  .info-panel{
-    background: var(--paper);
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    padding: 20px;
-  }
-  .steps{
-    list-style: none;
-    margin: 0; padding: 0;
-    display: grid;
-    gap: 12px;
-  }
-  .steps li{
-    display: flex;
-    gap: 12px;
-    align-items: flex-start;
-    font-size: 0.92em;
-    color: var(--ink-soft);
-  }
-  .steps .num{
-    flex: none;
-    width: 24px; height: 24px;
-    border-radius: 999px;
-    background: var(--brand);
-    color: #fff;
-    font-size: 0.72em;
-    font-weight: 700;
-    display: grid;
-    place-items: center;
-    margin-top: 1px;
-  }
-  .steps b{ color: var(--ink); }
-
-  footer{
-    margin: 34px 0 10px;
-    text-align: center;
-    color: var(--ink-soft);
-    font-size: 0.82em;
-  }
-  footer .muh{ color: var(--brand-dark); font-weight: 700; }
-
-  .menu-section{ margin-top: 30px; }
-  .t-riwayat{ background:#EAEBF7; color:#4A4FB0; }
-
-  @media (min-width: 640px){
-    header.site{ padding: 32px 0 36px; }
-    .subject-grid{ grid-template-columns: 1fr 1fr; gap: 14px; }
-    .subject-card{ padding: 18px; }
-  }
-
-  @media (min-width: 960px){
-    .layout{
-      display: grid;
-      grid-template-columns: 1fr 300px;
-      gap: 22px;
-      align-items: start;
-    }
-    .subject-grid{ margin-bottom: 0; }
-    .info-panel{ position: sticky; top: 20px; }
-  }
-
-  @media (prefers-reduced-motion: no-preference){
-    a.subject-card{ transition: border-color .15s ease, box-shadow .15s ease; }
-    .font-ctrl button{ transition: background-color .15s ease; }
-  }
+  .btn:disabled{ opacity:.55; }
+  .msg{ display:none; margin-top:10px; padding:10px 12px; border-radius:10px; font-size:.9em; }
+  .msg.show{ display:block; }
+  .msg.err{ background:#FBEAE6; color:#C24B3F; }
+  .msg.ok{ background:#E4F3EC; color:var(--brand-dark); }
+  footer{ text-align:center; color:var(--soft); font-size:.8em; padding:16px; }
 </style>
 </head>
 <body>
-
-<header class="site">
-  <div class="wrap">
-    <div class="brand-row">
-      <div class="brand">
-        <span class="brand-mark" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none"><path d="M4 6.5 12 3l8 3.5-8 3.5-8-3.5Z" stroke="#F4FBF9" stroke-width="1.6" stroke-linejoin="round"/><path d="M7 10.2v4.3c0 1.4 2.2 2.5 5 2.5s5-1.1 5-2.5v-4.3" stroke="#F4FBF9" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M20 8.2v5.6" stroke="#F4FBF9" stroke-width="1.6" stroke-linecap="round"/></svg>
-        </span>
-        <span class="brand-text">
-          <span class="school">SD Muhammadiyah 01 Kukusan</span>
-          <span class="app">Kuis Digital</span>
-        </span>
-      </div>
-      <div class="font-ctrl" role="group" aria-label="Ukuran tulisan">
-        <button type="button" id="fontDown" aria-label="Perkecil tulisan">A−</button>
-        <button type="button" id="fontUp" class="lg" aria-label="Perbesar tulisan">A+</button>
-      </div>
-    </div>
-    <div class="hero">
-      <h1>Yuk, latihan kuis harian!</h1>
-      <p>Pilih mata pelajaran di bawah untuk mulai kuis. Kerjakan pelan-pelan dan jawab dengan jujur ya.</p>
-    </div>
-  </div>
+<header>
+  <div class="school">SD Muhammadiyah 01 Kukusan</div>
+  <h1>Kuis Digital</h1>
 </header>
-
 <main>
-  <div class="wrap">
-    <div class="layout">
-      <div>
-        <h2 class="section-title">Mata pelajaran</h2>
-        <ul class="subject-grid">
+  <p class="lead">Pilih bagaimana kamu masuk.</p>
 
-          <li>
-            <a class="subject-card" href="pendidikan-pancasila/">
-              <span class="icon t-pancasila" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none"><path d="M12 3 4 6.5 5.2 15c.5 3.4 3.4 5.6 6.8 6.5 3.4-.9 6.3-3.1 6.8-6.5L20 6.5 12 3Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M9.5 12.2l1.8 1.8 3.2-3.6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              </span>
-              <span class="subject-body">
-                <span class="subj-name">Pendidikan Pancasila</span>
-                <span class="subj-meta">Kuis pilihan ganda</span>
-              </span>
-              <span class="status soon">Segera hadir</span>
-            </a>
-          </li>
+  <button type="button" class="role" id="btnSiswa">
+    <span class="t">Saya siswa</span>
+    <span class="d">Kerjakan kuis dan latihan asesmen</span>
+  </button>
 
-          <li>
-            <a class="subject-card" href="bahasa-indonesia/">
-              <span class="icon t-bindo" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none"><path d="M4 5.5h13a2 2 0 0 1 2 2v10.7L15.5 16H4V5.5Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M7.5 9h7M7.5 12.2h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-              </span>
-              <span class="subject-body">
-                <span class="subj-name">Bahasa Indonesia</span>
-                <span class="subj-meta">Kuis pilihan ganda</span>
-              </span>
-              <span class="status ready">2 kuis tersedia</span>
-            </a>
-          </li>
+  <button type="button" class="role" id="btnGuruShow">
+    <span class="t">Saya guru</span>
+    <span class="d">Kelola latihan, bank soal, dan pengaturan</span>
+  </button>
 
-          <li>
-            <a class="subject-card" href="matematika/">
-              <span class="icon t-mtk" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none"><path d="M6 4h12M9 4v5.5L5 19h14l-4-9.5V4" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M8 15.5h8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-              </span>
-              <span class="subject-body">
-                <span class="subj-name">Matematika</span>
-                <span class="subj-meta">Kuis pilihan ganda</span>
-              </span>
-              <span class="status soon">Segera hadir</span>
-            </a>
-          </li>
-
-          <li>
-            <a class="subject-card" href="ipas/">
-              <span class="icon t-ipas" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="8.2" stroke="currentColor" stroke-width="1.6"/><path d="M12 3.8c2.6 2.4 4 5.3 4 8.2s-1.4 5.8-4 8.2c-2.6-2.4-4-5.3-4-8.2s1.4-5.8 4-8.2Z" stroke="currentColor" stroke-width="1.6"/><path d="M4.3 12h15.4" stroke="currentColor" stroke-width="1.6"/></svg>
-              </span>
-              <span class="subject-body">
-                <span class="subj-name">IPAS</span>
-                <span class="subj-meta">Ilmu Pengetahuan Alam &amp; Sosial</span>
-              </span>
-              <span class="status ready">2 kuis tersedia</span>
-            </a>
-          </li>
-
-          <li>
-            <a class="subject-card" href="seni-budaya/">
-              <span class="icon t-seni" aria-hidden="true">
-                <svg viewBox="0 0 24 24" fill="none"><path d="M12 3.5c-4.7 0-8.5 3.5-8.5 7.8 0 2.6 2 4 4 4h1.1c.9 0 1.5.9 1.1 1.7l-.3.6c-.5 1 .3 2.1 1.4 1.9 4.4-.7 9.7-4.3 9.7-9.2 0-3.7-4-6.8-8.5-6.8Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="8.7" cy="10.2" r=".9" fill="currentColor"/><circle cx="12" cy="8" r=".9" fill="currentColor"/><circle cx="15.3" cy="10.2" r=".9" fill="currentColor"/></svg>
-              </span>
-              <span class="subject-body">
-                <span class="subj-name">Seni Budaya</span>
-                <span class="subj-meta">Seni Rupa &amp; Seni Musik</span>
-              </span>
-              <span class="status soon">Segera hadir</span>
-            </a>
-          </li>
-
-        </ul>
-      </div>
-
-      <div class="info-panel">
-        <h2 class="section-title">Cara mengerjakan</h2>
-        <ul class="steps">
-          <li><span class="num">1</span><span><b>Pilih mata pelajaran</b> yang akan diujikan hari ini.</span></li>
-          <li><span class="num">2</span><span><b>Jawab setiap soal</b> sesuai waktu yang diberikan guru.</span></li>
-          <li><span class="num">3</span><span><b>Lihat hasil</b> setelah selesai mengerjakan seluruh soal.</span></li>
-        </ul>
-      </div>
-    </div>
-
-    <section class="menu-section">
-      <h2 class="section-title">Latihan asesmen</h2>
-      <ul class="subject-grid">
-        <li>
-          <a class="subject-card" href="latihan/">
-            <span class="icon t-ipas" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none"><path d="M5 19V6.5A1.5 1.5 0 0 1 6.5 5H14l5 5v9a1.5 1.5 0 0 1-1.5 1.5h-11A1.5 1.5 0 0 1 5 19Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M14 5v4.5H19M8 13h8M8 16.5h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </span>
-            <span class="subject-body">
-              <span class="subj-name">Latihan ATS / AAS</span>
-              <span class="subj-meta">Persiapan asesmen — boleh diulang</span>
-            </span>
-            <span class="status ready">Mulai latihan</span>
-          </a>
-        </li>
-      </ul>
-    </section>
-
-    <section class="menu-section">
-      <h2 class="section-title">Nilai &amp; Riwayat</h2>
-      <ul class="subject-grid">
-        <li>
-          <a class="subject-card" href="riwayat-kuis/">
-            <span class="icon t-riwayat" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none"><path d="M5 4.5h14v15l-3.2-2.1-3.3 2.1-3.3-2.1L10 19.5l-3.3-2.1L5 19.5v-15Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M8.3 9h7.4M8.3 12.5h7.4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
-            </span>
-            <span class="subject-body">
-              <span class="subj-name">Riwayat Kuis</span>
-              <span class="subj-meta">Nilai akhir siswa per mata pelajaran &amp; materi</span>
-            </span>
-            <span class="status ready">Lihat riwayat</span>
-          </a>
-        </li>
-      </ul>
-    </section>
-
-    <footer>
-      Dibuat untuk siswa kelas 5 &middot; <span class="muh">SD Muhammadiyah 01 Kukusan</span>
-    </footer>
+  <div class="guru-panel" id="guruPanel">
+    <label for="sandiGuru">Sandi guru</label>
+    <input id="sandiGuru" type="password" autocomplete="current-password" placeholder="Sandi dari admin">
+    <button type="button" class="btn" id="btnGuruLogin">Masuk sebagai guru</button>
+    <div id="msgGuru" class="msg"></div>
   </div>
 </main>
-
+<footer>Kelas 5 · SD Muhammadiyah 01 Kukusan</footer>
 <script>
 (function(){
-  var root = document.documentElement;
-  var KEY = "kuis-font-step";
-  var MIN = -2, MAX = 4, STEP = 1; // px increments applied to base 16px
+  var WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbwotrwYBt0_-_9g4o2gNs6ktaTn1sw41f3jJlgoK5pN2N5RofwRjOeiSqzQq1JZsjhclw/exec';
+  var KEY = 'kuis-guru-ok';
 
-  function apply(step){
-    step = Math.max(MIN, Math.min(MAX, step));
-    root.style.setProperty("--step", step + "px");
-    localStorage.setItem(KEY, String(step));
-    return step;
-  }
+  document.getElementById('btnSiswa').onclick = function(){
+    location.href = 'beranda.html';
+  };
+  document.getElementById('btnGuruShow').onclick = function(){
+    document.getElementById('guruPanel').classList.add('show');
+    document.getElementById('sandiGuru').focus();
+  };
 
-  var saved = parseInt(localStorage.getItem(KEY), 10);
-  var current = apply(isNaN(saved) ? 0 : saved);
-
-  document.getElementById("fontUp").addEventListener("click", function(){
-    current = apply(current + STEP);
-  });
-  document.getElementById("fontDown").addEventListener("click", function(){
-    current = apply(current - STEP);
-  });
+  document.getElementById('btnGuruLogin').onclick = function(){
+    var btn = this;
+    var sandi = (document.getElementById('sandiGuru').value || '').trim();
+    var msg = document.getElementById('msgGuru');
+    if (!sandi) {
+      msg.className = 'msg show err';
+      msg.textContent = 'Isi sandi guru.';
+      return;
+    }
+    btn.disabled = true;
+    msg.className = 'msg show ok';
+    msg.textContent = 'Memeriksa…';
+    fetch(WEBAPP_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+      body: JSON.stringify({ action: 'loginGuru', sandi: sandi })
+    }).then(function(r){ return r.json(); }).then(function(res){
+      btn.disabled = false;
+      if (res && res.ok) {
+        sessionStorage.setItem(KEY, '1');
+        sessionStorage.setItem('kuis-guru-token', sandi);
+        location.href = 'guru/';
+      } else {
+        msg.className = 'msg show err';
+        msg.textContent = (res && res.pesan) || 'Sandi salah.';
+      }
+    }).catch(function(){
+      btn.disabled = false;
+      msg.className = 'msg show err';
+      msg.textContent = 'Tidak terhubung ke server. Pastikan Code.gs sudah di-deploy.';
+    });
+  };
 })();
 </script>
-
 </body>
 </html>
