@@ -21,6 +21,7 @@
   header.site a{ color:#E3F2ED; text-decoration:none; font-weight:600; font-size:.88em; }
   header.site h1{ margin:0; font-size:1.1em; }
   main{ max-width:794px; margin:0 auto; padding:18px 14px 40px; }
+
   .card{
     background:var(--paper); border:1px solid var(--line); border-radius:var(--radius);
     padding:14px 16px; margin-bottom:12px;
@@ -44,9 +45,16 @@
   .msg{ display:none; margin-top:8px; padding:10px; border-radius:10px; font-size:.9em; }
   .msg.show.err{ display:block; background:#FBEAE6; color:#C24B3F; }
 
+  /* —— Preview laporan (mendekati hasil cetak A4) —— */
   .report{
-    display:none; background:#fff; border:1px solid var(--line); border-radius:4px;
-    padding:0; margin:16px auto 0; max-width:210mm; box-shadow:0 2px 12px rgba(0,0,0,.06);
+    display:none;
+    background:#fff;
+    border:1px solid var(--line);
+    border-radius:4px;
+    padding:0;
+    margin:16px auto 0;
+    max-width:210mm;
+    box-shadow:0 2px 12px rgba(0,0,0,.06);
   }
   .report.show{ display:block; }
   .report-inner{ padding:14mm 14mm 12mm; }
@@ -55,12 +63,14 @@
     display:flex; align-items:flex-start; justify-content:space-between; gap:12px;
     border-bottom:2.5px solid var(--brand); padding-bottom:10px; margin-bottom:12px;
   }
+  .r-head .left{ min-width:0; }
   .r-head .school{ font-size:10.5pt; font-weight:700; color:var(--brand-dark); letter-spacing:.02em; }
   .r-head .sub{ font-size:9pt; color:var(--soft); margin-top:2px; }
   .r-head .title{ font-size:13pt; font-weight:800; margin:6px 0 0; color:var(--ink); line-height:1.25; }
   .r-head .badge{
     flex:none; font-size:8pt; font-weight:700; text-transform:uppercase; letter-spacing:.04em;
-    border:1px solid var(--brand); color:var(--brand-dark); padding:4px 8px; border-radius:4px; white-space:nowrap;
+    border:1px solid var(--brand); color:var(--brand-dark); padding:4px 8px; border-radius:4px;
+    white-space:nowrap;
   }
 
   .r-meta{
@@ -70,17 +80,25 @@
   .r-meta .k{ font-size:8pt; color:var(--soft); margin-bottom:1px; }
   .r-meta .v{ font-weight:650; }
 
-  .r-summary{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:14px; }
-  .r-summary .box{ border:1px solid var(--line); border-radius:6px; padding:8px 6px; text-align:center; }
+  .r-summary{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:14px;
+  }
+  .r-summary .box{
+    border:1px solid var(--line); border-radius:6px; padding:8px 6px; text-align:center;
+  }
   .r-summary .n{ font-size:16pt; font-weight:800; color:var(--brand-dark); line-height:1.1; }
   .r-summary .l{ font-size:8pt; color:var(--soft); margin-top:2px; }
 
+  .r-table-wrap{ margin-bottom:12px; }
   table.r-table{ width:100%; border-collapse:collapse; font-size:9pt; }
   table.r-table th{
     background:#F0F4F2; color:var(--brand-dark); font-size:7.5pt; text-transform:uppercase;
-    letter-spacing:.03em; font-weight:700; padding:6px 5px; border:1px solid #C5D5CF; text-align:left;
+    letter-spacing:.03em; font-weight:700; padding:6px 5px; border:1px solid #C5D5CF;
+    text-align:left;
   }
-  table.r-table td{ padding:5px; border:1px solid #D8D4C8; vertical-align:top; }
+  table.r-table td{
+    padding:5px; border:1px solid #D8D4C8; vertical-align:top;
+  }
   table.r-table tbody tr:nth-child(even) td{ background:#FAFAF8; }
   table.r-table .num{ text-align:center; white-space:nowrap; }
   table.r-table .pct{ text-align:right; font-weight:700; white-space:nowrap; }
@@ -90,45 +108,236 @@
     font-size:8pt; color:var(--soft); line-height:1.4;
     background:#F7F6F1; border-radius:4px; padding:8px 10px; margin-bottom:14px;
   }
-  .r-sign{ display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-top:8px; font-size:9pt; }
+
+  .r-sign{
+    display:grid; grid-template-columns:1fr 1fr; gap:24px; margin-top:8px;
+    font-size:9pt;
+  }
   .r-sign .side{ text-align:center; }
   .r-sign .space{ height:48px; }
   .r-sign .name{ font-weight:700; margin-top:2px; }
   .r-sign .role{ font-size:8pt; color:var(--soft); }
+
   .r-foot{
     margin-top:14px; padding-top:8px; border-top:1px solid var(--line);
     font-size:7.5pt; color:var(--soft); display:flex; justify-content:space-between; gap:8px;
   }
 
-  @page{ size: A4 portrait; margin: 12mm 12mm 14mm; }
+  /* —— Print media: A4, rapi, hemat tinta, anti-potong —— */
+  @page{
+    size: A4 portrait;
+    margin: 10mm 12mm 12mm;
+  }
 
   @media print{
+    /* Reset dasar */
     html, body{
-      background:#fff !important; color:#000 !important; font-size:10pt;
-      -webkit-print-color-adjust: exact; print-color-adjust: exact;
+      width: 100% !important;
+      height: auto !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      background: #fff !important;
+      color: #111 !important;
+      font-size: 10pt !important;
+      line-height: 1.35 !important;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
     }
-    header.site, .no-print{ display:none !important; }
-    main{ max-width:none; padding:0; margin:0; }
+
+    /* Sembunyikan UI kontrol */
+    header.site,
+    .no-print,
+    .card.no-print,
+    script{
+      display: none !important;
+    }
+
+    /* Kontainer penuh halaman */
+    main{
+      display: block !important;
+      max-width: none !important;
+      width: 100% !important;
+      margin: 0 !important;
+      padding: 0 !important;
+    }
+
     .report{
-      display:block !important; border:0 !important; border-radius:0 !important;
-      box-shadow:none !important; max-width:none !important; margin:0 !important;
+      display: block !important;
+      position: static !important;
+      width: 100% !important;
+      max-width: none !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      border: 0 !important;
+      border-radius: 0 !important;
+      box-shadow: none !important;
+      background: #fff !important;
+      overflow: visible !important;
     }
-    .report-inner{ padding:0 !important; }
-    .r-head{ border-bottom-color:#0F6B5C !important; }
-    .r-summary .box{ break-inside:avoid; }
-    table.r-table thead{ display:table-header-group; }
-    table.r-table tr{ page-break-inside:avoid; }
+
+    .report-inner{
+      padding: 0 !important;
+      margin: 0 !important;
+    }
+
+    /* Header laporan */
+    .r-head{
+      display: flex !important;
+      align-items: flex-start !important;
+      justify-content: space-between !important;
+      gap: 8pt !important;
+      border-bottom: 2pt solid #0F6B5C !important;
+      padding: 0 0 6pt !important;
+      margin: 0 0 8pt !important;
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+    .r-head .school{ font-size: 11pt !important; font-weight: 700 !important; color: #0B4F45 !important; }
+    .r-head .sub{ font-size: 8.5pt !important; color: #444 !important; margin-top: 1pt !important; }
+    .r-head .title{ font-size: 13pt !important; font-weight: 800 !important; margin: 4pt 0 0 !important; color: #111 !important; }
+    .r-head .badge{
+      border: 0.75pt solid #0F6B5C !important;
+      color: #0B4F45 !important;
+      background: transparent !important;
+      font-size: 7.5pt !important;
+      padding: 3pt 6pt !important;
+    }
+
+    /* Meta */
+    .r-meta{
+      display: grid !important;
+      grid-template-columns: 1.3fr 1fr 1fr !important;
+      gap: 4pt 10pt !important;
+      font-size: 9pt !important;
+      margin: 0 0 8pt !important;
+      padding: 0 0 6pt !important;
+      border-bottom: 0.6pt solid #ccc !important;
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+    .r-meta .k{ font-size: 7.5pt !important; color: #555 !important; }
+    .r-meta .v{ font-weight: 650 !important; color: #111 !important; }
+
+    /* Ringkasan skor */
+    .r-summary{
+      display: grid !important;
+      grid-template-columns: repeat(3, 1fr) !important;
+      gap: 6pt !important;
+      margin: 0 0 10pt !important;
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+    .r-summary .box{
+      border: 0.75pt solid #bbb !important;
+      border-radius: 3pt !important;
+      padding: 5pt 4pt !important;
+      background: #fff !important;
+    }
+    .r-summary .n{ font-size: 14pt !important; font-weight: 800 !important; color: #0B4F45 !important; }
+    .r-summary .l{ font-size: 7.5pt !important; color: #555 !important; }
+
+    /* Tabel: header berulang, baris utuh */
+    .r-table-wrap{
+      margin: 0 0 8pt !important;
+      overflow: visible !important;
+    }
+    table.r-table{
+      width: 100% !important;
+      border-collapse: collapse !important;
+      font-size: 8.5pt !important;
+      page-break-inside: auto;
+    }
+    table.r-table thead{
+      display: table-header-group !important; /* ulang header di halaman berikutnya */
+    }
+    table.r-table tfoot{
+      display: table-footer-group !important;
+    }
+    table.r-table tr{
+      page-break-inside: avoid !important;
+      break-inside: avoid !important;
+    }
     table.r-table th{
-      background:#E8F0ED !important;
-      -webkit-print-color-adjust: exact; print-color-adjust: exact;
+      background: #E4EEEA !important;
+      color: #0B4F45 !important;
+      font-size: 7pt !important;
+      font-weight: 700 !important;
+      text-transform: uppercase !important;
+      letter-spacing: 0.02em !important;
+      padding: 4pt 3.5pt !important;
+      border: 0.6pt solid #9BB5AB !important;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+    table.r-table td{
+      padding: 3.5pt !important;
+      border: 0.5pt solid #ccc !important;
+      color: #111 !important;
+      background: #fff !important;
+      vertical-align: top !important;
     }
     table.r-table tbody tr:nth-child(even) td{
-      background:#F7F7F5 !important;
-      -webkit-print-color-adjust: exact; print-color-adjust: exact;
+      background: #F5F7F6 !important;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
     }
-    .r-note, .r-sign, .r-foot{ break-inside:avoid; }
-    .r-sign .space{ height:56px; }
-    a{ color:#000; text-decoration:none; }
+    table.r-table .num{ text-align: center !important; }
+    table.r-table .pct{ text-align: right !important; font-weight: 700 !important; }
+
+    /* Catatan formatif */
+    .r-note{
+      font-size: 7.5pt !important;
+      line-height: 1.35 !important;
+      color: #333 !important;
+      background: #F3F3F0 !important;
+      border: 0.5pt solid #ddd !important;
+      border-radius: 2pt !important;
+      padding: 5pt 7pt !important;
+      margin: 0 0 10pt !important;
+      break-inside: avoid;
+      page-break-inside: avoid;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+
+    /* Tanda tangan: selalu di halaman terakhir bila muat */
+    .r-sign{
+      display: grid !important;
+      grid-template-columns: 1fr 1fr !important;
+      gap: 18pt !important;
+      margin: 6pt 0 0 !important;
+      font-size: 9pt !important;
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+    .r-sign .side{ text-align: center !important; }
+    .r-sign .space{ height: 52pt !important; }
+    .r-sign .name{ font-weight: 700 !important; margin-top: 2pt !important; }
+    .r-sign .role{ font-size: 7.5pt !important; color: #444 !important; }
+
+    .r-foot{
+      margin-top: 10pt !important;
+      padding-top: 5pt !important;
+      border-top: 0.5pt solid #ccc !important;
+      font-size: 7pt !important;
+      color: #555 !important;
+      display: flex !important;
+      justify-content: space-between !important;
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+
+    /* Link & orphan control */
+    a{ color: #111 !important; text-decoration: none !important; }
+    h1, h2, h3{ page-break-after: avoid !important; }
+    img, svg{ max-width: 100% !important; page-break-inside: avoid !important; }
+
+    /* Hilangkan highlight selection / outline */
+    *{
+      box-shadow: none !important;
+      text-shadow: none !important;
+      outline: none !important;
+    }
   }
 </style>
 </head>
@@ -260,7 +469,7 @@ if (sessionStorage.getItem('kuis-guru-ok') !== '1') location.replace('../index.h
   }
   function esc(s){
     return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){
-      return ({'&':'&','<':'<','>':'>','"':'"',"'":'&#39;'})[c];
+      return { '&': '&'+'amp;', '<': '&'+'lt;', '>': '&'+'gt;', '"': '&'+'quot;', "'": '&#39;' }[c];
     });
   }
   function fillSelect(id, arr, first){
@@ -364,6 +573,7 @@ if (sessionStorage.getItem('kuis-guru-ok') !== '1') location.replace('../index.h
           document.getElementById('btnCetak').disabled = false;
         }
         document.getElementById('report').classList.add('show');
+        // scroll ke preview
         document.getElementById('report').scrollIntoView({ behavior:'smooth', block:'start' });
       })
       .catch(function(){
@@ -372,7 +582,9 @@ if (sessionStorage.getItem('kuis-guru-ok') !== '1') location.replace('../index.h
   }
 
   document.getElementById('btnBuat').onclick = buatLaporan;
-  document.getElementById('btnCetak').onclick = function(){ window.print(); };
+  document.getElementById('btnCetak').onclick = function(){
+    window.print();
+  };
   loadFilters();
 })();
 </script>
