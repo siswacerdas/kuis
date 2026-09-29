@@ -1,1 +1,25 @@
-PLACEHOLDER
+{
+  "schema_version": "1.0-latihan",
+  "pool": {
+    "id": "ipas-ganjil-2026",
+    "mapel": "IPAS",
+    "judul": "IPAS Kelas 5 — Semester Ganjil 2026/2027",
+    "kelas": "5",
+    "semester": "ganjil",
+    "tahun_ajaran": "2026/2027",
+    "deskripsi": "Pool soal latihan ATS/AAS: Gelombang Bunyi, Gelombang Cahaya, Ekosistem, serta Bencana Alam & Perubahan Lingkungan. Hanya PG dan PGK.",
+    "total_soal": 126
+  },
+  "materi": [
+    {"id": "Gelombang Bunyi", "kode": "BUNYI", "label": "Gelombang Bunyi", "file": "ipas/bunyi-1.json", "file2": "ipas/bunyi-2.json", "jumlah": 55},
+    {"id": "Gelombang Cahaya", "kode": "CAHAYA", "label": "Gelombang Cahaya", "file": "ipas/cahaya.json", "jumlah": 29},
+    {"id": "Ekosistem", "kode": "EKOSISTEM", "label": "Ekosistem", "file": "ipas/ekosistem.json", "jumlah": 29},
+    {"id": "Bencana Alam & Perubahan Lingkungan", "kode": "LINGKUNGAN", "label": "Bencana Alam & Perubahan Lingkungan", "file": "ipas/lingkungan.json", "jumlah": 13}
+  ],
+  "kompleksitas": [
+    {"id": "L1", "label": "L1 — Dasar (mengingat & memahami)"},
+    {"id": "L2", "label": "L2 — Menengah (menerapkan & menganalisis)"},
+    {"id": "L3", "label": "L3 — Lanjut (mengevaluasi & mencipta / multi-jawaban)"}
+  ],
+  "cara_muat": "Gabungkan array soal dari semua file di folder bank-soal/ipas/. File indeksi ini tidak berisi soal."
+}
