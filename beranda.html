@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Beranda siswa — Kuis Digital SDM01KKS</title>
+<meta name="theme-color" content="#0F6B5C">
+<style>
+  :root{ --bg:#F7F6F1; --paper:#FFFFFF; --ink:#23241F; --ink-soft:#5B5D55; --line:#E3E0D6; --brand:#0F6B5C; --brand-dark:#0B4F45; --radius:14px; --step:0px; --maxw:1040px; }
+  *{ box-sizing:border-box; }
+  body{ margin:0; background:var(--bg); color:var(--ink); font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif; font-size:calc(16px + var(--step)); line-height:1.5; }
+  a{ color:inherit; text-decoration:none; }
+  .wrap{ max-width:var(--maxw); margin:0 auto; padding:0 20px; }
+  header.site{ background:var(--brand); color:#F4FBF9; padding:24px 0 28px; }
+  .brand-row{ display:flex; align-items:center; justify-content:space-between; gap:12px; }
+  .brand{ display:flex; align-items:center; gap:10px; }
+  .brand-mark{ width:38px; height:38px; border-radius:10px; background:var(--brand-dark); display:grid; place-items:center; }
+  .brand-text .school{ font-size:0.72em; letter-spacing:.04em; text-transform:uppercase; opacity:.8; }
+  .brand-text .app{ font-weight:700; font-size:1.08em; }
+  .hero{ margin-top:22px; max-width:46ch; }
+  .hero h1{ margin:0 0 8px; font-size:clamp(1.4rem,3.4vw,2rem); font-weight:800; }
+  .hero p{ margin:0; color:#E3F2ED; font-size:0.95em; }
+  main{ padding:28px 0 30px; }
+  .section-title{ font-size:0.85em; text-transform:uppercase; letter-spacing:.06em; color:var(--ink-soft); font-weight:700; margin:0 0 12px; }
+  .subject-grid{ list-style:none; margin:0 0 30px; padding:0; display:grid; grid-template-columns:1fr; gap:12px; }
+  .subject-card{ display:flex; align-items:center; gap:14px; background:var(--paper); border:1px solid var(--line); border-radius:var(--radius); padding:16px; }
+  a.subject-card:hover{ border-color:#CFE3DA; }
+  .icon{ width:46px; height:46px; border-radius:12px; display:grid; place-items:center; flex:none; }
+  .subj-name{ font-weight:700; display:block; }
+  .subj-meta{ margin-top:2px; font-size:0.82em; color:var(--ink-soft); display:block; }
+  .status{ flex:none; font-size:0.74em; font-weight:700; padding:5px 10px; border-radius:999px; }
+  .status.ready{ background:#E4F3EC; color:var(--brand-dark); }
+  .status.soon{ background:#F1EFE8; color:var(--ink-soft); }
+  .t-pancasila{ background:#FBEAE6; color:#B85C3E; }
+  .t-bindo{ background:#EAF1FB; color:#3E6BB8; }
+  .t-mtk{ background:#F6EAFB; color:#8A46B0; }
+  .t-ipas{ background:#E7F6EE; color:#1F8A55; }
+  .t-seni{ background:#FBF2E1; color:#B8823E; }
+  .t-riwayat{ background:#EAEBF7; color:#4A4FB0; }
+  .info-panel{ background:var(--paper); border:1px solid var(--line); border-radius:var(--radius); padding:20px; }
+  .steps{ list-style:none; margin:0; padding:0; display:grid; gap:12px; }
+  .steps li{ display:flex; gap:12px; font-size:0.92em; color:var(--ink-soft); }
+  .steps .num{ flex:none; width:24px; height:24px; border-radius:999px; background:var(--brand); color:#fff; font-size:0.72em; font-weight:700; display:grid; place-items:center; }
+  .steps b{ color:var(--ink); }
+  footer{ margin:34px 0 10px; text-align:center; color:var(--ink-soft); font-size:0.82em; }
+  footer .muh{ color:var(--brand-dark); font-weight:700; }
+  .menu-section{ margin-top:30px; }
+  @media (min-width:640px){ .subject-grid{ grid-template-columns:1fr 1fr; } }
+  @media (min-width:960px){ .layout{ display:grid; grid-template-columns:1fr 300px; gap:22px; } }
+</style>
+</head>
+<body>
+<header class="site">
+  <div class="wrap">
+    <div class="brand-row">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 6.5 12 3l8 3.5-8 3.5-8-3.5Z" stroke="#F4FBF9" stroke-width="1.6"/></svg></span>
+        <span class="brand-text"><span class="school">SD Muhammadiyah 01 Kukusan</span><span class="app">Kuis Digital</span></span>
+      </div>
+    </div>
+    <div class="hero">
+      <h1>Yuk, latihan kuis harian!</h1>
+      <p>Pilih mata pelajaran di bawah untuk mulai kuis. Kerjakan pelan-pelan dan jawab dengan jujur ya.</p>
+    </div>
+  </div>
+</header>
+<main>
+  <div class="wrap">
+    <div class="layout">
+      <div>
+        <h2 class="section-title">Mata pelajaran</h2>
+        <ul class="subject-grid">
+          <li><a class="subject-card" href="pendidikan-pancasila/"><span class="icon t-pancasila">P</span><span class="subject-body"><span class="subj-name">Pendidikan Pancasila</span><span class="subj-meta">Kuis pilihan ganda</span></span><span class="status soon">Segera hadir</span></a></li>
+          <li><a class="subject-card" href="bahasa-indonesia/"><span class="icon t-bindo">B</span><span class="subject-body"><span class="subj-name">Bahasa Indonesia</span><span class="subj-meta">Kuis pilihan ganda</span></span><span class="status ready">2 kuis tersedia</span></a></li>
+          <li><a class="subject-card" href="matematika/"><span class="icon t-mtk">M</span><span class="subject-body"><span class="subj-name">Matematika</span><span class="subj-meta">Kuis pilihan ganda</span></span><span class="status soon">Segera hadir</span></a></li>
+          <li><a class="subject-card" href="ipas/"><span class="icon t-ipas">I</span><span class="subject-body"><span class="subj-name">IPAS</span><span class="subj-meta">Ilmu Pengetahuan Alam & Sosial</span></span><span class="status ready">2 kuis tersedia</span></a></li>
+          <li><a class="subject-card" href="seni-budaya/"><span class="icon t-seni">S</span><span class="subject-body"><span class="subj-name">Seni Budaya</span><span class="subj-meta">Seni Rupa & Seni Musik</span></span><span class="status soon">Segera hadir</span></a></li>
+        </ul>
+      </div>
+      <div class="info-panel">
+        <h2 class="section-title">Cara mengerjakan</h2>
+        <ul class="steps">
+          <li><span class="num">1</span><span><b>Pilih mata pelajaran</b> yang akan diujikan hari ini.</span></li>
+          <li><span class="num">2</span><span><b>Jawab setiap soal</b> sesuai waktu yang diberikan guru.</span></li>
+          <li><span class="num">3</span><span><b>Lihat hasil</b> setelah selesai mengerjakan seluruh soal.</span></li>
+        </ul>
+      </div>
+    </div>
+    <section class="menu-section">
+      <h2 class="section-title">Latihan asesmen</h2>
+      <ul class="subject-grid">
+        <li><a class="subject-card" href="latihan/"><span class="icon t-ipas">L</span><span class="subject-body"><span class="subj-name">Latihan ATS / AAS</span><span class="subj-meta">Persiapan asesmen — boleh diulang</span></span><span class="status ready">Mulai latihan</span></a></li>
+      </ul>
+    </section>
+    <section class="menu-section">
+      <h2 class="section-title">Nilai & Riwayat</h2>
+      <ul class="subject-grid">
+        <li><a class="subject-card" href="riwayat-kuis/"><span class="icon t-riwayat">R</span><span class="subject-body"><span class="subj-name">Riwayat Kuis</span><span class="subj-meta">Nilai akhir siswa per mata pelajaran & materi</span></span><span class="status ready">Lihat riwayat</span></a></li>
+      </ul>
+    </section>
+    <footer>
+      <a href="index.html" style="color:inherit;opacity:.85">← Pintu masuk</a> &middot;
+      Dibuat untuk siswa kelas 5 &middot; <span class="muh">SD Muhammadiyah 01 Kukusan</span>
+    </footer>
+  </div>
+</main>
+</body>
+</html>
