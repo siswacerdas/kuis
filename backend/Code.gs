@@ -164,6 +164,22 @@ function doGet(e) {
       namaLatihan: e.parameter.namaLatihan || ''
     }));
   }
+  // Login via GET (lebih andal di browser: hindari masalah redirect POST GAS)
+  if (action === 'loginGuru') {
+    return jsonResponse_(loginGuru_({
+      nama: e.parameter.nama || '',
+      sandi: e.parameter.sandi || e.parameter.password || ''
+    }));
+  }
+  if (action === 'loginSiswa') {
+    return jsonResponse_(loginSiswa_({
+      nama: e.parameter.nama || '',
+      nisn: e.parameter.nisn || e.parameter.password || ''
+    }));
+  }
+  if (action === 'ping') {
+    return jsonResponse_({ ok: true, pesan: 'pong', waktu: new Date().toISOString() });
+  }
   return jsonResponse_({ ok: false, pesan: 'Aksi GET tidak dikenal.' });
 }
 
