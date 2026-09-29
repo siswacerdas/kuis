@@ -147,7 +147,7 @@
 <header class="site">
   <div class="wrap">
     <div class="top-row">
-      <a class="back-link" href="../">← Beranda</a>
+      <a class="back-link" href="../beranda.html">← Beranda siswa</a>
       <div class="font-ctrl" role="group" aria-label="Ukuran tulisan">
         <button type="button" id="fontDown" aria-label="Perkecil">A−</button>
         <button type="button" id="fontUp" aria-label="Perbesar">A+</button>
@@ -233,6 +233,11 @@
 (function(){
   /* ========== Konfigurasi ========== */
   var WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbwotrwYBt0_-_9g4o2gNs6ktaTn1sw41f3jJlgoK5pN2N5RofwRjOeiSqzQq1JZsjhclw/exec';
+
+  // Wajib login siswa lewat pintu masuk website
+  if (sessionStorage.getItem('kuis-siswa-ok') !== '1') {
+    location.replace('../index.html');
+  }
 
   /* ========== State ========== */
   var daftarLatihan = [];
@@ -359,21 +364,22 @@
 
   function muatNamaSiswa(){
     var sel = $('namaSiswa');
-    sel.innerHTML = '<option value="">Memuat nama…</option>';
-    getJSON(WEBAPP_URL + '?action=daftarSiswa')
-      .then(function(res){
-        sel.innerHTML = '<option value="">— Pilih nama —</option>';
-        if (res && res.ok && res.siswa){
-          res.siswa.forEach(function(n){
-            var o = document.createElement('option');
-            o.value = n; o.textContent = n;
-            sel.appendChild(o);
-          });
-        }
-      })
-      .catch(function(){
-        sel.innerHTML = '<option value="">Gagal memuat nama</option>';
-      });
+    var namaLogin = sessionStorage.getItem('kuis-siswa-nama') || '';
+    // Sudah login di pintu masuk website?
+    if (sessionStorage.getItem('kuis-siswa-ok') !== '1' || !namaLogin) {
+      location.replace('../index.html');
+      return;
+    }
+    sel.innerHTML = '';
+    var o = document.createElement('option');
+    o.value = namaLogin;
+    o.textContent = namaLogin;
+    o.selected = true;
+    sel.appendChild(o);
+    sel.disabled = true;
+    // Hint di atas select
+    var lab = document.querySelector('label[for="namaSiswa"]');
+    if (lab) lab.textContent = 'Nama (dari login)';
   }
 
   $('btnKembaliDaftar').onclick = function(){
