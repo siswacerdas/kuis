@@ -1,0 +1,2 @@
+ID_Latihan,Nama_Latihan,Mapel,Materi,Kompleksitas,ID_Soal_List,Jumlah_Soal,Durasi_Menit,Token,Boleh_Ulang,Kirim_Email_Ortu,Status,Dibuat,Catatan
+LAT-IPAS-BUNYI-01,Latihan ATS IPAS — Gelombang Bunyi (L1),IPAS,Gelombang Bunyi,L1,IPAS-BUNYI-003;IPAS-BUNYI-014;IPAS-BUNYI-001;IPAS-BUNYI-013;IPAS-BUNYI-009;IPAS-BUNYI-007;IPAS-BUNYI-004;IPAS-BUNYI-002;IPAS-BUNYI-008;IPAS-BUNYI-010,10,20,LATIHAN1,ya,ya,aktif,,Contoh sesi latihan
