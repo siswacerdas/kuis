@@ -1,0 +1,541 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Impor Massal Bank Soal · Kelas 5</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="../../assets/css/design-system.css" />
+<style>
+  :root { --accent: #2e6fbc; --ok: #2a9d6f; --warn: #c9861f; --err: #c44; }
+  body { font-family: "Plus Jakarta Sans", system-ui, sans-serif; background: var(--paper, #faf9f6); color: var(--ink, #1c1917); margin: 0; }
+  #checking { padding: 4rem 1.5rem; text-align: center; color: var(--ink-3); }
+  .hidden { display: none !important; }
+  #topbar {
+    position: sticky; top: 0; z-index: 50; height: 52px;
+    background: var(--ink, #1a1a2e); color: #fff;
+    display: flex; align-items: center; justify-content: space-between; padding: 0 1.25rem;
+  }
+  #topbar .brand { font-family: "Playfair Display", Georgia, serif; font-size: 1.05rem; }
+  #topbar a { color: rgba(255,255,255,.8); font-size: 12.5px; text-decoration: none; margin-left: 12px; }
+  #topbar a:hover { color: #fff; }
+  .page { max-width: 860px; margin: 0 auto; padding: 1.35rem 1.15rem 3.5rem; }
+  h1 { font-family: "Playfair Display", Georgia, serif; font-size: 1.5rem; margin: 0 0 0.25rem; }
+  .sub { font-size: 13.5px; color: var(--ink-3); margin: 0 0 1.25rem; line-height: 1.45; }
+  .steps { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 1.25rem; }
+  .step {
+    font-size: 12px; font-weight: 700; padding: 6px 12px; border-radius: 999px;
+    background: #eee; color: var(--ink-3);
+  }
+  .step.on { background: var(--accent); color: #fff; }
+  .step.done { background: #e6f6ef; color: var(--ok); }
+  .panel {
+    background: #fff; border: 1px solid var(--border, #e8e4dc);
+    border-radius: 14px; padding: 1.15rem 1.2rem 1.25rem;
+    margin-bottom: 1rem; box-shadow: 0 1px 2px rgba(0,0,0,.04);
+  }
+  .panel h2 { font-size: 15px; font-weight: 700; margin: 0 0 0.5rem; }
+  .hint { font-size: 13px; color: var(--ink-3); line-height: 1.45; margin: 0 0 0.75rem; }
+  .btn {
+    font-family: inherit; font-size: 13px; font-weight: 650;
+    padding: 9px 16px; border-radius: 999px; border: 1.5px solid var(--border, #e8e4dc);
+    background: #fff; color: var(--ink); cursor: pointer;
+  }
+  .btn-primary { background: var(--accent); border-color: var(--accent); color: #fff; }
+  .btn-ok { background: var(--ok); border-color: var(--ok); color: #fff; }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+  .row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; margin-bottom: 0.75rem; }
+  textarea {
+    width: 100%; min-height: 220px; box-sizing: border-box;
+    font-family: ui-monospace, Consolas, monospace; font-size: 12px;
+    padding: 12px; border: 1.5px solid var(--border, #e8e4dc); border-radius: 12px;
+    background: var(--paper, #faf9f6); resize: vertical;
+  }
+  textarea:focus { outline: none; border-color: var(--accent); background: #fff; }
+  .ok-box {
+    background: #e6f6ef; border: 1px solid #b8e0cc; color: #1a5c3a;
+    border-radius: 12px; padding: 12px 14px; font-size: 13px; line-height: 1.5;
+  }
+  .err-box {
+    background: #fde8e8; border: 1px solid #f0b4b4; color: #7a1f1f;
+    border-radius: 12px; padding: 12px 14px; font-size: 13px; line-height: 1.5;
+    max-height: 320px; overflow-y: auto;
+  }
+  .warn-box {
+    background: #fff8e8; border: 1px solid #f0d9a0; color: #7a5b10;
+    border-radius: 12px; padding: 10px 12px; font-size: 12.5px; line-height: 1.45; margin-top: 8px;
+  }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; margin-top: 8px; }
+  th, td { text-align: left; padding: 6px 4px; border-bottom: 1px solid rgba(0,0,0,.06); }
+  th { font-size: 11px; text-transform: uppercase; color: var(--ink-3); }
+  .tp-chips { display: flex; flex-wrap: wrap; gap: 6px; max-height: 140px; overflow-y: auto; }
+  .tp-chip {
+    font-size: 11.5px; font-weight: 650; padding: 4px 10px; border-radius: 999px;
+    background: #f0eee8; color: var(--ink-2); cursor: pointer; border: none; font-family: inherit;
+  }
+  #progress { font-size: 13px; color: var(--ink-3); margin-top: 8px; }
+  details { margin-top: 0.5rem; font-size: 13px; }
+  summary { cursor: pointer; font-weight: 650; }
+  code { font-size: 12px; }
+</style>
+</head>
+<body>
+<div id="checking">Memeriksa akses guru…</div>
+<div id="app" class="hidden">
+  <div id="topbar">
+    <div class="brand">Impor Massal Soal</div>
+    <div>
+      <a href="audit-bank-soal.html">Audit Pool</a>
+      <a href="index.html#impor">Admin</a>
+      <a href="index.html#soal">Panel Soal</a>
+    </div>
+  </div>
+  <div class="page">
+    <h1>Impor soal → Firestore</h1>
+    <p class="sub">
+      Validasi format JSON ketat sebelum tulis. Root harus <strong>array soal</strong>.
+      Field wajib + aturan per <code>jenisSoal</code>. Payload dibersihkan (field asing dibuang, string di-trim).
+    </p>
+    <div class="steps">
+      <span class="step on" data-s="1">1. JSON</span>
+      <span class="step" data-s="2">2. Validasi</span>
+      <span class="step" data-s="3">3. Impor</span>
+    </div>
+
+    <div class="panel">
+      <h2>1. Siapkan JSON</h2>
+      <p class="hint">UTF-8 · array <code>[ {...}, {...} ]</code> · bukan objek pembungkus. Maks. disarankan 2000 soal/file.</p>
+      <div class="row">
+        <button type="button" class="btn btn-primary" id="btn-contoh">Unduh contoh valid</button>
+        <label class="btn" style="cursor:pointer">Pilih file .json
+          <input type="file" id="file-json" accept=".json,application/json,text/plain" hidden />
+        </label>
+      </div>
+      <p class="hint" id="file-status">Atau tempel di bawah.</p>
+      <textarea id="impor-json" spellcheck="false" placeholder='[ { "pertanyaan": "...", "mapel": "Matematika", "tp": "bilangan-tp1", "jenisSoal": "pg_tunggal", "kko": "C2", "kompleksitas": "dasar", "pilihan": ["A","B","C","D"], "jawaban": "A" } ]'></textarea>
+      <details>
+        <summary>Kode TP valid (klik = salin)</summary>
+        <div class="tp-chips" id="tp-chips"></div>
+      </details>
+    </div>
+
+    <div class="panel">
+      <h2>2. Validasi format &amp; isi</h2>
+      <p class="hint">Cek struktur JSON, tipe field, mapel/TP/KKO/kompleksitas, dan kelengkapan per jenis soal. Satu error = tidak impor.</p>
+      <button type="button" class="btn btn-primary" id="btn-validasi">Validasi JSON</button>
+      <div id="hasil-validasi" style="margin-top:0.85rem"></div>
+    </div>
+
+    <div class="panel">
+      <h2>3. Impor</h2>
+      <p class="hint">Hanya payload yang sudah dinormalisasi (bersih) yang ditulis. Batch 400.</p>
+      <button type="button" class="btn btn-ok hidden" id="btn-impor">Impor ke Firestore</button>
+      <div id="progress"></div>
+    </div>
+
+    <div class="panel">
+      <h2>Ringkas skema</h2>
+      <table>
+        <thead><tr><th>Field</th><th>Wajib</th></tr></thead>
+        <tbody>
+          <tr><td><code>pertanyaan, mapel, tp, jenisSoal, kko, kompleksitas</code></td><td>Semua jenis</td></tr>
+          <tr><td><code>pilihan[] + jawaban</code></td><td>pg_tunggal</td></tr>
+          <tr><td><code>pilihan[] + jawabanBenar[]</code></td><td>pg_kompleks</td></tr>
+          <tr><td><code>kategori[] + item[{teks,kategoriBenar}]</code></td><td>pg_kategori</td></tr>
+          <tr><td><code>item[]</code> (≥3 string)</td><td>mengurutkan</td></tr>
+          <tr><td><code>pasangan[{kiri,kanan}]</code> (≥3)</td><td>menjodohkan</td></tr>
+        </tbody>
+      </table>
+      <p class="hint" style="margin-top:0.6rem"><code>kompleksitas</code>: dasar | menengah | menantang · <code>randKey</code> otomatis · field lain dibuang.</p>
+    </div>
+  </div>
+</div>
+
+<script src="../materi/assets/tp-kko-index.js"></script>
+<script type="module" src="../../assets/js/guru-guard.js"></script>
+<script type="module">
+  import { getFirestore, collection, doc, writeBatch }
+    from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+  import { getApps } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+
+  const db = getFirestore(getApps()[0]);
+  const CHUNK = 400;
+  const MAX_SOAL = 2000;
+  const VALID_JENIS = ["pg_tunggal", "pg_kompleks", "pg_kategori", "mengurutkan", "menjodohkan"];
+  const VALID_KKO = ["C1", "C2", "C3", "C4", "C5", "C6"];
+  const VALID_KOMP = ["dasar", "menengah", "menantang"];
+  const ALLOWED_KEYS = new Set([
+    "pertanyaan", "mapel", "tp", "jenisSoal", "kko", "kompleksitas",
+    "pilihan", "jawaban", "jawabanBenar", "kategori", "item", "pasangan"
+  ]);
+
+  let imporData = null;
+  const CONTOH_JSON = "[\n  {\n    \"pertanyaan\": \"Manakah yang termasuk informasi penting dari teks yang dibacakan guru?\",\n    \"mapel\": \"Bahasa Indonesia\",\n    \"tp\": \"M1\",\n    \"jenisSoal\": \"pg_tunggal\",\n    \"kko\": \"C2\",\n    \"kompleksitas\": \"dasar\",\n    \"pilihan\": [\n      \"Judul buku yang disebut sambil lalu\",\n      \"Nama tokoh utama dan masalahnya\",\n      \"Warna baju guru\",\n      \"Jumlah kursi di kelas\"\n    ],\n    \"jawaban\": \"Nama tokoh utama dan masalahnya\"\n  },\n  {\n    \"pertanyaan\": \"Pilih SEMUA kalimat yang menunjukkan hubungan sebab-akibat.\",\n    \"mapel\": \"Bahasa Indonesia\",\n    \"tp\": \"M2\",\n    \"jenisSoal\": \"pg_kompleks\",\n    \"kko\": \"C3\",\n    \"kompleksitas\": \"menengah\",\n    \"pilihan\": [\n      \"Karena hujan deras, jalan banjir.\",\n      \"Budi suka apel.\",\n      \"Lampu padam sehingga ruangan gelap.\",\n      \"Hari ini hari Senin.\"\n    ],\n    \"jawabanBenar\": [\n      \"Karena hujan deras, jalan banjir.\",\n      \"Lampu padam sehingga ruangan gelap.\"\n    ]\n  },\n  {\n    \"pertanyaan\": \"Masukkan setiap bilangan ke kategori yang tepat.\",\n    \"mapel\": \"Matematika\",\n    \"tp\": \"bilangan-tp1\",\n    \"jenisSoal\": \"pg_kategori\",\n    \"kko\": \"C2\",\n    \"kompleksitas\": \"dasar\",\n    \"kategori\": [\n      \"Bilangan genap\",\n      \"Bilangan ganjil\"\n    ],\n    \"item\": [\n      {\n        \"teks\": \"12\",\n        \"kategoriBenar\": \"Bilangan genap\"\n      },\n      {\n        \"teks\": \"7\",\n        \"kategoriBenar\": \"Bilangan ganjil\"\n      },\n      {\n        \"teks\": \"20\",\n        \"kategoriBenar\": \"Bilangan genap\"\n      },\n      {\n        \"teks\": \"15\",\n        \"kategoriBenar\": \"Bilangan ganjil\"\n      }\n    ]\n  },\n  {\n    \"pertanyaan\": \"Urutkan langkah menyelesaikan soal cerita dari awal sampai akhir.\",\n    \"mapel\": \"Matematika\",\n    \"tp\": \"bilangan-tp2\",\n    \"jenisSoal\": \"mengurutkan\",\n    \"kko\": \"C3\",\n    \"kompleksitas\": \"menengah\",\n    \"item\": [\n      \"Baca soal dan pahami yang ditanyakan\",\n      \"Tulis yang diketahui\",\n      \"Pilih operasi yang tepat\",\n      \"Hitung dan cek jawaban\"\n    ]\n  },\n  {\n    \"pertanyaan\": \"Jodohkan istilah dengan artinya.\",\n    \"mapel\": \"IPAS\",\n    \"tp\": \"organ-tp2\",\n    \"jenisSoal\": \"menjodohkan\",\n    \"kko\": \"C1\",\n    \"kompleksitas\": \"dasar\",\n    \"pasangan\": [\n      {\n        \"kiri\": \"Jantung\",\n        \"kanan\": \"Memompa darah ke seluruh tubuh\"\n      },\n      {\n        \"kiri\": \"Paru-paru\",\n        \"kanan\": \"Tempat pertukaran oksigen dan karbon dioksida\"\n      },\n      {\n        \"kiri\": \"Lambung\",\n        \"kanan\": \"Mencerna makanan secara kimiawi\"\n      }\n    ]\n  }\n]";
+
+  function esc(s) {
+    return String(s ?? "").replace(/[&<>"']/g, (c) =>
+      ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+  }
+  function setStep(n) {
+    document.querySelectorAll(".step").forEach((el) => {
+      const s = +el.getAttribute("data-s");
+      el.classList.toggle("on", s === n);
+      el.classList.toggle("done", s < n);
+    });
+  }
+  function isPlainObject(v) {
+    return v !== null && typeof v === "object" && !Array.isArray(v);
+  }
+  function trimStr(v) {
+    return typeof v === "string" ? v.trim() : v;
+  }
+  function asNonEmptyStrings(arr, path, errors, no) {
+    if (!Array.isArray(arr)) {
+      errors.push(no + ": " + path + " harus array string.");
+      return null;
+    }
+    const out = [];
+    for (let i = 0; i < arr.length; i++) {
+      if (typeof arr[i] !== "string" || !arr[i].trim()) {
+        errors.push(no + ": " + path + "[" + i + "] harus string non-kosong.");
+        return null;
+      }
+      out.push(arr[i].trim());
+    }
+    return out;
+  }
+
+  /**
+   * Validasi + normalisasi satu soal.
+   * @returns {{ ok: object|null, errors: string[], warnings: string[] }}
+   */
+  function normalizeSoal(raw, index) {
+    const no = "Soal #" + (index + 1);
+    const errors = [];
+    const warnings = [];
+
+    if (!isPlainObject(raw)) {
+      errors.push(no + ": elemen harus objek JSON { ... }, bukan " + (Array.isArray(raw) ? "array" : typeof raw) + ".");
+      return { ok: null, errors, warnings };
+    }
+
+    const unknown = Object.keys(raw).filter((k) => !ALLOWED_KEYS.has(k) && k !== "id" && k !== "randKey");
+    if (unknown.length) {
+      warnings.push(no + ": field diabaikan: " + unknown.join(", "));
+    }
+
+    const pertanyaan = trimStr(raw.pertanyaan);
+    const mapel = trimStr(raw.mapel);
+    const tp = trimStr(raw.tp);
+    const jenisSoal = trimStr(raw.jenisSoal);
+    const kko = trimStr(raw.kko);
+    const kompleksitas = trimStr(raw.kompleksitas);
+
+    if (typeof pertanyaan !== "string" || !pertanyaan) errors.push(no + ": pertanyaan wajib string non-kosong.");
+    if (typeof mapel !== "string" || !mapel) errors.push(no + ": mapel wajib.");
+    else if (!(window.URUTAN_MAPEL || []).includes(mapel))
+      errors.push(no + ': mapel "' + mapel + '" tidak dikenal. Nilai valid: ' + (window.URUTAN_MAPEL || []).join(", "));
+
+    if (typeof tp !== "string" || !tp) errors.push(no + ": tp wajib string (kode TP).");
+    const tpEntry = tp ? window.getTpKko(tp) : null;
+    if (tp && !tpEntry) errors.push(no + ': tp "' + tp + '" tidak ada di tp-kko-index.');
+    else if (tpEntry && mapel && tpEntry.mapel && mapel !== tpEntry.mapel)
+      errors.push(no + ': mapel "' + mapel + '" tidak cocok tp (harusnya "' + tpEntry.mapel + '").');
+
+    if (!VALID_JENIS.includes(jenisSoal))
+      errors.push(no + ': jenisSoal harus salah satu: ' + VALID_JENIS.join(", ") + ' (sekarang: "' + jenisSoal + '").');
+    if (!VALID_KKO.includes(kko))
+      errors.push(no + ': kko harus C1–C6 (sekarang: "' + kko + '").');
+    if (!VALID_KOMP.includes(kompleksitas))
+      errors.push(no + ': kompleksitas harus dasar|menengah|menantang (sekarang: "' + kompleksitas + '").');
+    if (tpEntry && VALID_KKO.includes(kko) && !window.kkoDalamBatas(kko, tpEntry.kkoMax))
+      errors.push(no + ": kko " + kko + " melebihi batas TP " + tp + " (maks " + tpEntry.kkoMax + ").");
+
+    const clean = { pertanyaan, mapel, tp, jenisSoal, kko, kompleksitas };
+
+    if (jenisSoal === "pg_tunggal") {
+      const pilihan = asNonEmptyStrings(raw.pilihan, "pilihan", errors, no);
+      if (pilihan) {
+        if (pilihan.length < 2) errors.push(no + ": pilihan minimal 2.");
+        const seen = new Set();
+        pilihan.forEach((p, i) => {
+          if (seen.has(p)) warnings.push(no + ": pilihan[" + i + "] duplikat \"" + p.slice(0, 40) + "\".");
+          seen.add(p);
+        });
+        clean.pilihan = pilihan;
+        const jawaban = trimStr(raw.jawaban);
+        if (typeof jawaban !== "string" || !jawaban) errors.push(no + ": jawaban wajib string.");
+        else if (pilihan.length >= 2 && !pilihan.includes(jawaban))
+          errors.push(no + ': jawaban harus sama persis salah satu pilihan.');
+        else clean.jawaban = jawaban;
+      }
+    } else if (jenisSoal === "pg_kompleks") {
+      const pilihan = asNonEmptyStrings(raw.pilihan, "pilihan", errors, no);
+      const jb = asNonEmptyStrings(raw.jawabanBenar, "jawabanBenar", errors, no);
+      if (pilihan) {
+        if (pilihan.length < 2) errors.push(no + ": pilihan minimal 2.");
+        clean.pilihan = pilihan;
+      }
+      if (jb) {
+        if (jb.length < 2) errors.push(no + ": jawabanBenar minimal 2.");
+        if (pilihan && jb.every((v) => typeof v === "string")) {
+          const missing = jb.filter((v) => !pilihan.includes(v));
+          if (missing.length) errors.push(no + ": jawabanBenar tidak ada di pilihan: " + missing.map((m) => '"' + m.slice(0, 30) + '"').join(", "));
+        }
+        clean.jawabanBenar = jb;
+      }
+    } else if (jenisSoal === "pg_kategori") {
+      const kategori = asNonEmptyStrings(raw.kategori, "kategori", errors, no);
+      if (kategori) {
+        if (kategori.length < 2) errors.push(no + ": kategori minimal 2.");
+        clean.kategori = kategori;
+      }
+      if (!Array.isArray(raw.item)) errors.push(no + ": item harus array objek {teks, kategoriBenar}.");
+      else if (raw.item.length < 2) errors.push(no + ": item minimal 2.");
+      else {
+        const items = [];
+        raw.item.forEach((it, j) => {
+          if (!isPlainObject(it)) {
+            errors.push(no + ": item[" + j + "] harus objek.");
+            return;
+          }
+          const teks = trimStr(it.teks);
+          const kb = trimStr(it.kategoriBenar);
+          if (typeof teks !== "string" || !teks) errors.push(no + ": item[" + j + "].teks wajib.");
+          if (typeof kb !== "string" || !kb) errors.push(no + ": item[" + j + "].kategoriBenar wajib.");
+          else if (kategori && !kategori.includes(kb))
+            errors.push(no + ": item[" + j + '].kategoriBenar "' + kb + '" tidak ada di kategori.');
+          items.push({ teks: teks, kategoriBenar: kb });
+        });
+        if (items.length >= 2) clean.item = items;
+      }
+    } else if (jenisSoal === "mengurutkan") {
+      const item = asNonEmptyStrings(raw.item, "item", errors, no);
+      if (item) {
+        if (item.length < 3) errors.push(no + ": item mengurutkan minimal 3.");
+        clean.item = item;
+      }
+    } else if (jenisSoal === "menjodohkan") {
+      if (!Array.isArray(raw.pasangan)) errors.push(no + ": pasangan harus array.");
+      else if (raw.pasangan.length < 3) errors.push(no + ": pasangan minimal 3.");
+      else {
+        const pas = [];
+        raw.pasangan.forEach((p, j) => {
+          if (!isPlainObject(p)) {
+            errors.push(no + ": pasangan[" + j + "] harus objek {kiri, kanan}.");
+            return;
+          }
+          const kiri = trimStr(p.kiri);
+          const kanan = trimStr(p.kanan);
+          if (typeof kiri !== "string" || !kiri) errors.push(no + ": pasangan[" + j + "].kiri wajib.");
+          if (typeof kanan !== "string" || !kanan) errors.push(no + ": pasangan[" + j + "].kanan wajib.");
+          pas.push({ kiri: kiri, kanan: kanan });
+        });
+        if (pas.length >= 3) clean.pasangan = pas;
+      }
+    }
+
+    if (errors.length) return { ok: null, errors, warnings };
+    return { ok: clean, errors, warnings };
+  }
+
+  function validasiRootDanSoal(rawText) {
+    const errors = [];
+    const warnings = [];
+    let data;
+    try {
+      data = JSON.parse(rawText);
+    } catch (err) {
+      let msg = err.message || String(err);
+      // Bantuan umum untuk JSON rusak
+      if (/Unexpected token|JSON/i.test(msg)) {
+        msg += " — periksa koma berlebih, tanda kutip, atau trailing comma.";
+      }
+      return { cleanList: null, errors: ["JSON tidak dapat di-parse: " + msg], warnings: [] };
+    }
+
+    if (data !== null && isPlainObject(data) && Array.isArray(data.soal)) {
+      errors.push('Root harus array langsung [...], bukan { "soal": [...] }.');
+      return { cleanList: null, errors, warnings };
+    }
+    if (!Array.isArray(data)) {
+      errors.push("Root JSON harus array [...]. Tipe sekarang: " + (data === null ? "null" : typeof data) + ".");
+      return { cleanList: null, errors, warnings };
+    }
+    if (data.length === 0) {
+      errors.push("Array kosong — minimal 1 soal.");
+      return { cleanList: null, errors, warnings };
+    }
+    if (data.length > MAX_SOAL) {
+      errors.push("Terlalu banyak (" + data.length + "). Maks. " + MAX_SOAL + " per file — pecah batch.");
+      return { cleanList: null, errors, warnings };
+    }
+
+    const cleanList = [];
+    const fingerprint = new Set();
+    data.forEach((item, i) => {
+      const r = normalizeSoal(item, i);
+      errors.push(...r.errors);
+      warnings.push(...r.warnings);
+      if (r.ok) {
+        const fp = r.ok.tp + "||" + r.ok.pertanyaan;
+        if (fingerprint.has(fp))
+          warnings.push("Soal #" + (i + 1) + ": kemungkinan duplikat (tp+pertanyaan sama dengan soal lain di file).");
+        fingerprint.add(fp);
+        cleanList.push(r.ok);
+      }
+    });
+
+    if (errors.length) return { cleanList: null, errors, warnings };
+    return { cleanList, errors, warnings };
+  }
+
+  document.addEventListener("guru-verified", () => {
+    document.getElementById("checking").remove();
+    document.getElementById("app").classList.remove("hidden");
+    const wrap = document.getElementById("tp-chips");
+    (window.TP_KKO_INDEX || []).forEach((e) => {
+      const b = document.createElement("button");
+      b.type = "button";
+      b.className = "tp-chip";
+      b.textContent = e.tp + " · " + (e.mapel || "");
+      b.title = (e.judul || "") + " · max " + e.kkoMax;
+      b.onclick = () => {
+        navigator.clipboard.writeText(e.tp).catch(() => {});
+        b.textContent = "✓ " + e.tp;
+        setTimeout(() => { b.textContent = e.tp + " · " + (e.mapel || ""); }, 800);
+      };
+      wrap.appendChild(b);
+    });
+  });
+  document.addEventListener("DOMContentLoaded", () => window.guardGuruPage("../../index.html"));
+
+  document.getElementById("btn-contoh").onclick = () => {
+    const blob = new Blob([CONTOH_JSON], { type: "application/json" });
+    const a = document.createElement("a");
+    a.href = URL.createObjectURL(blob);
+    a.download = "bank-soal-contoh.json";
+    a.click();
+    URL.revokeObjectURL(a.href);
+  };
+
+  document.getElementById("file-json").onchange = (ev) => {
+    const file = ev.target.files[0];
+    if (!file) return;
+    const status = document.getElementById("file-status");
+    if (file.size > 5 * 1024 * 1024) {
+      status.textContent = "File terlalu besar (>" + Math.round(file.size / 1024) + " KB). Pecah batch.";
+      return;
+    }
+    status.textContent = "Membaca " + file.name + "…";
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      document.getElementById("impor-json").value = e.target.result;
+      status.textContent = "✓ " + file.name + " (" + Math.round(file.size / 1024) + " KB).";
+      setStep(2);
+      jalankanValidasi();
+    };
+    reader.onerror = () => { status.textContent = "Gagal membaca file."; };
+    reader.readAsText(file, "UTF-8");
+  };
+
+  document.getElementById("btn-validasi").onclick = jalankanValidasi;
+  document.getElementById("btn-impor").onclick = jalankanImpor;
+
+  function jalankanValidasi() {
+    const raw = document.getElementById("impor-json").value.trim();
+    const hasilEl = document.getElementById("hasil-validasi");
+    const submitBtn = document.getElementById("btn-impor");
+    submitBtn.classList.add("hidden");
+    document.getElementById("progress").textContent = "";
+    imporData = null;
+    setStep(2);
+
+    if (!raw) {
+      hasilEl.innerHTML = '<div class="err-box">Textarea kosong.</div>';
+      return;
+    }
+
+    const { cleanList, errors, warnings } = validasiRootDanSoal(raw);
+
+    if (errors.length) {
+      hasilEl.innerHTML = '<div class="err-box"><strong>' + errors.length +
+        " error</strong> — tidak ada yang akan diimpor:<br><br>" +
+        errors.slice(0, 60).map(esc).join("<br>") +
+        (errors.length > 60 ? "<br>… +" + (errors.length - 60) + " error lain" : "") +
+        "</div>" +
+        (warnings.length
+          ? '<div class="warn-box">' + warnings.slice(0, 15).map(esc).join("<br>") + "</div>"
+          : "");
+      return;
+    }
+
+    const countByTp = {};
+    const countByJenis = {};
+    const countByKomp = { dasar: 0, menengah: 0, menantang: 0 };
+    cleanList.forEach((s) => {
+      countByTp[s.tp] = (countByTp[s.tp] || 0) + 1;
+      countByJenis[s.jenisSoal] = (countByJenis[s.jenisSoal] || 0) + 1;
+      countByKomp[s.kompleksitas]++;
+    });
+
+    let ring = "<table><thead><tr><th>TP</th><th>Judul</th><th>Jml</th></tr></thead><tbody>";
+    Object.keys(countByTp).sort().forEach((tp) => {
+      const e = window.getTpKko(tp);
+      ring += "<tr><td><code>" + esc(tp) + "</code></td><td>" + esc(e ? e.judul : "") +
+        "</td><td>" + countByTp[tp] + "</td></tr>";
+    });
+    ring += "</tbody></table>";
+    ring += '<p class="hint" style="margin-top:8px">Jenis: ' +
+      Object.keys(countByJenis).map((j) => j + " " + countByJenis[j]).join(" · ") +
+      "<br>Kompleksitas: dasar " + countByKomp.dasar +
+      " · menengah " + countByKomp.menengah +
+      " · menantang " + countByKomp.menantang + "</p>";
+
+    imporData = cleanList;
+    let html = '<div class="ok-box"><strong>' + cleanList.length +
+      " soal valid</strong> (payload sudah dinormalisasi)." + ring + "</div>";
+    if (warnings.length) {
+      html += '<div class="warn-box"><strong>Peringatan</strong> (impor tetap jalan):<br>' +
+        warnings.slice(0, 20).map(esc).join("<br>") + "</div>";
+    }
+    hasilEl.innerHTML = html;
+    submitBtn.classList.remove("hidden");
+    setStep(3);
+  }
+
+  async function jalankanImpor() {
+    if (!imporData || !imporData.length) return;
+    const btn = document.getElementById("btn-impor");
+    const progress = document.getElementById("progress");
+    btn.disabled = true;
+    let selesai = 0;
+    try {
+      for (let start = 0; start < imporData.length; start += CHUNK) {
+        const potongan = imporData.slice(start, start + CHUNK);
+        const batch = writeBatch(db);
+        potongan.forEach((soal) => {
+          const ref = doc(collection(db, "bank_soal"));
+          batch.set(ref, Object.assign({}, soal, { randKey: Math.random() }));
+        });
+        await batch.commit();
+        selesai += potongan.length;
+        progress.textContent = "Mengimpor… " + selesai + " / " + imporData.length;
+      }
+      progress.textContent = "Selesai — " + selesai + " soal di bank_soal. Cek Audit Pool.";
+      document.getElementById("impor-json").value = "";
+      document.getElementById("hasil-validasi").innerHTML = "";
+      btn.classList.add("hidden");
+      imporData = null;
+      setStep(1);
+    } catch (err) {
+      progress.textContent = "Berhenti (" + selesai + ") — " + (err.message || err);
+    } finally {
+      btn.disabled = false;
+    }
+  }
+</script>
+</body>
+</html>
