@@ -59,7 +59,7 @@
 </head>
 <body>
 <script>
-if (sessionStorage.getItem('kuis-guru-ok') !== '1') location.replace('../index.html');
+if (sessionStorage.getItem('kuis-guru-ok') !== '1') location.replace('../../index.html');
 </script>
 <header>
   <div class="wrap">
@@ -186,7 +186,7 @@ if (sessionStorage.getItem('kuis-guru-ok') !== '1') location.replace('../index.h
   }
   function escapeHtml(t){
     return String(t || '').replace(/[&<>"']/g, function(c){
-      return ({'&':'&','<':'<','>':'>','"':'"',"'":'&#39;'})[c];
+      return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c];
     });
   }
   function loadMeta(){
