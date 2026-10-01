@@ -147,7 +147,7 @@
 <header class="site">
   <div class="wrap">
     <div class="top-row">
-      <a class="back-link" href="../beranda.html">← Beranda siswa</a>
+      <a class="back-link" href="../../beranda.html">← Beranda siswa</a>
       <div class="font-ctrl" role="group" aria-label="Ukuran tulisan">
         <button type="button" id="fontDown" aria-label="Perkecil">A−</button>
         <button type="button" id="fontUp" aria-label="Perbesar">A+</button>
@@ -236,7 +236,7 @@
 
   // Wajib login siswa lewat pintu masuk website
   if (sessionStorage.getItem('kuis-siswa-ok') !== '1') {
-    location.replace('../index.html');
+    location.replace('../../index.html');
   }
 
   /* ========== State ========== */
@@ -367,7 +367,7 @@
     var namaLogin = sessionStorage.getItem('kuis-siswa-nama') || '';
     // Sudah login di pintu masuk website?
     if (sessionStorage.getItem('kuis-siswa-ok') !== '1' || !namaLogin) {
-      location.replace('../index.html');
+      location.replace('../../index.html');
       return;
     }
     sel.innerHTML = '';
@@ -681,7 +681,7 @@
     show($('layar-daftar'));
     muatDaftar();
   };
-  $('btnKeBeranda').onclick = function(){ location.href = '../'; };
+  $('btnKeBeranda').onclick = function(){ location.href = '../../beranda.html'; };
 
   /* ========== Start ========== */
   muatDaftar();
