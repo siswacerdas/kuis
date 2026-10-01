@@ -42,7 +42,6 @@
     font-weight:700; margin:20px 0 10px 4px;
   }
 
-  /* ---------- Filter ---------- */
   .filter-panel{
     background:var(--paper); border-radius:var(--radius);
     box-shadow:0 1px 3px rgba(20,30,25,.06), 0 8px 24px -14px rgba(20,30,25,.18);
@@ -77,7 +76,6 @@
   .btn-refresh:disabled{ opacity:.55; cursor:default; }
   .btn-refresh:active:not(:disabled){ background:#F1EFE8; }
 
-  /* ---------- Grup hasil ---------- */
   .riwayat-group{
     border:1px solid var(--line); border-radius:12px; margin-bottom:10px;
     overflow:hidden; background:var(--paper);
@@ -132,7 +130,7 @@
 <header class="site">
   <div class="wrap">
     <div class="top-row">
-      <a class="back-link" href="../">← Menu utama</a>
+      <a class="back-link" href="../../beranda.html">← Menu utama</a>
       <div class="font-ctrl" role="group" aria-label="Ukuran tulisan">
         <button type="button" id="fontDown" aria-label="Perkecil tulisan">A−</button>
         <button type="button" id="fontUp" aria-label="Perbesar tulisan">A+</button>
@@ -144,7 +142,7 @@
       </span>
       <div>
         <h1>Riwayat Kuis</h1>
-        <p>Nilai akhir siswa per mata pelajaran &amp; materi</p>
+        <p>Nilai akhir siswa per mata pelajaran & materi</p>
       </div>
     </div>
   </div>
@@ -206,14 +204,8 @@
 
 <script>
 (function(){
-  // WEBAPP_URL sama persis dengan yang dipakai halaman kuis (bunyi.html, dst.)
-  // untuk memuat daftar nama siswa — backend Apps Script yang sama, action baru.
   var WEBAPP_URL = 'https://script.google.com/macros/s/AKfycbwotrwYBt0_-_9g4o2gNs6ktaTn1sw41f3jJlgoK5pN2N5RofwRjOeiSqzQq1JZsjhclw/exec';
 
-  // Nama materi yang lebih ramah dibaca, menimpa Nama_Kuis mentah dari
-  // spreadsheet. Kuis yang belum terdaftar di sini akan tetap tampil
-  // memakai Nama_Kuis apa adanya dari sheet Daftar_Kuis, jadi halaman ini
-  // tidak akan "melewatkan" kuis baru meski belum sempat ditambahkan ke sini.
   var MATERI_LABEL_OVERRIDE = {
     'IPAS-BUNYI-01': 'Bunyi',
     'BINDO-DESKRIPSI-01': 'Mendeskripsikan Informasi',
@@ -234,7 +226,7 @@
 
   function escapeHtml(s){
     return String(s).replace(/[&<>"']/g, function(c){
-      return { "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;", "'":"&#39;" }[c];
+      return { "&":"&", "<":"<", ">":">", '"':""", "'":"&#39;" }[c];
     });
   }
 
