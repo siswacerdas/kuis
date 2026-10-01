@@ -45,7 +45,7 @@
 </head>
 <body>
 <script>
-if (sessionStorage.getItem('kuis-guru-ok') !== '1') location.replace('../index.html');
+if (sessionStorage.getItem('kuis-guru-ok') !== '1') location.replace('../../index.html');
 </script>
 <header>
   <div class="wrap">
@@ -142,7 +142,7 @@ if (sessionStorage.getItem('kuis-guru-ok') !== '1') location.replace('../index.h
   }
   function esc(s){
     return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){
-      return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c];
+      return ({'&':'&','<':'<','>':'>','"':'"',"'":'&#39;'})[c];
     });
   }
   document.getElementById('btnRefresh').onclick = load;
