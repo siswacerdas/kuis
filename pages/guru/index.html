@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Area guru — Kuis Digital SDM01KKS</title>
 <meta name="theme-color" content="#1E3A5F">
-<link rel="stylesheet" href="../assets/app.css">
+<link rel="stylesheet" href="../../assets/app.css">
 <style>
   body{
     background:
@@ -26,7 +26,7 @@
 </head>
 <body>
 <script>
-if (sessionStorage.getItem('kuis-guru-ok') !== '1') location.replace('../index.html');
+if (sessionStorage.getItem('kuis-guru-ok') !== '1') location.replace('../../index.html');
 </script>
 <header class="app-top">
   <div class="inner">
@@ -94,7 +94,7 @@ if (sessionStorage.getItem('kuis-guru-ok') !== '1') location.replace('../index.h
   <h2 class="section-label">Pratinjau</h2>
   <div class="bento">
     <a class="tile c-navy" href="../latihan/"><div class="top"><span class="ico"><svg viewBox="0 0 24 24" fill="none" width="24" height="24"><path d="M4 12h16M13 5l7 7-7 7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg></span></div><div><h3>Halaman latihan siswa</h3><p>Pratinjau tampilan siswa</p></div></a>
-    <a class="tile c-teal" href="../beranda.html"><div class="top"><span class="ico"><svg viewBox="0 0 24 24" fill="none" width="24" height="24"><path d="M4 10.5 12 4l8 6.5V20H4V10.5Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg></span></div><div><h3>Beranda siswa</h3><p>Menu mata pelajaran</p></div></a>
+    <a class="tile c-teal" href="../../beranda.html"><div class="top"><span class="ico"><svg viewBox="0 0 24 24" fill="none" width="24" height="24"><path d="M4 10.5 12 4l8 6.5V20H4V10.5Z" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round"/></svg></span></div><div><h3>Beranda siswa</h3><p>Menu mata pelajaran</p></div></a>
     <a class="tile c-amber span-2" href="../riwayat-kuis/"><div class="top"><span class="ico"><svg viewBox="0 0 24 24" fill="none" width="24" height="24"><path d="M5 4.5h14v15l-3.2-2.1-3.3 2.1-3.3-2.1L5 19.5v-15Z" stroke="currentColor" stroke-width="1.7"/></svg></span></div><div><h3>Riwayat kuis</h3><p>Nilai kuis mapel</p></div></a>
   </div>
 
@@ -105,7 +105,7 @@ document.getElementById('btnKeluar').onclick = function(){
   sessionStorage.removeItem('kuis-guru-ok');
   sessionStorage.removeItem('kuis-guru-token');
   sessionStorage.removeItem('kuis-guru-nama');
-  location.href = '../index.html';
+  location.href = '../../index.html';
 };
 </script>
 </body>
