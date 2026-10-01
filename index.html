@@ -221,7 +221,6 @@
     if (!nisn){ showMsg('msgSiswa', false, 'Isi NISN.'); return; }
     btn.disabled = true;
     showMsg('msgSiswa', true, 'Memeriksa…');
-    // GET lebih andal untuk login (hindari masalah redirect POST Apps Script)
     var url = WEBAPP_URL
       + '?action=loginSiswa'
       + '&nama=' + encodeURIComponent(nama)
@@ -267,7 +266,7 @@
           sessionStorage.setItem('kuis-guru-ok', '1');
           sessionStorage.setItem('kuis-guru-token', sandi);
           sessionStorage.setItem('kuis-guru-nama', 'Arif Azwar Anas');
-          location.href = 'guru/';
+          location.href = 'pages/guru/';
         } else {
           showMsg('msgGuru', false, (res && res.pesan) || 'Sandi salah.');
         }
